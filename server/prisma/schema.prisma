@@ -1,0 +1,170 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model Usuario {
+  id       Int     @id
+  nombre   String
+  email    String  @unique
+  telefono    String 
+  password String
+  proveedor String? 
+  estado Boolean
+  roles Rol[]
+  direcciones Direccion[]
+  metodosPago MetodoPago[]
+  productos Producto []
+  pedidos Pedido[]
+  evaluaciones Evaluacion[]
+  comentarios Comentario[]
+}
+
+model Rol {
+  id  Int   @id @default(autoincrement())
+  descripcion  String
+  usuarios Usuario[]
+}
+
+model Direccion{
+  id       Int     @id @default(autoincrement())
+  provincia   Int
+  canton    Int  
+  distrito    Int  
+  exacta String
+  codigoPostal Int
+  telefono String
+  usuarioId Int 
+  usuario Usuario @relation(fields: [usuarioId],references: [id])
+}
+
+model MetodoPago {
+  id       Int     @id @default(autoincrement())
+  numTajeta   String
+  fechaVenc    String  
+  codSeguridad    String  
+  tipo String
+  usuarioId Int 
+  usuario Usuario @relation(fields: [usuarioId],references: [id])
+  facturas Factura[]
+}
+
+model Categoria{
+  id  Int   @id @default(autoincrement())
+  descripcion  String
+  productos Producto[]
+}
+
+model ProductoEstado{
+  id  Int   @id @default(autoincrement())
+  descripcion  String
+  productos Producto []
+}
+
+model Producto {
+  id  Int   @id @default(autoincrement())
+  descripcion  String
+  precio Decimal  @db.Decimal(10, 2)
+  cantidad Int
+  estado Boolean 
+  categoriaId Int
+  categoria Categoria @relation(fields: [categoriaId],references: [id])
+  productoEstadoId Int
+  productoEstado ProductoEstado @relation(fields: [productoEstadoId],references: [id])
+  proveedorId Int 
+  proveedor Usuario @relation(fields: [proveedorId],references: [id])
+  imagenes Galeria[]
+  pedidos DetallePedido[]
+  dialogos Dialogo[]
+}
+
+model Galeria{
+  id  Int   @id @default(autoincrement())
+  imagen  Bytes?  @db.LongBlob
+  estado Boolean 
+  productoId Int 
+  producto Producto @relation(fields: [productoId],references: [id])
+}
+
+
+model Pedido {
+  id          Int                 @id @default(autoincrement())
+  total Decimal  @db.Decimal(10, 2) 
+  fechaPedido  DateTime            @default(now())
+  updatedAt DateTime @updatedAt @default(now())
+  estado String
+  usuarioId Int
+  usuario Usuario @relation(fields: [usuarioId],references: [id])
+  productos DetallePedido[]
+  facturas Factura[]
+  evaluaciones Evaluacion[]
+}
+
+model DetallePedido{
+//Llaves foráneas
+  //Orden
+  pedidoId Int
+  pedido Pedido @relation(fields: [pedidoId],references: [id])
+  //Videojuego
+  productoId Int
+  producto Producto @relation(fields: [productoId],references: [id])
+  cantidad     Int
+  precioUnitario Decimal  @db.Decimal(10, 2)
+  subTotal Decimal  @db.Decimal(10, 2)
+  estado String
+  //Llave primaria compuesta
+  @@id([pedidoId,productoId])
+}
+
+model Factura{
+  id          Int                 @id @default(autoincrement())
+  total Decimal  @db.Decimal(10, 2) 
+  fechaFactura  DateTime            @default(now())
+  updatedAt DateTime @updatedAt @default(now())
+  estado String
+  metodoPagoId Int
+  metodoPago MetodoPago @relation(fields: [metodoPagoId],references: [id])
+  pedidoId Int
+  pedido Pedido  @relation(fields: [pedidoId],references: [id])
+}
+
+model Evaluacion{
+  comentrario String
+  puntaje      Int
+  realizadoPor Int //Inserta el Rol del Usuario que esta realizando la evaluación para así poder identificar si fue un Cliente hacia un Proveedor o si fue de un Proveedor hacia un Cliente 
+  //Pedido
+  pedidoId Int
+  pedido Pedido @relation(fields: [pedidoId],references: [id])
+  //Proveedor
+  proveedorId Int
+  proveedor Usuario @relation(fields: [proveedorId],references: [id])
+  //RolUsuario
+  
+  @@id([pedidoId,proveedorId,realizadoPor])
+
+}
+
+model Dialogo{
+    id          Int                 @id @default(autoincrement())
+    productoId Int
+    producto Producto @relation(fields: [productoId], references: [id])
+    comentarios Comentario[]
+}
+
+model Comentario {
+  id                Int             @id @default(autoincrement())
+  contenido         String
+  fechaComentario    DateTime        @default(now())
+  tipo Int
+  dialogoId Int
+  dialogo Dialogo @relation(fields: [dialogoId],references: [id])
+  usuarioId Int
+  usuario Usuario  @relation(fields: [usuarioId],references: [id])
+} 
