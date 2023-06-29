@@ -12,7 +12,7 @@
   width: 200px;
   z-index: 996;
   transition: all 0.3s;
-  padding: 20px;
+  padding-top: 50px;
   overflow-y: auto;
   scrollbar-width: thin;
   scrollbar-color: #aab0bbd3 transparent;
@@ -77,14 +77,18 @@
 
 .sidebar-nav .nav-item {
   margin-bottom: 5px;
- 
+  padding: 10px;
 }
-
+.sidebar-nav .nav-link span{
+  padding: 10px;
+}
 .sidebar-nav .nav-heading {
   font-size: 11px;
+  padding-top: 10px;
+  padding-bottom: 10px;
   text-transform: uppercase;
   color: #ffffffb7;
-  font-weight: 450;
+  font-weight: 500;
   margin: 10px 0 5px 15px;
 }
 
@@ -98,6 +102,7 @@
   background: rgb(245, 245, 245);
   padding: 10px 15px;
   border-radius: 4px;
+  padding-left: 25px;
 }
 
 .sidebar-nav .nav-link i {
@@ -107,7 +112,7 @@
 }
 
 .sidebar-nav .nav-link.collapsed {
-  color: rgba(245, 245, 245, 0.747);
+  color: rgba(245, 245, 245, 0.788);
   background-color: #1a1a1a;
 }
 
@@ -117,7 +122,7 @@
 
 .sidebar-nav .nav-link:hover {
   color: #1a1a1a;
-  background: rgba(245, 245, 245, 0.76);
+  background: rgba(245, 245, 245, 0.932);
 }
 
 .sidebar-nav .nav-link:hover i {
@@ -167,3 +172,34 @@
   background-color: #4154f1;
 }
 
+.sidebar-container {
+  position: relative;
+}
+
+.button-session {
+  position: absolute;
+  bottom: 0;
+  margin-bottom: 15px;
+}
+
+.nav-link-session {
+  display: flex;
+  align-items: center;
+  font-size: 15px;
+  font-weight: 100;
+  color: #1a1a1a;
+  transition: 0.3;
+  background: rgba(245, 245, 245, 0.788);
+  padding: 15px;
+}
+
+.nav-link-session span{
+  margin: 8px;
+}
+
+.nav-link-session:hover {
+  
+  color: #1a1a1a;
+  transition: 0.3;
+  background: rgb(245, 245, 245);
+}

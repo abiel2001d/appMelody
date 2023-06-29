@@ -1,1 +1,32 @@
-<p>page-not-found works!</p>
+<link href="https://fonts.googleapis.com/css?family=Montserrat:200,400,700" rel="stylesheet">
+
+<body>
+
+	<div id="notfound">
+		<div class="notfound">
+			<div class="notfound-404">
+				<h1 style=" font-family: 'Montserrat', sans-serif;
+                font-size: 230px;
+                margin: 0px;
+                font-weight: 900;
+                position: absolute;
+                left: 50%;
+                -webkit-transform: translateX(-50%);
+                    -ms-transform: translateX(-50%);
+                        transform: translateX(-50%);
+                background: url('./assets/img/bg.jpeg') no-repeat;
+                -webkit-background-clip: text;
+                -webkit-text-fill-color: transparent;
+                background-size: cover;
+                background-position: center;">Oops!</h1>
+			</div>
+			<h2>404 - Página no encontrada</h2>
+			<p> La página que está buscando podría haber sido eliminada, cambio su
+                nombre o no está disponible temporalmente</p>
+                <button mat-raised-button class="return" (click)="irInicio()">
+                    Regresar
+                  </button>
+		</div>
+	</div>
+
+</body>

@@ -1,26 +1,22 @@
-<!-- Add the Font Awesome CDN link to your HTML file -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
-
-<!-- ======= Header ======= -->
-<header id="header" class="header fixed-top d-flex align-items-center">
+<mat-toolbar color="primary" class="d-flex align-items-center fixed-top" style="background-color: #1a1a1a;">
   <div class="d-flex align-items-center justify-content-between">
-    <a href="index.html" class="logo d-flex align-items-center">
-      <img src="./assets/images/logo.png" alt="">
-      <img src="./assets/images/logoletras.png" alt="">
+    <a routerLink="/">
+      <img src="./assets/img/logo.png" class="logo">
+      <img src="./assets/img/logoletras.png" class="logo-letters">
     </a>
-    <i class="bi bi-list toggle-sidebar-btn"></i>
-  </div><!-- End Logo -->
+  </div>
+  <div class="example-spacer"></div>
+  <div class="example-spacer"></div>
+  <div class="example-spacer"></div>
+  <div class="example-spacer">
+    <button mat-button class="border-button" [routerLink]="['/producto']">
+      <mat-icon>shopping_bag</mat-icon>
+      Tienda
+    </button>
+    <button mat-icon-button>
+      <mat-icon style="padding-top: 2px;">shopping_cart</mat-icon>
+    </button>
+  </div>
+  
+</mat-toolbar>
 
-  <div class="search-bar d-flex align-items-center">
-    <form class="search-form d-flex align-items-center" method="POST" action="#">
-      <input type="text" name="query" placeholder="Search" title="Enter search keyword">
-      <button type="submit" title="Search"><i class="bi bi-search"></i></button>
-    </form>
-  </div><!-- End Search Bar -->
-
-  <nav class="header-nav ms-auto">
-    <ul class="d-flex align-items-center">
-      <li><i class="fa-solid fa-cart-shopping"></i></li> <!-- Car Icon -->
-    </ul>
-  </nav><!-- End Icons Navigation -->
-</header><!-- End Header -->

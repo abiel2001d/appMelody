@@ -2,27 +2,27 @@
 export const categorias = [
     //1
     {
-        descripcion: "Baterías"
+        descripcion: "Batería"
     },
     //2
     {
-        descripcion: "Guitarras"
+        descripcion: "Guitarra"
     },
     
     //3
     {
-        descripcion: "Pianos"
+        descripcion: "Piano"
     },
     //4
     {
-        descripcion: "Vientos"
+        descripcion: "Viento"
     },
     //5
     {
-        descripcion: "Bajos"
+        descripcion: "Bajo"
     },
     //6
     {
-        descripcion: "Amplificadores"
+        descripcion: "Amplificador"
     }
     ];

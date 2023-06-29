@@ -1,0 +1,26 @@
+<mat-form-field>
+    <mat-label>Provincia:</mat-label>
+    <mat-select [(ngModel)]="selectedProvince" (selectionChange)="onProvinceChange()">
+      <mat-option *ngFor="let province of provinces" [value]="province.key">{{ province.value }}</mat-option>
+    </mat-select>
+  </mat-form-field>
+  
+  <mat-form-field>
+    <mat-label>Cantón:</mat-label>
+    <mat-select [(ngModel)]="selectedCanton" (selectionChange)="onCantonChange()">
+      <mat-option *ngFor="let canton of cantons" [value]="canton.key">{{ canton.value }}</mat-option>
+    </mat-select>
+  </mat-form-field>
+  
+  <mat-form-field>
+    <mat-label>Distrito:</mat-label>
+    <mat-select [(ngModel)]="selectedDistrito" (selectionChange)="onDistritoChange()">
+      <mat-option *ngFor="let distrito of distritos" [value]="distrito.key">{{ distrito.value }}</mat-option>
+    </mat-select>
+  </mat-form-field>
+  
+  <mat-form-field>
+    <mat-label>Código Postal:</mat-label>
+    <input matInput type="text" id="postalCode" [(ngModel)]="postalCode" readonly>
+  </mat-form-field>
+  

@@ -1,156 +1,76 @@
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
- 
- <!-- ======= Sidebar ======= -->
- <aside id="sidebar" class="sidebar">
+<mat-sidenav-container class="sidebar-container" color="primary">
+  <mat-sidenav mode="side" opened class="sidebar">
+    <mat-nav-list class="sidebar-nav" id="sidebar-nav">
+      <mat-list-item class="nav-item">
+        <a class="nav-link collapsed" routerLink="index.html">
+          <mat-icon>pie_chart</mat-icon>
+          <span>Dashboard</span>
+        </a>
+      </mat-list-item><!-- End Dashboard Nav -->
 
-  <ul class="sidebar-nav" id="sidebar-nav">
+      <h3 matSubheader class="nav-heading">Mantenimientos</h3>
 
-    <li class="nav-item">
-      <a class="nav-link " href="index.html">
-        <i class="fa-solid fa-chart-pie"></i>
-        <span>Dashboard</span>
-      </a>
-    </li><!-- End Dashboard Nav -->
+      <mat-list-item class="nav-item" routerLinkActive="active">
+        <a class="nav-link collapsed" [routerLink]="['/producto/all']" routerLinkActive="mat-raised-button">
+          <mat-icon>piano</mat-icon>
+          <span>Productos</span>
+        </a>
+       
+      </mat-list-item><!-- End Components Nav -->
 
-    <li class="nav-item">
-      <a class="nav-link collapsed" data-bs-target="#components-nav" data-bs-toggle="collapse" href="#">
-        <i class="fa-solid fa-list"></i><span>Pedidos</span><i class="bi bi-chevron-down ms-auto"></i>
-      </a>
-      <ul id="components-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
-        <li>
-          <a href="components-alerts.html">
-            <i class="bi bi-circle"></i><span>Alerts</span>
-          </a>
-        </li>
-        <li>
-          <a href="components-accordion.html">
-            <i class="bi bi-circle"></i><span>Accordion</span>
-          </a>
-        </li>
-        <li>
-          <a href="components-badges.html">
-            <i class="bi bi-circle"></i><span>Badges</span>
-          </a>
-        </li>
-      </ul>
-    </li><!-- End Components Nav -->
+      <mat-list-item class="nav-item" routerLinkActive="active">
+        <a class="nav-link collapsed" [routerLink]="['/pedido']" routerLinkActive="mat-raised-button">
+          <mat-icon>shop_two</mat-icon>
+          <span>Pedidos</span>
+        </a>
+       
+      </mat-list-item><!-- End Components Nav -->
 
-    <li class="nav-item">
-      <a class="nav-link collapsed" data-bs-target="#forms-nav" data-bs-toggle="collapse" href="#">
-        <i class="bi bi-journal-text"></i><span>Forms</span><i class="bi bi-chevron-down ms-auto"></i>
-      </a>
-      <ul id="forms-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
-        <li>
-          <a href="forms-elements.html">
-            <i class="bi bi-circle"></i><span>Form Elements</span>
-          </a>
-        </li>
-        <li>
-          <a href="forms-layouts.html">
-            <i class="bi bi-circle"></i><span>Form Layouts</span>
-          </a>
-        </li>
-        <li>
-          <a href="forms-editors.html">
-            <i class="bi bi-circle"></i><span>Form Editors</span>
-          </a>
-        </li>
-        <li>
-          <a href="forms-validation.html">
-            <i class="bi bi-circle"></i><span>Form Validation</span>
-          </a>
-        </li>
-      </ul>
-    </li><!-- End Forms Nav -->
+      <mat-list-item class="nav-item" routerLinkActive="active">
+        <a class="nav-link collapsed">
+          <mat-icon>groups</mat-icon>
+          <span>Usuarios</span>
+        </a>
+      </mat-list-item><!-- End Components Nav -->
 
-    <li class="nav-item">
-      <a class="nav-link collapsed" data-bs-target="#tables-nav" data-bs-toggle="collapse" href="#">
-        <i class="bi bi-layout-text-window-reverse"></i><span>Tables</span><i class="bi bi-chevron-down ms-auto"></i>
-      </a>
-      <ul id="tables-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
-        <li>
-          <a href="tables-general.html">
-            <i class="bi bi-circle"></i><span>General Tables</span>
-          </a>
-        </li>
-        <li>
-          <a href="tables-data.html">
-            <i class="bi bi-circle"></i><span>Data Tables</span>
-          </a>
-        </li>
-      </ul>
-    </li><!-- End Tables Nav -->
+      <h3 matSubheader class="nav-heading">Perfil</h3>
 
-    <li class="nav-item">
-      <a class="nav-link collapsed" data-bs-target="#charts-nav" data-bs-toggle="collapse" href="#">
-        <i class="bi bi-bar-chart"></i><span>Charts</span><i class="bi bi-chevron-down ms-auto"></i>
-      </a>
-      <ul id="charts-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
-        <li>
-          <a href="charts-chartjs.html">
-            <i class="bi bi-circle"></i><span>Chart.js</span>
+      <mat-list-item class="nav-item">
+        <a class="nav-link collapsed" [routerLink]="['/direccion']">
+          <mat-icon>directions</mat-icon>
+          <span>Direcciones</span>
+        </a>
+      </mat-list-item><!-- End Profile Page Nav -->
+
+      <mat-list-item class="nav-item">
+        <a class="nav-link collapsed" routerLink="users-profile.html">
+          <mat-icon>credit_card</mat-icon>
+          <span>Métodos Pago</span>
+        </a>
+      </mat-list-item><!-- End Profile Page Nav -->
+
+      <mat-list-item class="nav-item">
+        <a class="nav-link collapsed" routerLink="users-profile.html">
+          <mat-icon>manage_accounts</mat-icon>
+          <span>Mi Cuenta</span>
+        </a>
+      </mat-list-item><!-- End Profile Page Nav -->
+
+      <mat-nav-list class="sidebar-nav" id="sidebar-nav-bottom" >
+        <mat-list-item class="nav-item" class="button-session">
+          <a class="nav-link-session" routerLink="users-profile.html" mat-menu-item *ngIf="!(isAutenticated)">
+            <mat-icon>login</mat-icon>
+            <span>Iniciar Sesión</span>
           </a>
-        </li>
-        <li>
-          <a href="charts-apexcharts.html">
-            <i class="bi bi-circle"></i><span>ApexCharts</span>
+        </mat-list-item><!-- End Profile Page Nav -->
+        <mat-list-item class="nav-item" class="button-session">
+          <a class="nav-link-session" routerLink="users-profile.html" mat-menu-item *ngIf="isAutenticated" (click)="cerrarSesion()">
+            <mat-icon>logout</mat-icon>
+            <span>Cerrar Sesión</span>
           </a>
-        </li>
-        <li>
-          <a href="charts-echarts.html">
-            <i class="bi bi-circle"></i><span>ECharts</span>
-          </a>
-        </li>
-      </ul>
-    </li><!-- End Charts Nav -->
+        </mat-list-item><!-- End Profile Page Nav -->
+      </mat-nav-list>
 
-    <li class="nav-item">
-      <a class="nav-link collapsed" data-bs-target="#icons-nav" data-bs-toggle="collapse" href="#">
-        <i class="bi bi-gem"></i><span>Icons</span><i class="bi bi-chevron-down ms-auto"></i>
-      </a>
-      <ul id="icons-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
-        <li>
-          <a href="icons-bootstrap.html">
-            <i class="bi bi-circle"></i><span>Bootstrap Icons</span>
-          </a>
-        </li>
-        <li>
-          <a href="icons-remix.html">
-            <i class="bi bi-circle"></i><span>Remix Icons</span>
-          </a>
-        </li>
-        <li>
-          <a href="icons-boxicons.html">
-            <i class="bi bi-circle"></i><span>Boxicons</span>
-          </a>
-        </li>
-      </ul>
-    </li><!-- End Icons Nav -->
-
-    <li class="nav-heading">Perfil</li>
-
-    <li class="nav-item">
-      <a class="nav-link collapsed" href="users-profile.html">
-        <i class="fa-sharp fa-solid fa-route"></i>
-        <span>Direcciones</span>
-      </a>
-    </li><!-- End Profile Page Nav -->
-
-    <li class="nav-item">
-      <a class="nav-link collapsed" href="pages-contact.html">
-        <i class="fa-sharp fa-solid fa-credit-card"></i>
-        <span>Métodos Pago</span>
-      </a>
-    </li><!-- End Contact Page Nav -->
-
-    <li class="nav-item">
-      <a class="nav-link collapsed" href="pages-login.html">
-        <i class="fa-regular fa-user"></i>
-        <span>Cuenta</span>
-      </a>
-    </li><!-- End Login Page Nav -->
-
-  
-  </ul>
-
-</aside><!-- End Sidebar-->
+    </mat-nav-list>
+  </mat-sidenav>
+</mat-sidenav-container><!-- End Sidebar -->
