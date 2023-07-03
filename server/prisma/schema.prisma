@@ -43,6 +43,7 @@ model Direccion{
   telefono String
   usuarioId Int 
   usuario Usuario @relation(fields: [usuarioId],references: [id])
+  pedidos Pedido[]
 }
 
 model MetodoPago {
@@ -62,7 +63,7 @@ model Categoria{
   productos Producto[]
 }
 
-model ProductoEstado{
+model Estado{
   id  Int   @id @default(autoincrement())
   descripcion  String
   productos Producto []
@@ -77,7 +78,7 @@ model Producto {
   categoriaId Int
   categoria Categoria @relation(fields: [categoriaId],references: [id])
   productoEstadoId Int
-  productoEstado ProductoEstado @relation(fields: [productoEstadoId],references: [id])
+  productoEstado Estado @relation(fields: [productoEstadoId],references: [id])
   proveedorId Int 
   proveedor Usuario @relation(fields: [proveedorId],references: [id])
   imagenes Galeria[]
@@ -88,6 +89,7 @@ model Producto {
 model Galeria{
   id  Int   @id @default(autoincrement())
   imagen  Bytes?  @db.LongBlob
+  imagenPath String?
   estado Boolean 
   productoId Int 
   producto Producto @relation(fields: [productoId],references: [id])
@@ -102,6 +104,8 @@ model Pedido {
   estado String
   usuarioId Int
   usuario Usuario @relation(fields: [usuarioId],references: [id])
+  direccionId Int
+  direccion Direccion @relation(fields: [direccionId],references: [id])
   productos DetallePedido[]
   facturas Factura[]
   evaluaciones Evaluacion[]

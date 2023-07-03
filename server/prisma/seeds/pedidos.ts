@@ -4,6 +4,7 @@ export const pedidos = [
         total: 56000,
         estado: "Finalizado",
         usuarioId: 465218563,
+        direccionId:3,
         productos: {
             createMany: {
                 data: [
@@ -15,12 +16,14 @@ export const pedidos = [
                 ],
             },
         },
+        
     },
     //2
     {
         total: 104000,
         estado: "Pendiente",
         usuarioId: 465218563,
+        direccionId:3,
         productos: {
             createMany: {
                 data: [
@@ -47,6 +50,7 @@ export const pedidos = [
         total: 760000,
         estado: "Pendiente",
         usuarioId: 462578415,
+        direccionId:4,
         productos: {
             createMany: {
                 data: [

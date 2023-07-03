@@ -56,4 +56,9 @@ export class ProductoAllComponent implements AfterViewInit {
     this.destroy$.next(true);
     this.destroy$.unsubscribe();
   }
+  crearProducto() {
+    this.router.navigate(['/producto/create'], {
+      relativeTo: this.route,
+    });
+  }
 }

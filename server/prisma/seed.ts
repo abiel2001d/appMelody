@@ -44,8 +44,8 @@ async function main() {
     data: categorias
   });
 
-  //Estado de los Productos
-  await prisma.productoEstado.createMany({
+  //Estado de los EstadoProductos
+  await prisma.estado.createMany({
     data: productoEstados
   });
   

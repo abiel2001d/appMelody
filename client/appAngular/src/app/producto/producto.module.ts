@@ -14,14 +14,23 @@ import { ProductoAllComponent } from './producto-all/producto-all.component';
 import { MatTableModule } from '@angular/material/table';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatSortModule } from '@angular/material/sort';
-
-
+import {MatTabsModule} from '@angular/material/tabs';
+import {MatProgressBarModule} from '@angular/material/progress-bar';
+import { ProductoFormComponent } from './producto-form/producto-form.component';
+import { ReactiveFormsModule } from '@angular/forms';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatRadioModule } from '@angular/material/radio';
+import {FormsModule} from '@angular/forms';
+import {MatInputModule} from '@angular/material/input';
+import {NgFor} from '@angular/common';
+import {MatSelectModule} from '@angular/material/select';
 
 @NgModule({
   declarations: [
     ProductoIndexComponent,
     ProductoDetailComponent,
-    ProductoAllComponent
+    ProductoAllComponent,
+    ProductoFormComponent
   ],
   imports: [
     MatGridListModule,
@@ -34,7 +43,16 @@ import { MatSortModule } from '@angular/material/sort';
     MatTableModule,
     MatPaginatorModule,
     MatSortModule,
-    MatCheckboxModule
+    MatCheckboxModule,
+    MatTabsModule,
+    MatProgressBarModule,
+    ReactiveFormsModule,
+    MatFormFieldModule,
+    MatRadioModule,
+    FormsModule,
+    MatInputModule,
+    NgFor,
+    MatSelectModule
   ]
 })
 export class ProductoModule { }

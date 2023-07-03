@@ -1,1 +1,64 @@
-<p>producto-detail works!</p>
+<mat-card class="full-width">
+
+    <h2 class="p-5" style="font-weight: 300;">{{ datos.descripcion }}</h2>
+
+    <div class="row g-0">
+
+        <div class="col-6 p-2">
+            
+          <div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel">
+            <div class="carousel-inner">
+              <ng-container *ngFor="let imagen of datos.imagenes; let isFirst = first">
+                <div class="carousel-item" [class.active]="isFirst">
+                  <img [src]="getBase64FromBytes(imagen.imagen.data)" class="d-block w-100 rounded" alt="...">
+                </div>
+              </ng-container>
+            </div>
+            <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="prev">
+              <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+              <span class="visually-hidden">Previous</span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="next">
+              <span class="carousel-control-next-icon" aria-hidden="true"></span>
+              <span class="visually-hidden">Next</span>
+            </button>
+          </div>
+          
+
+        </div>
+
+
+              <div class="col-6 p-2">
+                <mat-tab-group>
+                    <mat-tab label="Detalles"> 
+                        <mat-card class="p-5" style="font-weight: 200;"> 
+                            <p><mat-icon>label_important</mat-icon>Estado: {{ datos.productoEstado.descripcion }}</p>
+                            <p><mat-icon>label_important</mat-icon>Disponibles: {{ datos.cantidad  }}</p>
+                            <p><mat-icon>label_important</mat-icon>Categoría: {{ datos.categoria.descripcion }}</p>
+                            <p><mat-icon>label_important</mat-icon>Proveedor: {{ datos.proveedor.proveedor }}</p>
+                            <p><mat-icon>sell</mat-icon> {{ datos.precio | currency: "USD"}}</p>
+                          </mat-card>
+                    </mat-tab>
+                    <mat-tab label="Comentarios">
+                        <div>
+                            <div *ngFor="let dialogo of datos.dialogos" class="p-2">
+                                <mat-card>
+                                <div *ngFor="let comentario of dialogo.comentarios;last as last" class="p-2">
+                                    <p style="font-weight: 500;"> 
+                                        <mat-icon *ngIf="comentario.tipo==2" style="margin-right: 8px;margin-top: 5px;">support_agent</mat-icon> 
+                                        <mat-icon *ngIf="comentario.tipo==3" style="margin-right: 8px;margin-top: 5px;">person</mat-icon>
+                                        {{ comentario.usuario.nombre }} <span style="font-style: italic;">- {{ comentario.fechaComentario | date }}</span></p> 
+                                    <p style="font-weight: 200;">{{ comentario.contenido }}</p> 
+                                    <mat-divider [inset]="true" *ngIf="!last"></mat-divider>
+                                </div>
+                                </mat-card>
+                            </div>
+                        </div>
+                    </mat-tab>
+                </mat-tab-group>
+            </div>
+
+    </div>
+    
+</mat-card>
+

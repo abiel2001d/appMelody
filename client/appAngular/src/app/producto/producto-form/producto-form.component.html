@@ -1,0 +1,94 @@
+<form [formGroup]="productoForm" (ngSubmit)="isCreate ? crearProducto() : actualizarProducto()"  novalidate >
+    <input type="hidden" formControlName="id"  />
+    <mat-card class="shipping-card">
+      <mat-card-header>
+        <mat-card-title>{{titleForm}} Producto</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+
+        <div class="row g-0">
+
+          <div class="col-6 p-2">
+
+
+            <div class="row">
+                <mat-form-field class="full-width">
+                  <input matInput maxlength="20" placeholder="Descripción" formControlName="descripcion" >
+                </mat-form-field>
+            </div>
+            <div class="row">
+              <div class="col-6">
+                <mat-form-field  style="width: 280px;">
+                  <mat-select placeholder="Proveedores" formControlName="proveedor">
+                    <mat-option *ngFor="let item of proveedoresList" [value]="item.id">
+                      {{item.proveedor}}
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
+              <div class="col-6">
+                <mat-form-field class="full-width">
+                  <input matInput placeholder="Precio" formControlName="precio">
+                 
+                </mat-form-field>
+              </div>
+            </div>
+           
+
+
+            <div class="row">
+              <div class="col-6">
+                
+                <mat-form-field >
+                  <mat-select placeholder="Categoria" formControlName="categoria">
+                    <mat-option *ngFor="let item of categoriasList" [value]="item.id">
+                      {{item.descripcion}}
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
+              <div class="col-6">
+                <mat-form-field class="full-width">
+                  <input matInput placeholder="Cantidad" formControlName="cantidad">
+                
+                </mat-form-field>
+              </div>
+              
+            </div>
+    
+            <div class="row">
+              <div class="col-6">
+                <mat-form-field style="width: 250px;" >
+                  <mat-select placeholder="Estado" formControlName="productoEstado">
+                    <mat-option *ngFor="let item of estadosProductoList" [value]="item.id">
+                      {{ item.descripcion }}
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
+              <div class="col-6">
+               
+                <mat-label>Publicar</mat-label>
+                <mat-radio-group formControlName="estado" primary>
+                  <mat-radio-button [value]="true">Sí</mat-radio-button>
+                  <mat-radio-button [value]="false">No</mat-radio-button>
+                </mat-radio-group>
+              </div>
+            
+            
+            </div>
+
+          </div>
+
+        </div>
+
+
+        
+
+      </mat-card-content>
+      <mat-card-actions>
+        <button mat-raised-button color="primary" type="submit">Guardar</button>
+      </mat-card-actions>
+    </mat-card>
+  </form>
+  

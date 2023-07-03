@@ -7,13 +7,14 @@
       matTooltip="Crear Producto"
       aria-label="Crear Producto"
       color="primary"
+      (click)="crearProducto()"
     >
       <mat-icon>add</mat-icon>
     </a>
   </mat-card-title>
   <mat-card-content>
     <!-- Table -->
-    <div class="mat-elevation-z8">
+    <div class="mat-elevation-z8" style="font-weight: 200;">
       <table mat-table [dataSource]="dataSource" class="full-width-table" matSort aria-label="Elements">
         <!-- Columna nombre -->
         <ng-container matColumnDef="descripcion">

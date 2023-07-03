@@ -6,6 +6,7 @@ module.exports.get = async (request, response, next) => {
     include: {
         usuario:true,
         productos: true,
+        direccion:true,
     },
   });
   response.json(pedidos);
@@ -19,11 +20,13 @@ module.exports.getById = async (request, response, next) => {
         include: {
             usuario:true,
             productos: true,
+            direccion:true,
         }
     })
     response.json(pedido);
 };
 //Crear
-module.exports.create = async (request, response, next) => {};
+module.exports.create = async (request, response, next) => {}
+
 //Actualizar
 module.exports.update = async (request, response, next) => {};
