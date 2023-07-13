@@ -1,5 +1,6 @@
 const dotEnv = require('dotenv');
 const express = require('express');
+const bodyParser = require('body-parser');
 const { PrismaClient } = require('@prisma/client');
 const { request, response } = require('express');
 const cors = require('cors');
@@ -13,11 +14,14 @@ const productoRoutes = require('./routes/productoRoutes');
 const galeriaRoutes = require('./routes/galeriaRoutes');
 const estadoRoutes = require('./routes/estadoRoutes');
 const categoriaRoutes = require('./routes/categoriaRoutes');
+const comentarioRoutes = require('./routes/comentarioRoutes');
 
 // Acceder a la configuracion del archivo .env
 dotEnv.config();
 // Puerto que escucha por defecto 3000 o definido .env
 const port = process.env.PORT || 3000;
+
+app.use(bodyParser.json({ limit: '50mb' }));
 // Middleware CORS para aceptar llamadas en el servidor
 app.use(cors());
 // Middleware para loggear las llamadas al servidor
@@ -36,6 +40,7 @@ app.use('/producto/', productoRoutes);
 app.use('/galeria/', galeriaRoutes);
 app.use('/estado/', estadoRoutes);
 app.use('/categoria/', categoriaRoutes);
+app.use('/comentario/', comentarioRoutes);
 
 // Servidor
 app.listen(port, () => {

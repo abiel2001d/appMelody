@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Subject, takeUntil } from 'rxjs';
-import { LocationService } from 'src/app/direccion/location.service';
+import { LocationService } from 'src/app/share/location.service';
 
 @Component({
 selector: 'app-direccion-index',

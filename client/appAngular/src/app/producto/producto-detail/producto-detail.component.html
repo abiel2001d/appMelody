@@ -1,6 +1,6 @@
-<mat-card class="full-width">
+<mat-card class="full-width" style="margin: 0 50px 0 50px;">
 
-    <h2 class="p-5" style="font-weight: 300;">{{ datos.descripcion }}</h2>
+    
 
     <div class="row g-0">
 
@@ -10,16 +10,19 @@
             <div class="carousel-inner">
               <ng-container *ngFor="let imagen of datos.imagenes; let isFirst = first">
                 <div class="carousel-item" [class.active]="isFirst">
-                  <img [src]="getBase64FromBytes(imagen.imagen.data)" class="d-block w-100 rounded" alt="...">
+                  <img *ngIf="imagen.imagen; else imagePath" [src]="getBase64FromBytes(imagen.imagen.data)" class="d-block w-100 rounded" alt="...">
+                  <ng-template #imagePath>
+                    <img src="./assets/img/default.jpg" class="d-block w-100 rounded" alt="...">
+                  </ng-template> 
                 </div>
               </ng-container>
             </div>
             <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="prev">
-              <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+              <span class="carousel-control-prev-icon" aria-hidden="true" style="background-color: black;border-radius: 8px;"></span>
               <span class="visually-hidden">Previous</span>
             </button>
-            <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="next">
-              <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="next" >
+              <span class="carousel-control-next-icon" aria-hidden="true"  style="background-color: black;border-radius: 8px;"></span>
               <span class="visually-hidden">Next</span>
             </button>
           </div>
@@ -27,38 +30,82 @@
 
         </div>
 
+        <div class="col-6 p-4">
 
-              <div class="col-6 p-2">
-                <mat-tab-group>
-                    <mat-tab label="Detalles"> 
-                        <mat-card class="p-5" style="font-weight: 200;"> 
-                            <p><mat-icon>label_important</mat-icon>Estado: {{ datos.productoEstado.descripcion }}</p>
-                            <p><mat-icon>label_important</mat-icon>Disponibles: {{ datos.cantidad  }}</p>
-                            <p><mat-icon>label_important</mat-icon>Categoría: {{ datos.categoria.descripcion }}</p>
-                            <p><mat-icon>label_important</mat-icon>Proveedor: {{ datos.proveedor.proveedor }}</p>
-                            <p><mat-icon>sell</mat-icon> {{ datos.precio | currency: "USD"}}</p>
-                          </mat-card>
-                    </mat-tab>
-                    <mat-tab label="Comentarios">
-                        <div>
-                            <div *ngFor="let dialogo of datos.dialogos" class="p-2">
-                                <mat-card>
-                                <div *ngFor="let comentario of dialogo.comentarios;last as last" class="p-2">
-                                    <p style="font-weight: 500;"> 
-                                        <mat-icon *ngIf="comentario.tipo==2" style="margin-right: 8px;margin-top: 5px;">support_agent</mat-icon> 
-                                        <mat-icon *ngIf="comentario.tipo==3" style="margin-right: 8px;margin-top: 5px;">person</mat-icon>
-                                        {{ comentario.usuario.nombre }} <span style="font-style: italic;">- {{ comentario.fechaComentario | date }}</span></p> 
-                                    <p style="font-weight: 200;">{{ comentario.contenido }}</p> 
-                                    <mat-divider [inset]="true" *ngIf="!last"></mat-divider>
-                                </div>
-                                </mat-card>
-                            </div>
-                        </div>
-                    </mat-tab>
-                </mat-tab-group>
-            </div>
+          <h3 class="p-2" style="font-weight: 500;color: rgb(61, 61, 61);">{{ datos.descripcion }}</h3>
+          <mat-card>
+            <div style="font-weight: 200;padding:30px 0 5px 90px;">
+              <p><mat-icon>label_important</mat-icon><span style="font-weight: 400;">Estado: </span> {{ datos.productoEstado.descripcion }}</p>
+              <p><mat-icon>label_important</mat-icon><span style="font-weight: 400;">Categoría: </span> {{ datos.categoria.descripcion }}</p>
+              <p><mat-icon>label_important</mat-icon><span style="font-weight: 400;">Proveedor: </span> {{ datos.proveedor.proveedor }}</p>
+            </div> 
+            <hr>
+            <p style="font-weight: 500; text-align: center;"><mat-icon>sell</mat-icon> {{ datos.precio | currency: "USD"}}</p>
+            <p style="text-align: center;"><span style="padding:5px 10px 5px 10px; border-radius: 8px;margin-left: 8px;" [ngStyle]="{'background-color': getBackgroundColor(datos.cantidad)}">{{ estadoInventario }}</span> </p>
+            
+          </mat-card>
+             
+        </div>
 
     </div>
+
+    <div>
+      <mat-tab-group>
+        <mat-tab label="Comentarios">
+          <div style="padding: 15px 100px 30px 100px">
+            <mat-card *ngIf="datos.dialogos && datos.dialogos.length > 0">
+              <mat-card>
+                <p style="font-weight: 400; font-size: 20px; padding: 15px; padding-bottom: 3px;">
+                  {{ datos.dialogos[currentDialog].titulo }}
+                </p>
+                <mat-divider></mat-divider>
+                <div *ngFor="let comentario of datos.dialogos[currentDialog].comentarios; last as last" class="p-2">
+                  <p style="display: flex; align-items: baseline;">
+                    <mat-icon *ngIf="comentario.tipo == 2" style="margin-right: 8px; margin-top: 5px;">group_work</mat-icon>
+                    <mat-icon *ngIf="comentario.tipo == 3" style="margin-right: 8px; margin-top: 5px;">person</mat-icon>
+                    <span *ngIf="comentario.tipo == 2" style="font-weight: 500;">{{ comentario.usuario.proveedor }}:</span>
+                    <span *ngIf="comentario.tipo == 3" style="font-weight: 500;">{{ comentario.usuario.nombre }}:</span>
+                    <span style="font-weight: 300; margin-left: 5px;">{{ comentario.contenido }}</span>
+                    <span style="margin-left: auto; font-weight: 100; font-size: 12px;">
+                      {{ comentario.fechaComentario | date: 'dd/MM/YYYY HH:mm' }}
+                    </span>
+                  </p>
+                  <mat-divider [inset]="true" *ngIf="!last"></mat-divider>
+                </div>
+              </mat-card>
+              <form style="margin-top: 10px;" [formGroup]="comentarioForm"
+                (ngSubmit)="enviarMensaje(datos.dialogos[currentDialog].id)">
+                <mat-form-field appearance="fill" class="p-2" style="width: 500px;">
+                  <input matInput placeholder="Comentario" formControlName="contenido">
+                  <mat-error *ngIf="errorHandling('contenido','required')">
+                    Comentario no puede ser <strong>vacío</strong>
+                  </mat-error>
+                  <mat-error *ngIf="errorHandling('contenido','minlength')">
+                    Comentario debe tener como mínimo <strong>2 caracteres</strong>
+                  </mat-error>
+                </mat-form-field>
+                <button mat-raised-button color="primary" type="submit">
+                  <mat-icon>send</mat-icon>
+                </button>
+              </form>
+              <div style="display: flex; justify-content: center; padding-bottom: 5px;">
+                <button mat-icon-button (click)="prevDialog()" [disabled]="currentDialog === 0">
+                  <mat-icon>keyboard_arrow_left</mat-icon>
+                </button>
+                <button mat-icon-button (click)="nextDialog()"
+                  [disabled]="currentDialog === datos.dialogos.length - 1">
+                  <mat-icon>keyboard_arrow_right</mat-icon>
+                </button>
+              </div>
+            </mat-card>
+            <div *ngIf="!datos.dialogos || datos.dialogos.length === 0" style="text-align: center; padding: 10px;">
+              <p style="font-weight: 100;color: rgb(160, 160, 160);">No hay comentarios</p>
+            </div>
+          </div>
+        </mat-tab>
+      </mat-tab-group>
+    </div>
+    
     
 </mat-card>
 

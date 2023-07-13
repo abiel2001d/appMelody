@@ -66,10 +66,7 @@ async function main() {
     });
   }
 
-  //Facturas
-  await prisma.factura.createMany({
-    data: facturas
-  });
+  
 
   //Evaluaciones
    await prisma.evaluacion.createMany({

@@ -52,7 +52,7 @@ import {MatSelectModule} from '@angular/material/select';
     FormsModule,
     MatInputModule,
     NgFor,
-    MatSelectModule
+    MatSelectModule,
   ]
 })
 export class ProductoModule { }

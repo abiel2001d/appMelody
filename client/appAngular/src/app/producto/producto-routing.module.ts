@@ -9,9 +9,8 @@ const routes: Routes = [
   {path:'producto',component:ProductoIndexComponent},
   {path:'producto/all',component:ProductoAllComponent},
   {path:'producto/create', component: ProductoFormComponent},
-
-  {path:'producto/:id',component:ProductoDetailComponent}
-  //{path:'videojuego/update/:id', component: VideojuegoFormComponent},
+  {path:'producto/:id',component:ProductoDetailComponent},
+  {path:'producto/update/:id', component: ProductoFormComponent},
 ];
 
 @NgModule({

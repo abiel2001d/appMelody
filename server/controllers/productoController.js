@@ -28,11 +28,14 @@ module.exports.getById = async (request, response, next) => {
           },
           dialogos: {
               select: {
+                titulo:true,
+                  id:true,
                   comentarios: {
                       include: {
                           usuario: {
                               select: {
-                                  nombre: true
+                                  nombre: true,
+                                  proveedor: true
                               }
                           }
                       }
@@ -45,9 +48,8 @@ module.exports.getById = async (request, response, next) => {
 };
 
 //Crear
-const fs = require('fs');
 module.exports.create = async (request, response, next) => {
-  let producto = request.body;
+  let producto = request.body; 
   const newProducto = await prisma.producto.create({
     data: {
       descripcion: producto.descripcion,
@@ -59,7 +61,8 @@ module.exports.create = async (request, response, next) => {
       proveedorId: producto.proveedor,
       imagenes: {
         create: producto.imagenes.map((imagen) => ({
-          imagen: fs.readFileSync(imagen.imagePath),
+          imagen: Buffer.from(imagen.imagen.split(';base64,').pop(), 'base64'), 
+          imagenPath:imagen.imagenPath,
           estado: imagen.estado,
         })),
       }
@@ -74,4 +77,38 @@ module.exports.create = async (request, response, next) => {
   
   
 //Actualizar
-module.exports.update = async (request, response, next) => {};
+module.exports.update = async (request, response, next) => {
+  let producto = request.body;
+  let idProducto = parseInt(request.params.id);
+ 
+ 
+  await prisma.galeria.deleteMany({
+    where: {
+      productoId: idProducto,
+    },
+  });
+
+  const newProducto = await prisma.producto.update({
+    where: {
+      id: idProducto,
+    },
+    data: {
+      descripcion: producto.descripcion,
+      precio: producto.precio,
+      cantidad: producto.cantidad,
+      estado: producto.estado,
+      categoriaId: producto.categoria,
+      productoEstadoId: producto.productoEstado,
+      proveedorId: producto.proveedor,
+      imagenes: {
+        create: producto.imagenes.map((imagen) => ({
+          imagen: Buffer.from(imagen.imagen.split(';base64,').pop(), 'base64'), 
+          imagenPath:imagen.imagenPath,
+          estado: imagen.estado,
+        })),
+      }
+    },
+  });
+  response.json(producto);
+};
+

@@ -1,0 +1,25 @@
+p{
+    font-weight: 100;
+}
+strong{
+    font-weight: 500;
+}
+
+h4{
+    font-weight: 300;
+    padding: 8px;
+}
+
+th{
+    font-weight: 500;
+}
+
+.custom{
+    color: #91CA62;
+    font-size: 30px;
+    padding: 15px;
+}
+
+td{
+    font-weight: 100;
+}

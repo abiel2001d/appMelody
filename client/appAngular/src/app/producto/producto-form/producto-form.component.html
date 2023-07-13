@@ -2,21 +2,64 @@
     <input type="hidden" formControlName="id"  />
     <mat-card class="shipping-card">
       <mat-card-header>
-        <mat-card-title>{{titleForm}} Producto</mat-card-title>
+       
       </mat-card-header>
       <mat-card-content>
 
         <div class="row g-0">
 
           <div class="col-6 p-2">
+            
+            <div id="carouselExampleControls" class="carousel slide"(slid.bs.carousel)="updateCurrentCarouselIndex($event)">
+              <div class="carousel-inner">
+                <ng-container *ngFor="let imagen of selectedImagesPath; let isFirst = first; let i = index; trackBy: trackByIndex">
+                  <div class="carousel-item" [class.active]="i === currentCarouselIndex">
+                    <img [src]="imagen" class="d-block w-100 rounded" alt="...">
+                  </div>
+                </ng-container>
+                
+              </div>
+              <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true" style="background-color: black;border-radius: 8px;"></span>
+                <span class="visually-hidden">Previous</span>
+              </button>
+              <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true" style="background-color: black;border-radius: 8px;"></span>
+                <span class="visually-hidden">Next</span>
+              </button>
+            </div>
+            
+            <div class="row mt-1">
+           
+                <div class="col-sm-7">
+                  <input type="file" class="form-control" id="customFile" (change)="handleFileInput($event)" #fileInput />
+                </div>
+                
+                <div class="col-sm-1">
+                  <div class="btn-group" role="group">
+                    <button mat-raised-button color="primary" (click)="addSelectedImage($event)" style="margin-right: 5px;">
+                      <mat-icon>add</mat-icon>
+                    </button>
+                    <button mat-raised-button color="primary" (click)="changeImage($event)" style="margin-right: 5px;">
+                      <mat-icon>check</mat-icon>
+                    </button>
+                    <button mat-raised-button color="primary" (click)="deleteImage($event)">
+                      <mat-icon>delete</mat-icon>
+                    </button>
+                  </div>
+                </div>
+                
+              </div>
+            
+            </div>
 
-
+          <div class="col-6 p-2">
             <div class="row">
                 <mat-form-field class="full-width">
-                  <input matInput maxlength="20" placeholder="Descripción" formControlName="descripcion" >
+                  <input matInput  placeholder="Descripción" formControlName="descripcion" >
                 </mat-form-field>
             </div>
-            <div class="row">
+            <div class="row mt-3">
               <div class="col-6">
                 <mat-form-field  style="width: 280px;">
                   <mat-select placeholder="Proveedores" formControlName="proveedor">
@@ -33,10 +76,7 @@
                 </mat-form-field>
               </div>
             </div>
-           
-
-
-            <div class="row">
+            <div class="row mt-3">
               <div class="col-6">
                 
                 <mat-form-field >
@@ -56,7 +96,7 @@
               
             </div>
     
-            <div class="row">
+            <div class="row mt-3">
               <div class="col-6">
                 <mat-form-field style="width: 250px;" >
                   <mat-select placeholder="Estado" formControlName="productoEstado">
@@ -81,14 +121,12 @@
           </div>
 
         </div>
-
-
-        
-
       </mat-card-content>
-      <mat-card-actions>
-        <button mat-raised-button color="primary" type="submit">Guardar</button>
-      </mat-card-actions>
+
+      <mat-card-footer class="footer">
+        <button mat-raised-button color="primary" type="submit"> <mat-icon >save</mat-icon></button>
+      </mat-card-footer>
+      
     </mat-card>
   </form>
   

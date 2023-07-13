@@ -5,6 +5,7 @@ export const pedidos = [
         estado: "Finalizado",
         usuarioId: 465218563,
         direccionId:3,
+        metodoPagoId: 1,
         productos: {
             createMany: {
                 data: [
@@ -12,7 +13,7 @@ export const pedidos = [
                     cantidad: 1,
                     precioUnitario: 56000,
                     subTotal: 56000,
-                    estado: "Finalizado" }
+                    estado: "Entregado" }
                 ],
             },
         },
@@ -21,9 +22,10 @@ export const pedidos = [
     //2
     {
         total: 104000,
-        estado: "Pendiente",
+        estado: "En progreso",
         usuarioId: 465218563,
         direccionId:3,
+        metodoPagoId: 2,
         productos: {
             createMany: {
                 data: [
@@ -32,7 +34,7 @@ export const pedidos = [
                     cantidad: 1,
                     precioUnitario: 56000,
                     subTotal: 56000,
-                    estado: "Pendiente" 
+                    estado: "Entregado" 
                 },
                 {   
                     productoId: 4,
@@ -51,6 +53,7 @@ export const pedidos = [
         estado: "Pendiente",
         usuarioId: 462578415,
         direccionId:4,
+        metodoPagoId: 3,
         productos: {
             createMany: {
                 data: [
@@ -59,7 +62,7 @@ export const pedidos = [
                     cantidad: 2,
                     precioUnitario: 56000,
                     subTotal: 760000,
-                    estado: "En proceso"
+                    estado: "Pendiente"
                 }
                 ],
             },

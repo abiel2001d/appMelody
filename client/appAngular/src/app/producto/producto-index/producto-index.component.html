@@ -14,35 +14,52 @@
               <div [id]="'carouselExampleControls-' + i" class="carousel slide" data-bs-ride="carousel">
                 <div class="carousel-inner">
                   <ng-container *ngFor="let imagen of item.imagenes; let isFirst = first">
-                    <div class="carousel-item" [class.active]="isFirst" *ngIf="imagen.imagen !== null">
-                      <img [src]="getBase64FromBytes(imagen.imagen.data)" class="d-block w-100 rounded" alt="...">
+                    <div class="carousel-item" [class.active]="isFirst">
+                      <img *ngIf="imagen.imagen; else imagePath" [src]="getBase64FromBytes(imagen.imagen.data)" class="d-block w-100 rounded" alt="...">
+                      <ng-template #imagePath>
+                        <img src="./assets/img/default.jpg" class="d-block w-100 rounded" alt="...">
+                      </ng-template> 
                     </div>
                   </ng-container>
                 </div>
                 <button class="carousel-control-prev" type="button"
                   [attr.data-bs-target]="'#carouselExampleControls-' + i" data-bs-slide="prev">
-                  <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                  <span class="carousel-control-prev-icon" aria-hidden="true"  style="background-color: black;border-radius: 8px;"></span>
                   <span class="visually-hidden">Previous</span>
                 </button>
                 <button class="carousel-control-next" type="button"
                   [attr.data-bs-target]="'#carouselExampleControls-' + i" data-bs-slide="next">
-                  <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                  <span class="carousel-control-next-icon" aria-hidden="true"  style="background-color: black;border-radius: 8px;"></span>
                   <span class="visually-hidden">Next</span>
                 </button>
               </div>
               <div class="card-body">
                 <h5 class="card-title" style="font-size: 18px; font-weight: 500;">{{ item.descripcion }}</h5>
-                <p class="card-text" style="font-size: 16px; font-weight: 100; color: gray;">{{ item.proveedor.proveedor }}</p>
-                <p class="card-text" style="font-size: 16px; font-weight: 300;">{{ item.precio | currency: "USD" }}</p>
+                <hr>
+                <div class="row mt-3">
+                  <div class="col-5">
+                    <p class="card-text" style="font-size: 16px; font-weight: 300;"><mat-icon>sell</mat-icon>{{ item.precio | currency: "USD" }}</p>
+                  </div>
+                 
+                  <div class="col-3">
+                    <div class="row">
+                    <button (click)="detalleProducto(item.id)" mat-mini-fab aria-label="Detalle" color="primary">
+                      <mat-icon>info</mat-icon>
+                    </button>
+                    <button mat-mini-fab  aria-label="Comprar" color="primary">
+                      <mat-icon>add</mat-icon>
+                    </button>
+                  </div>
+                  </div>
+                  <div class="col-4">
+                    <p class="card-text">
+                      <span style="font-weight: 300;padding:5px 10px 5px 10px; border-radius: 8px;margin-left: 8px;" [ngStyle]="{'background-color': getBackgroundColor(item.cantidad)}">{{ estadoInventario }}</span>
+                    </p>
+                  </div>
+                </div>
               </div>
-              <div class="card-footer">
-                <button mat-mini-fab color="accent"aria-label="Detalle" color="primary">
-                  <mat-icon class="mat-18">info</mat-icon>
-                </button>
-                <button mat-mini-fab color="accent" aria-label="Comprar" color="primary">
-                  <mat-icon class="mat-18">add_shopping_cart</mat-icon>
-                </button>
-              </div>
+              
+            
             </div>
           </div>
         </div>
@@ -66,34 +83,49 @@
               <div [id]="'carouselExampleControls-' + i" class="carousel slide" data-bs-ride="carousel">
                 <div class="carousel-inner">
                   <ng-container *ngFor="let imagen of item.imagenes; let isFirst = first">
-                    <div class="carousel-item" [class.active]="isFirst" *ngIf="imagen.imagen !== null">
-                      <img [src]="getBase64FromBytes(imagen.imagen.data)" class="d-block w-100 rounded" alt="...">
+                    <div class="carousel-item" [class.active]="isFirst">
+                      <img *ngIf="imagen.imagen; else imagePath" [src]="getBase64FromBytes(imagen.imagen.data)" class="d-block w-100 rounded" alt="...">
+                      <ng-template #imagePath>
+                        <img src="./assets/img/default.jpg" class="d-block w-100 rounded" alt="...">
+                      </ng-template> 
                     </div>
                   </ng-container>
                 </div>
                 <button class="carousel-control-prev" type="button"
                   [attr.data-bs-target]="'#carouselExampleControls-' + i" data-bs-slide="prev">
-                  <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                  <span class="carousel-control-prev-icon" aria-hidden="true"  style="background-color: black;border-radius: 8px;"></span>
                   <span class="visually-hidden">Previous</span>
                 </button>
                 <button class="carousel-control-next" type="button"
                   [attr.data-bs-target]="'#carouselExampleControls-' + i" data-bs-slide="next">
-                  <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                  <span class="carousel-control-next-icon" aria-hidden="true"  style="background-color: black;border-radius: 8px;"></span>
                   <span class="visually-hidden">Next</span>
                 </button>
               </div>
               <div class="card-body">
                 <h5 class="card-title" style="font-size: 18px; font-weight: 500;">{{ item.descripcion }}</h5>
-                <p class="card-text" style="font-size: 16px; font-weight: 100; color: gray;">{{ item.proveedor.proveedor }}</p>
-                <p class="card-text" style="font-size: 16px; font-weight: 300;">{{ item.precio | currency: "USD" }}</p>
-              </div>
-              <div class="card-footer">
-                <button mat-mini-fab color="accent"aria-label="Detalle" color="primary">
-                  <mat-icon class="mat-18">info</mat-icon>
-                </button>
-                <button mat-mini-fab color="accent" aria-label="Comprar" color="primary">
-                  <mat-icon class="mat-18">add_shopping_cart</mat-icon>
-                </button>
+                <hr>
+                <div class="row mt-3">
+                  <div class="col-5">
+                    <p class="card-text" style="font-size: 16px; font-weight: 300;"><mat-icon>sell</mat-icon>{{ item.precio | currency: "USD" }}</p>
+                  </div>
+                 
+                  <div class="col-3">
+                    <div class="row">
+                    <button (click)="detalleProducto(item.id)" mat-mini-fab aria-label="Detalle" color="primary">
+                      <mat-icon>info</mat-icon>
+                    </button>
+                    <button mat-mini-fab  aria-label="Comprar" color="primary">
+                      <mat-icon>add</mat-icon>
+                    </button>
+                  </div>
+                  </div>
+                  <div class="col-4">
+                    <p class="card-text">
+                      <span style="font-weight: 300;padding:5px 10px 5px 10px; border-radius: 8px;margin-left: 8px;" [ngStyle]="{'background-color': getBackgroundColor(item.cantidad)}">{{ estadoInventario }}</span>
+                    </p>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -117,34 +149,49 @@
               <div [id]="'carouselExampleControls-' + i" class="carousel slide" data-bs-ride="carousel">
                 <div class="carousel-inner">
                   <ng-container *ngFor="let imagen of item.imagenes; let isFirst = first">
-                    <div class="carousel-item" [class.active]="isFirst" *ngIf="imagen.imagen !== null">
-                      <img [src]="getBase64FromBytes(imagen.imagen.data)" class="d-block w-100 rounded" alt="...">
+                    <div class="carousel-item" [class.active]="isFirst">
+                      <img *ngIf="imagen.imagen; else imagePath" [src]="getBase64FromBytes(imagen.imagen.data)" class="d-block w-100 rounded" alt="...">
+                      <ng-template #imagePath>
+                        <img src="./assets/img/default.jpg" class="d-block w-100 rounded" alt="...">
+                      </ng-template> 
                     </div>
                   </ng-container>
                 </div>
                 <button class="carousel-control-prev" type="button"
                   [attr.data-bs-target]="'#carouselExampleControls-' + i" data-bs-slide="prev">
-                  <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                  <span class="carousel-control-prev-icon" aria-hidden="true"  style="background-color: black;border-radius: 8px;"></span>
                   <span class="visually-hidden">Previous</span>
                 </button>
                 <button class="carousel-control-next" type="button"
                   [attr.data-bs-target]="'#carouselExampleControls-' + i" data-bs-slide="next">
-                  <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                  <span class="carousel-control-next-icon" aria-hidden="true"  style="background-color: black;border-radius: 8px;"></span>
                   <span class="visually-hidden">Next</span>
                 </button>
               </div>
               <div class="card-body">
                 <h5 class="card-title" style="font-size: 18px; font-weight: 500;">{{ item.descripcion }}</h5>
-                <p class="card-text" style="font-size: 16px; font-weight: 100; color: gray;">{{ item.proveedor.proveedor }}</p>
-                <p class="card-text" style="font-size: 16px; font-weight: 300;">{{ item.precio | currency: "USD" }}</p>
-              </div>
-              <div class="card-footer">
-                <button mat-mini-fab color="accent"aria-label="Detalle" color="primary">
-                  <mat-icon class="mat-18">info</mat-icon>
-                </button>
-                <button mat-mini-fab color="accent" aria-label="Comprar" color="primary">
-                  <mat-icon class="mat-18">add_shopping_cart</mat-icon>
-                </button>
+                <hr>
+                <div class="row mt-3">
+                  <div class="col-5">
+                    <p class="card-text" style="font-size: 16px; font-weight: 300;"><mat-icon>sell</mat-icon>{{ item.precio | currency: "USD" }}</p>
+                  </div>
+                 
+                  <div class="col-3">
+                    <div class="row">
+                    <button (click)="detalleProducto(item.id)" mat-mini-fab aria-label="Detalle" color="primary">
+                      <mat-icon>info</mat-icon>
+                    </button>
+                    <button mat-mini-fab  aria-label="Comprar" color="primary">
+                      <mat-icon>add</mat-icon>
+                    </button>
+                  </div>
+                  </div>
+                  <div class="col-4">
+                    <p class="card-text">
+                      <span style="font-weight: 300;padding:5px 10px 5px 10px; border-radius: 8px;margin-left: 8px;" [ngStyle]="{'background-color': getBackgroundColor(item.cantidad)}">{{ estadoInventario }}</span>
+                    </p>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -169,35 +216,51 @@
                 <div [id]="'carouselExampleControls-' + i" class="carousel slide" data-bs-ride="carousel">
                   <div class="carousel-inner">
                     <ng-container *ngFor="let imagen of item.imagenes; let isFirst = first">
-                      <div class="carousel-item" [class.active]="isFirst" *ngIf="imagen.imagen !== null">
-                        <img [src]="getBase64FromBytes(imagen.imagen.data)" class="d-block w-100 rounded" alt="...">
+                      <div class="carousel-item" [class.active]="isFirst">
+                        <img *ngIf="imagen.imagen; else imagePath" [src]="getBase64FromBytes(imagen.imagen.data)" class="d-block w-100 rounded" alt="...">
+                        <ng-template #imagePath>
+                          <img src="./assets/img/default.jpg" class="d-block w-100 rounded" alt="...">
+                        </ng-template> 
                       </div>
                     </ng-container>
                   </div>
                   <button class="carousel-control-prev" type="button"
                     [attr.data-bs-target]="'#carouselExampleControls-' + i" data-bs-slide="prev">
-                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="carousel-control-prev-icon" aria-hidden="true"  style="background-color: black;border-radius: 8px;"></span>
                     <span class="visually-hidden">Previous</span>
                   </button>
                   <button class="carousel-control-next" type="button"
                     [attr.data-bs-target]="'#carouselExampleControls-' + i" data-bs-slide="next">
-                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="carousel-control-next-icon" aria-hidden="true" style="background-color: black;border-radius: 8px;"> </span>
                     <span class="visually-hidden">Next</span>
                   </button>
                 </div>
                 <div class="card-body">
                   <h5 class="card-title" style="font-size: 18px; font-weight: 500;">{{ item.descripcion }}</h5>
-                  <p class="card-text" style="font-size: 16px; font-weight: 100; color: gray;">{{ item.proveedor.proveedor }}</p>
-                  <p class="card-text" style="font-size: 16px; font-weight: 300;">{{ item.precio | currency: "USD" }}</p>
+                  <hr>
+                  <div class="row mt-3">
+                    <div class="col-5">
+                      <p class="card-text" style="font-size: 16px; font-weight: 300;"><mat-icon>sell</mat-icon>{{ item.precio | currency: "USD" }}</p>
+                    </div>
+                   
+                    <div class="col-3">
+                      <div class="row">
+                      <button (click)="detalleProducto(item.id)" mat-mini-fab aria-label="Detalle" color="primary">
+                        <mat-icon>info</mat-icon>
+                      </button>
+                      <button mat-mini-fab  aria-label="Comprar" color="primary">
+                        <mat-icon>add</mat-icon>
+                      </button>
+                    </div>
+                    </div>
+                    <div class="col-4">
+                      <p class="card-text">
+                        <span style="font-weight: 300;padding:5px 10px 5px 10px; border-radius: 8px;margin-left: 8px;" [ngStyle]="{'background-color': getBackgroundColor(item.cantidad)}">{{ estadoInventario }}</span>
+                      </p>
+                    </div>
+                  </div>
                 </div>
-                <div class="card-footer">
-                  <button mat-mini-fab color="accent"aria-label="Detalle" color="primary">
-                    <mat-icon class="mat-18">info</mat-icon>
-                  </button>
-                  <button mat-mini-fab color="accent" aria-label="Comprar" color="primary">
-                    <mat-icon class="mat-18">add_shopping_cart</mat-icon>
-                  </button>
-                </div>
+
               </div>
             </div>
           </div>
@@ -219,35 +282,51 @@
               <div [id]="'carouselExampleControls-' + i" class="carousel slide" data-bs-ride="carousel">
                 <div class="carousel-inner">
                   <ng-container *ngFor="let imagen of item.imagenes; let isFirst = first">
-                    <div class="carousel-item" [class.active]="isFirst" *ngIf="imagen.imagen !== null">
-                      <img [src]="getBase64FromBytes(imagen.imagen.data)" class="d-block w-100 rounded" alt="...">
+                    <div class="carousel-item" [class.active]="isFirst">
+                      <img *ngIf="imagen.imagen; else imagePath" [src]="getBase64FromBytes(imagen.imagen.data)" class="d-block w-100 rounded" alt="...">
+                      <ng-template #imagePath>
+                        <img src="./assets/img/default.jpg" class="d-block w-100 rounded" alt="...">
+                      </ng-template> 
                     </div>
                   </ng-container>
                 </div>
                 <button class="carousel-control-prev" type="button"
                   [attr.data-bs-target]="'#carouselExampleControls-' + i" data-bs-slide="prev">
-                  <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                  <span class="carousel-control-prev-icon" aria-hidden="true"  style="background-color: black;border-radius: 8px;"></span>
                   <span class="visually-hidden">Previous</span>
                 </button>
                 <button class="carousel-control-next" type="button"
                   [attr.data-bs-target]="'#carouselExampleControls-' + i" data-bs-slide="next">
-                  <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                  <span class="carousel-control-next-icon" aria-hidden="true"  style="background-color: black;border-radius: 8px;"></span>
                   <span class="visually-hidden">Next</span>
                 </button>
               </div>
               <div class="card-body">
                 <h5 class="card-title" style="font-size: 18px; font-weight: 500;">{{ item.descripcion }}</h5>
-                <p class="card-text" style="font-size: 16px; font-weight: 100; color: gray;">{{ item.proveedor.proveedor }}</p>
-                <p class="card-text" style="font-size: 16px; font-weight: 300;">{{ item.precio | currency: "USD" }}</p>
+                <hr>
+                <div class="row mt-3">
+                  <div class="col-5">
+                    <p class="card-text" style="font-size: 16px; font-weight: 300;"><mat-icon>sell</mat-icon>{{ item.precio | currency: "USD" }}</p>
+                  </div>
+                 
+                  <div class="col-3">
+                    <div class="row">
+                    <button (click)="detalleProducto(item.id)" mat-mini-fab aria-label="Detalle" color="primary">
+                      <mat-icon>info</mat-icon>
+                    </button>
+                    <button mat-mini-fab  aria-label="Comprar" color="primary">
+                      <mat-icon>add</mat-icon>
+                    </button>
+                  </div>
+                  </div>
+                  <div class="col-4">
+                    <p class="card-text">
+                      <span style="font-weight: 300;padding:5px 10px 5px 10px; border-radius: 8px;margin-left: 8px;" [ngStyle]="{'background-color': getBackgroundColor(item.cantidad)}">{{ estadoInventario }}</span>
+                    </p>
+                  </div>
+                </div>
               </div>
-              <div class="card-footer">
-                <button mat-mini-fab color="accent"aria-label="Detalle" color="primary">
-                  <mat-icon class="mat-18">info</mat-icon>
-                </button>
-                <button mat-mini-fab color="accent" aria-label="Comprar" color="primary">
-                  <mat-icon class="mat-18">add_shopping_cart</mat-icon>
-                </button>
-              </div>
+
             </div>
           </div>
         </div>
@@ -270,35 +349,51 @@
               <div [id]="'carouselExampleControls-' + i" class="carousel slide" data-bs-ride="carousel">
                 <div class="carousel-inner">
                   <ng-container *ngFor="let imagen of item.imagenes; let isFirst = first">
-                    <div class="carousel-item" [class.active]="isFirst" *ngIf="imagen.imagen !== null">
-                      <img [src]="getBase64FromBytes(imagen.imagen.data)" class="d-block w-100 rounded" alt="...">
+                    <div class="carousel-item" [class.active]="isFirst">
+                      <img *ngIf="imagen.imagen; else imagePath" [src]="getBase64FromBytes(imagen.imagen.data)" class="d-block w-100 rounded" alt="...">
+                      <ng-template #imagePath>
+                        <img src="./assets/img/default.jpg" class="d-block w-100 rounded" alt="...">
+                      </ng-template> 
                     </div>
                   </ng-container>
                 </div>
                 <button class="carousel-control-prev" type="button"
                   [attr.data-bs-target]="'#carouselExampleControls-' + i" data-bs-slide="prev">
-                  <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                  <span class="carousel-control-prev-icon" aria-hidden="true"  style="background-color: black;border-radius: 8px;"></span>
                   <span class="visually-hidden">Previous</span>
                 </button>
                 <button class="carousel-control-next" type="button"
                   [attr.data-bs-target]="'#carouselExampleControls-' + i" data-bs-slide="next">
-                  <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                  <span class="carousel-control-next-icon" aria-hidden="true"  style="background-color: black;border-radius: 8px;"></span>
                   <span class="visually-hidden">Next</span>
                 </button>
               </div>
               <div class="card-body">
                 <h5 class="card-title" style="font-size: 18px; font-weight: 500;">{{ item.descripcion }}</h5>
-                <p class="card-text" style="font-size: 16px; font-weight: 100; color: gray;">{{ item.proveedor.proveedor }}</p>
-                <p class="card-text" style="font-size: 16px; font-weight: 300;">{{ item.precio | currency: "USD" }}</p>
+                <hr>
+                <div class="row mt-3">
+                  <div class="col-5">
+                    <p class="card-text" style="font-size: 16px; font-weight: 300;"><mat-icon>sell</mat-icon>{{ item.precio | currency: "USD" }}</p>
+                  </div>
+                 
+                  <div class="col-3">
+                    <div class="row">
+                    <button (click)="detalleProducto(item.id)" mat-mini-fab aria-label="Detalle" color="primary">
+                      <mat-icon>info</mat-icon>
+                    </button>
+                    <button mat-mini-fab  aria-label="Comprar" color="primary">
+                      <mat-icon>add</mat-icon>
+                    </button>
+                  </div>
+                  </div>
+                  <div class="col-4">
+                    <p class="card-text">
+                      <span style="font-weight: 300;padding:5px 10px 5px 10px; border-radius: 8px;margin-left: 8px;" [ngStyle]="{'background-color': getBackgroundColor(item.cantidad)}">{{ estadoInventario }}</span>
+                    </p>
+                  </div>
+                </div>
               </div>
-              <div class="card-footer">
-                <button mat-mini-fab color="accent"aria-label="Detalle" color="primary">
-                  <mat-icon class="mat-18">info</mat-icon>
-                </button>
-                <button mat-mini-fab color="accent" aria-label="Comprar" color="primary">
-                  <mat-icon class="mat-18">add_shopping_cart</mat-icon>
-                </button>
-              </div>
+
             </div>
           </div>
         </div>

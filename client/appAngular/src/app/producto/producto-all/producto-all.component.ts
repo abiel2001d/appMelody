@@ -40,7 +40,7 @@ export class ProductoAllComponent implements AfterViewInit {
       .subscribe((data:any)=>{
         console.log(data);
         this.datos=data;
-        this.dataSource = new MatTableDataSource(this.datos);
+        this.dataSource = new MatTableDataSource(this.datos.filter(item => item.proveedorId == "462578415"));
         this.dataSource.sort = this.sort;
         this.dataSource.paginator = this.paginator;
       })
@@ -58,6 +58,11 @@ export class ProductoAllComponent implements AfterViewInit {
   }
   crearProducto() {
     this.router.navigate(['/producto/create'], {
+      relativeTo: this.route,
+    });
+  }
+  actualizarProducto(id: number) {
+    this.router.navigate(['/producto/update', id], {
       relativeTo: this.route,
     });
   }

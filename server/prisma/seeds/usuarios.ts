@@ -19,7 +19,7 @@ export const usuarios = [
     email: "emanuel97d@hotmail.com",
     telefono: "8484-3065",
     password: "ema123",
-    proveedor: "Music Instruments Inc.",
+    proveedor: "Music Instruments Inc",
     estado: true,
     roles:{
         connect: [{ id: 2 }]

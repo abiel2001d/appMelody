@@ -54,7 +54,7 @@ model MetodoPago {
   tipo String
   usuarioId Int 
   usuario Usuario @relation(fields: [usuarioId],references: [id])
-  facturas Factura[]
+  pedidos Pedido[]
 }
 
 model Categoria{
@@ -106,8 +106,9 @@ model Pedido {
   usuario Usuario @relation(fields: [usuarioId],references: [id])
   direccionId Int
   direccion Direccion @relation(fields: [direccionId],references: [id])
+  metodoPagoId Int
+  metodoPago MetodoPago @relation(fields: [metodoPagoId],references: [id])
   productos DetallePedido[]
-  facturas Factura[]
   evaluaciones Evaluacion[]
 }
 
@@ -127,17 +128,6 @@ model DetallePedido{
   @@id([pedidoId,productoId])
 }
 
-model Factura{
-  id          Int                 @id @default(autoincrement())
-  total Decimal  @db.Decimal(10, 2) 
-  fechaFactura  DateTime            @default(now())
-  updatedAt DateTime @updatedAt @default(now())
-  estado String
-  metodoPagoId Int
-  metodoPago MetodoPago @relation(fields: [metodoPagoId],references: [id])
-  pedidoId Int
-  pedido Pedido  @relation(fields: [pedidoId],references: [id])
-}
 
 model Evaluacion{
   comentrario String
@@ -157,6 +147,7 @@ model Evaluacion{
 
 model Dialogo{
     id          Int                 @id @default(autoincrement())
+    titulo String
     productoId Int
     producto Producto @relation(fields: [productoId], references: [id])
     comentarios Comentario[]

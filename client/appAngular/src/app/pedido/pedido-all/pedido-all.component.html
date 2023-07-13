@@ -1,0 +1,73 @@
+<mat-card class="full-width">
+  <!-- Titulo del Card -->
+  
+  <mat-card-content>
+    <!-- Table -->
+    <div class="mat-elevation-z8" style="font-weight: 200;">
+      <table mat-table [dataSource]="dataSource" class="full-width-table" matSort aria-label="Elements">
+        <!-- Columna nombre -->
+        <ng-container matColumnDef="id">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Número Pedido</th>
+          <td mat-cell *matCellDef="let row">{{ row.id }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="usuario" *ngIf="currentUser.rol===2   || currentUser.rol===1">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Cliente</th>
+          <td mat-cell *matCellDef="let row">{{ row.usuario.nombre }}</td>
+        </ng-container>
+
+        
+        <ng-container matColumnDef="total">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Total</th>
+          <td mat-cell *matCellDef="let row">{{ getTotalSubtotal(row.productos) | currency:"USD"}}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="fechaPedido">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Realizado en</th>
+          <td mat-cell *matCellDef="let row">{{ row.fechaPedido | date: 'dd/MM/yyyy' }}</td>
+        </ng-container>
+        
+
+        <ng-container matColumnDef="estado">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Estado</th>
+          <td mat-cell *matCellDef="let row">
+            <span class="estado-cell"  style="padding:5px 10px 5px 10px; border-radius: 8px;" [ngStyle]="{'background-color': getBackgroundColor(getEstadoPedido(row))}">{{getEstadoPedido(row)}}</span>
+          </td>
+        </ng-container>
+        
+        
+        
+        
+        <!-- Columna acciones -->
+        <ng-container matColumnDef="acciones">
+          <th mat-header-cell *matHeaderCellDef ></th>
+          <td mat-cell *matCellDef="let row">
+            <a
+              mat-mini
+              matTooltip="Detalle Pedido"
+              aria-label="Detalle Pedido"
+              color="primary"
+              (click)="detallePedido(row.id)"
+            >
+              <mat-icon>info</mat-icon>
+            </a>
+          </td>
+        </ng-container>
+        
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+      </table>
+
+      <mat-paginator
+        #paginator
+        [length]="dataSource?.data?.length"
+        [pageIndex]="0"
+        [pageSize]="10"
+        [pageSizeOptions]="[10, 50, 100]"
+        aria-label="Seleccione una página"
+      >
+      </mat-paginator>
+    </div>
+    <!-- Table -->
+  </mat-card-content>
+</mat-card>
