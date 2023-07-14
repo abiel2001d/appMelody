@@ -34,15 +34,23 @@
 
           <h3 class="p-2" style="font-weight: 500;color: rgb(61, 61, 61);">{{ datos.descripcion }}</h3>
           <mat-card>
-            <div style="font-weight: 200;padding:30px 0 5px 90px;">
-              <p><mat-icon>label_important</mat-icon><span style="font-weight: 400;">Estado: </span> {{ datos.productoEstado.descripcion }}</p>
-              <p><mat-icon>label_important</mat-icon><span style="font-weight: 400;">Categoría: </span> {{ datos.categoria.descripcion }}</p>
-              <p><mat-icon>label_important</mat-icon><span style="font-weight: 400;">Proveedor: </span> {{ datos.proveedor.proveedor }}</p>
+            <div style="font-weight: 200;padding:30px 0 0 25px;" class="row g-0">
+              <div class="col-7">
+                <p><mat-icon>label_important</mat-icon><span style="font-weight: 400;">Estado: </span> {{ datos.productoEstado.descripcion }}</p>
+                <p><mat-icon>label_important</mat-icon><span style="font-weight: 400;">Categoría: </span> {{ datos.categoria.descripcion }}</p>
+                <p><mat-icon>label_important</mat-icon><span style="font-weight: 400;">Proveedor: </span> {{ datos.proveedor.proveedor }}</p>
+
+              </div>
+              <div class="col-3" style="font-weight: 200;padding-top: 30px;">
+                <p style="font-weight: 500; text-align: center;"><mat-icon>sell</mat-icon> {{ datos.precio | currency: "USD"}}</p>
+                <p style="text-align: center;"><span style="padding:5px 10px 5px 10px; border-radius: 8px;margin-left: 8px;font-weight: 100" [ngStyle]="{'background-color': getBackgroundColor(datos.cantidad)}">{{ estadoInventario }}</span> </p>
+               
+              </div>
             </div> 
             <hr>
-            <p style="font-weight: 500; text-align: center;"><mat-icon>sell</mat-icon> {{ datos.precio | currency: "USD"}}</p>
-            <p style="text-align: center;"><span style="padding:5px 10px 5px 10px; border-radius: 8px;margin-left: 8px;" [ngStyle]="{'background-color': getBackgroundColor(datos.cantidad)}">{{ estadoInventario }}</span> </p>
-            
+            <button *ngIf="currentUser.rol===3" mat-raised-button style="font-weight: 500;background-color: rgb(61, 61, 61);color: white;margin: 0px 50px 15px 50px" type="submit">
+              Agegar al carrito
+            </button>
           </mat-card>
              
         </div>
@@ -52,7 +60,7 @@
     <div>
       <mat-tab-group>
         <mat-tab label="Comentarios">
-          <div style="padding: 15px 100px 30px 100px">
+          <div style="padding: 15px 100px 15px 100px">
             <mat-card *ngIf="datos.dialogos && datos.dialogos.length > 0">
               <mat-card>
                 <p style="font-weight: 400; font-size: 20px; padding: 15px; padding-bottom: 3px;">
@@ -101,6 +109,11 @@
             <div *ngIf="!datos.dialogos || datos.dialogos.length === 0" style="text-align: center; padding: 10px;">
               <p style="font-weight: 100;color: rgb(160, 160, 160);">No hay comentarios</p>
             </div>
+          </div>
+          <div *ngIf="currentUser.rol===3" style="display: flex; justify-content: flex-end;">
+            <a mat-fab color="primary" (click)="openCreateDialog(datos.id,currentUser.id)">
+              <mat-icon>add</mat-icon>
+            </a>
           </div>
         </mat-tab>
       </mat-tab-group>

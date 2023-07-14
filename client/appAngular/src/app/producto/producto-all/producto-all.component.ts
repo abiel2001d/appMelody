@@ -38,11 +38,11 @@ export class ProductoAllComponent implements AfterViewInit {
       .list('producto/')
       .pipe(takeUntil(this.destroy$))
       .subscribe((data:any)=>{
-        console.log(data);
         this.datos=data;
-        this.dataSource = new MatTableDataSource(this.datos.filter(item => item.proveedorId == "462578415"));
+        this.dataSource = new MatTableDataSource(this.datos.filter(item => item.proveedorId == "402350442"));
         this.dataSource.sort = this.sort;
         this.dataSource.paginator = this.paginator;
+        console.log(this.dataSource);
       })
   }
   

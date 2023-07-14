@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-
 import { ProductoRoutingModule } from './producto-routing.module';
 import { ProductoIndexComponent } from './producto-index/producto-index.component';
 import { MatCheckboxModule } from '@angular/material/checkbox';
@@ -24,13 +23,18 @@ import {FormsModule} from '@angular/forms';
 import {MatInputModule} from '@angular/material/input';
 import {NgFor} from '@angular/common';
 import {MatSelectModule} from '@angular/material/select';
+import { ProductoDialogComponent } from './producto-dialog/producto-dialog.component';
+import {MatDialogModule} from "@angular/material/dialog";
+import { CoreModule } from '../core/core.module';
+
 
 @NgModule({
   declarations: [
     ProductoIndexComponent,
     ProductoDetailComponent,
     ProductoAllComponent,
-    ProductoFormComponent
+    ProductoFormComponent,
+    ProductoDialogComponent
   ],
   imports: [
     MatGridListModule,
@@ -53,6 +57,8 @@ import {MatSelectModule} from '@angular/material/select';
     MatInputModule,
     NgFor,
     MatSelectModule,
+    MatDialogModule,
+    CoreModule 
   ]
 })
 export class ProductoModule { }

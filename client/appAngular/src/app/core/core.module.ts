@@ -11,11 +11,13 @@ import {MatToolbarModule} from '@angular/material/toolbar';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import {MatMenuModule} from '@angular/material/menu';
 import {MatListModule} from '@angular/material/list';
+import { LoadingPageComponent } from './loading-page/loading-page.component';
 @NgModule({
   declarations: [
     HeaderComponent,
     FooterComponent,
-    PageNotFoundComponent
+    PageNotFoundComponent,
+    LoadingPageComponent
   ],
   imports: [
     CommonModule,
@@ -30,7 +32,8 @@ import {MatListModule} from '@angular/material/list';
   ],
   exports: [
     HeaderComponent,
-    FooterComponent
+    FooterComponent,
+    LoadingPageComponent
   ]
 })
 export class CoreModule { }

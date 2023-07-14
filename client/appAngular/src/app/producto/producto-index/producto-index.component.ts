@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { MatTabChangeEvent } from '@angular/material/tabs';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subject, takeUntil } from 'rxjs';
 import { GenericService } from 'src/app/share/generic.service';
@@ -12,12 +13,13 @@ export class ProductoIndexComponent {
   estadoInventario:any
   datos:any;//Guarda la respuesta del API
   destroy$: Subject<boolean>=new Subject<boolean>();
-  categorizedData: any = {};
+  loading: boolean ;
+
 
   constructor(private gService:GenericService,
     private router: Router,
     private route: ActivatedRoute){
-    this.listaProductos()
+    this.listaProductos(1)
   }
 
   getBackgroundColor(cantidad: any): string {
@@ -32,16 +34,24 @@ export class ProductoIndexComponent {
     }
   }
 
-  listaProductos(){
+  listaProductos(id: any) {
+   
     this.gService
-      .list('producto/')
+      .get('producto/categoria', id)
       .pipe(takeUntil(this.destroy$))
-      .subscribe((data:any)=>{
+      .subscribe((data: any) => {
         console.log(data);
-        this.datos=data;
-        this.categorizeData();
-      })
+        this.datos = data;
+      
+      });
+  }
+  
+  
 
+  onTabChange(event: MatTabChangeEvent) {
+    this.datos.length = 0;
+    const tabId = event.index+1; 
+    this.listaProductos(tabId);
   }
 
   detalleProducto(id:Number){
@@ -51,17 +61,7 @@ export class ProductoIndexComponent {
     })
   }
 
-  categorizeData() {
-    this.categorizedData = {};
-    this.datos.forEach((item) => {
-      const categoryId = item.categoria.id;
-      if (!this.categorizedData[categoryId]) {
-        this.categorizedData[categoryId] = [];
-      }
-      this.categorizedData[categoryId].push(item);
-    });
-    console.log(this.categorizedData);
-  }
+
   ngOnDestroy(){
     this.destroy$.next(true);
     this.destroy$.unsubscribe();

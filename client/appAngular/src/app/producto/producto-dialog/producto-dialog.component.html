@@ -1,0 +1,34 @@
+<h3 mat-dialog-title style="text-align: center;">Nueva Conversación</h3>
+<hr>
+<mat-dialog-content>
+  <!-- Form fields for creating a new dialogo -->
+  <!-- Replace the input fields and form structure as per your requirements -->
+  <form [formGroup]="dialogoForm">
+    <div class="row g-0">
+      <mat-form-field>
+        <input matInput placeholder="Título" formControlName="titulo">
+        <mat-error *ngIf="errorHandling('titulo','required')">
+          Título no puede ser <strong>vacío</strong>
+        </mat-error>
+        <mat-error *ngIf="errorHandling('titulo','minlength')">
+          Título debe tener como mínimo <strong>2 caracteres</strong>
+        </mat-error>
+      </mat-form-field>
+    </div>
+    <div class="row g-0">
+      <mat-form-field>
+        <textarea matInput placeholder="Comentario" formControlName="contenido"></textarea>
+        <mat-error *ngIf="errorHandling('contenido','required')">
+          Comentario no puede ser <strong>vacío</strong>
+        </mat-error>
+        <mat-error *ngIf="errorHandling('contenido','minlength')">
+          Comentario debe tener como mínimo <strong>2 caracteres</strong>
+        </mat-error>
+      </mat-form-field>
+    </div>
+  </form>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-button (click)="dialogRef.close()">Cancel</button>
+  <button mat-button (click)="crearDialogo()">Guardar</button>
+</mat-dialog-actions>

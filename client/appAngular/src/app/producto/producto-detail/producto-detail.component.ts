@@ -1,8 +1,10 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, NavigationExtras, Router } from '@angular/router';
 import { Subject, takeUntil } from 'rxjs';
 import { GenericService } from 'src/app/share/generic.service';
+import { ProductoDialogComponent } from '../producto-dialog/producto-dialog.component';
 
 @Component({
   selector: 'app-producto-detail',
@@ -25,6 +27,7 @@ export class ProductoDetailComponent {
     private route: ActivatedRoute,
     private router: Router,
     private fb: FormBuilder,
+    public dialog: MatDialog,
     ){
       //Obtener el parámetro
       let id=this.route.snapshot.paramMap.get('id');
@@ -142,6 +145,28 @@ export class ProductoDetailComponent {
       this.currentDialogIndex--;
     }
   }
+
+  openCreateDialog(productoId: number, usuarioId: number): void {
+    const dialogRef = this.dialog.open(ProductoDialogComponent, {
+      width: '800px',
+      data: { productoId: productoId, usuarioId: usuarioId } // Initial data for the dialog
+    });
+  
+    dialogRef.afterClosed().subscribe(result => {
+      // Handle the result after the dialog is closed
+      console.log('The dialog was closed', result);
+
+      if (result === 'created') {
+        let id = this.route.snapshot.paramMap.get('id'); // Obtain the ID from the current URL
+  
+        this.router.navigate(['/producto', id], { relativeTo: this.route })
+          .then(() => {
+            window.location.reload(); // Reload the page
+          });
+      }
+    });
+  }
+  
 
 
 }

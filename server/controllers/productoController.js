@@ -12,6 +12,21 @@ module.exports.get = async (request, response, next) => {
   });
   response.json(productos);
 };
+
+module.exports['getByCategory'] = async (request, response, next) => {
+  let id = parseInt(request.params.id);
+  const productos = await prisma.producto.findMany({
+    where:{ categoriaId: id},
+    include: {
+        categoria:true,
+        productoEstado: true,
+        imagenes:true,
+        proveedor:true
+    },
+  });
+  response.json(productos);
+};
+
 //Obtener por Id
 module.exports.getById = async (request, response, next) => {
   let id = parseInt(request.params.id);

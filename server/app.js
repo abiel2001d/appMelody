@@ -15,6 +15,7 @@ const galeriaRoutes = require('./routes/galeriaRoutes');
 const estadoRoutes = require('./routes/estadoRoutes');
 const categoriaRoutes = require('./routes/categoriaRoutes');
 const comentarioRoutes = require('./routes/comentarioRoutes');
+const dialogoRoutes = require('./routes/dialogoRoutes');
 
 // Acceder a la configuracion del archivo .env
 dotEnv.config();
@@ -41,6 +42,7 @@ app.use('/galeria/', galeriaRoutes);
 app.use('/estado/', estadoRoutes);
 app.use('/categoria/', categoriaRoutes);
 app.use('/comentario/', comentarioRoutes);
+app.use('/dialogo/', dialogoRoutes);
 
 // Servidor
 app.listen(port, () => {
