@@ -38,7 +38,7 @@ export class PedidoAllComponent implements AfterViewInit {
       rol: 2
       /*
       402350442 > Proveedor
-      462578415 > Proveedor
+      462578415 > Proveedor/Cliente
       465218563 > Cliente
       */
     }
@@ -94,7 +94,7 @@ export class PedidoAllComponent implements AfterViewInit {
     productos.forEach((producto) => {
       grandTotal += parseFloat(producto.subTotal);
     });
-    return grandTotal;
+    return grandTotal*1.13;
   }
 
   getEstadoPedido(pedido:any): string{

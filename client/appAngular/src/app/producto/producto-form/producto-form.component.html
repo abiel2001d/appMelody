@@ -57,45 +57,41 @@
             <div class="row">
                 <mat-form-field class="full-width">
                   <input matInput  placeholder="Descripción" formControlName="descripcion" >
+                  <mat-error *ngIf="errorHandling('descripcion','required')">
+                    Descripción no puede ser <strong>vacío</strong>
+                  </mat-error>
+                  <mat-error *ngIf="errorHandling('descripcion','minlength')">
+                    Descripción debe tener como mínimo <strong>5 caracteres</strong>
+                  </mat-error>
                 </mat-form-field>
             </div>
             <div class="row mt-3">
               <div class="col-6">
-                <mat-form-field  style="width: 280px;">
-                  <mat-select placeholder="Proveedores" formControlName="proveedor">
-                    <mat-option *ngFor="let item of proveedoresList" [value]="item.id">
-                      {{item.proveedor}}
-                    </mat-option>
-                  </mat-select>
-                </mat-form-field>
-              </div>
-              <div class="col-6">
-                <mat-form-field class="full-width">
-                  <input matInput placeholder="Precio" formControlName="precio">
-                 
-                </mat-form-field>
-              </div>
-            </div>
-            <div class="row mt-3">
-              <div class="col-6">
-                
-                <mat-form-field >
+                <mat-form-field style="width: 250px;">
                   <mat-select placeholder="Categoria" formControlName="categoria">
                     <mat-option *ngFor="let item of categoriasList" [value]="item.id">
                       {{item.descripcion}}
                     </mat-option>
                   </mat-select>
+                  <mat-error *ngIf="errorHandling('proveedor','required')">
+                    Seleccione una <strong>categoría</strong>
+                  </mat-error>
                 </mat-form-field>
               </div>
               <div class="col-6">
-                <mat-form-field class="full-width">
-                  <input matInput placeholder="Cantidad" formControlName="cantidad">
-                
+                <mat-form-field class="full-width" style="width: 250px;">
+                  <input matInput placeholder="0.00" formControlName="precio" class="example-right-align">
+                  <span matTextPrefix>$&nbsp;</span>
+                  <mat-error *ngIf="errorHandling('precio','required')">
+                    Precio no puede ser <strong>vacío</strong>
+                  </mat-error>
+                  <mat-error *ngIf="errorHandling('precio','pattern')">
+                    Ingrese un valor <strong>numérico</strong>
+                  </mat-error>
                 </mat-form-field>
+                
               </div>
-              
             </div>
-    
             <div class="row mt-3">
               <div class="col-6">
                 <mat-form-field style="width: 250px;" >
@@ -104,15 +100,46 @@
                       {{ item.descripcion }}
                     </mat-option>
                   </mat-select>
+                  <mat-error *ngIf="errorHandling('productoEstado','required')">
+                    Seleccione un <strong>estado</strong>
+                  </mat-error>
                 </mat-form-field>
+                
               </div>
               <div class="col-6">
-               
+                <mat-form-field class="full-width" style="width: 250px;">
+                  <input matInput type="number" placeholder="Cantidad" formControlName="cantidad" min="0">
+                  <mat-error *ngIf="errorHandling('cantidad','required')">
+                    Ingrese un valor <strong>numérico</strong>
+                  </mat-error>
+                  <mat-error *ngIf="errorHandling('cantidad','pattern')">
+                   Ingrese un valor <strong>numérico</strong>
+                  </mat-error>
+                </mat-form-field>
+              </div>
+              
+            </div>
+    
+            <div class="row mt-3">
+              <div class="col-6" style="padding-left: 30px;">
                 <mat-label>Publicar</mat-label>
                 <mat-radio-group formControlName="estado" primary>
                   <mat-radio-button [value]="true">Sí</mat-radio-button>
                   <mat-radio-button [value]="false">No</mat-radio-button>
                 </mat-radio-group>
+                
+              </div>
+              <div class="col-6" *ngIf="currentUser.rol===3">
+                <mat-form-field  style="width: 250px;" >
+                  <mat-select placeholder="Proveedores" formControlName="proveedor">
+                    <mat-option *ngFor="let item of proveedoresList" [value]="item.id">
+                      {{item.proveedor}}
+                    </mat-option>
+                  </mat-select>
+                  <mat-error *ngIf="errorHandling('proveedor','required')">
+                    Seleccione un <strong>proveedor</strong>
+                  </mat-error>
+                </mat-form-field>
               </div>
             
             

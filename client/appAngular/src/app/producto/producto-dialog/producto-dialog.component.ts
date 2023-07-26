@@ -4,6 +4,7 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subject, takeUntil } from 'rxjs';
 import { GenericService } from 'src/app/share/generic.service';
+import { NotificacionService } from 'src/app/share/notificacion.service';
 
 @Component({
   selector: 'app-producto-dialog',
@@ -21,6 +22,7 @@ export class ProductoDialogComponent {
     private router: Router,
     public dialogRef: MatDialogRef<ProductoDialogComponent>,
     private gService: GenericService,
+    private noti: NotificacionService, 
     @Inject(MAT_DIALOG_DATA) public data: any
   ) {
     this.formularioReactive();

@@ -18,12 +18,8 @@ export class GenericService {
    
   }
   // Listar
-  list(endpoint: string, filtro?: string): Observable<any> {
-    let params = {};
-    if (filtro) {
-      params = { filter: filtro };
-    }
-    return this.http.get<any>(this.urlAPI + endpoint, { params });
+  list(endpoint: string): Observable<any> {
+    return this.http.get<any>(this.urlAPI + endpoint);
   }
   // Obtener
   get(endopoint: string, filtro: any): Observable<any | any[]> {

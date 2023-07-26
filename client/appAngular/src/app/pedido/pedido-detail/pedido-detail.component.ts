@@ -11,6 +11,7 @@ import { LocationService } from 'src/app/share/location.service';
   styleUrls: ['./pedido-detail.component.css']
 })
 export class PedidoDetailComponent {
+  total:any
   estadoPedido:string
   grandTotal:any
   currentUser:any
@@ -94,10 +95,11 @@ export class PedidoDetailComponent {
         }
         console.log(this.datos);
       }else{
+        this.displayedColumns= ['imagen','producto', 'proveedor','cantidad', 'precioUnitario', 'subTotal', 'estado'];
         this.estadoPedido = this.datos.estado
       }
-
-      this.grandTotal = this.getTotalSubtotal(this.datos.productos)
+      this.total = this.getTotalSubtotal(this.datos.productos)
+      this.grandTotal = this.total * 1.13
 
         this.locationService.getProvinces()
         .pipe(takeUntil(this.destroy$))

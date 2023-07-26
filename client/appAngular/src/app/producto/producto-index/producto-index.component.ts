@@ -2,7 +2,9 @@ import { Component } from '@angular/core';
 import { MatTabChangeEvent } from '@angular/material/tabs';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subject, takeUntil } from 'rxjs';
+import { CartService } from 'src/app/share/cart.service';
 import { GenericService } from 'src/app/share/generic.service';
+import { NotificacionService, TipoMessage } from 'src/app/share/notificacion.service';
 
 @Component({
   selector: 'app-producto-index',
@@ -18,6 +20,8 @@ export class ProductoIndexComponent {
 
   constructor(private gService:GenericService,
     private router: Router,
+    private cartService:CartService,
+    private notificacion:NotificacionService,
     private route: ActivatedRoute){
     this.listaProductos(1)
   }
@@ -46,7 +50,21 @@ export class ProductoIndexComponent {
       });
   }
   
-  
+  comprar(id:number){
+    this.gService
+    .get('producto',id)
+    .pipe(takeUntil(this.destroy$))
+    .subscribe((data:any)=>{
+      //Agregar videojuego obtenido del API al carrito
+      this.cartService.addToCart(data,true);
+      //Notificar al usuario
+      this.notificacion.mensaje(
+        '',
+        data.descripcion+ ' agregado al pedido',
+        TipoMessage.success
+      )
+    });
+  }
 
   onTabChange(event: MatTabChangeEvent) {
     this.datos.length = 0;

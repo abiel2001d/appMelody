@@ -8,15 +8,21 @@
   <div class="example-spacer"></div>
   <div class="example-spacer"></div>
   <div class="example-spacer"></div>
-  <div class="example-spacer">
-    <button mat-button class="border-button" [routerLink]="['/producto']">
+
+  <div style="padding: 8px 18px 8px 0px;border-left: #ffffff91 solid 1px;height: 61px;"></div>
+    <button mat-button class="border-button" [routerLink]="['/producto']" style="margin-top: 10px;">
       <mat-icon>local_mall</mat-icon>
       Tienda
     </button>
-    <button mat-icon-button>
-      <mat-icon style="padding-top: 2px;">shopping_cart</mat-icon>
+
+
+
+  <div style="padding: 5px 18px 8px 0px;border-left: #ffffff91 solid 1px;border-right: #ffffff91 solid 1px;">
+    <button mat-icon-button [routerLink]="'/pedido'" [routerLinkActive]="'mat-raised-button'">
+      <mat-icon>shopping_cart</mat-icon>
+      <div class="custom-badge">{{ qtyItems }}</div>
     </button>
   </div>
-  
+  <div class="example-spacer"></div>
 </mat-toolbar>
 

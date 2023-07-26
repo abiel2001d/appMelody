@@ -3,6 +3,7 @@ import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@ang
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { Subject, takeUntil } from 'rxjs';
 import { GenericService } from 'src/app/share/generic.service';
+import { NotificacionService, TipoMessage } from 'src/app/share/notificacion.service';
 
 @Component({
   selector: 'app-producto-form',
@@ -28,7 +29,7 @@ export class ProductoFormComponent implements OnInit {
   submitted = false;
   //Nombre del formulario
   productoForm: FormGroup;
- 
+  currentUser:any
   idProducto: number = 0;
   //Sí es crear
   isCreate: boolean = true;
@@ -37,7 +38,8 @@ export class ProductoFormComponent implements OnInit {
     private fb: FormBuilder,
     private gService: GenericService,
     private router: Router,
-    private activeRouter: ActivatedRoute
+    private activeRouter: ActivatedRoute,
+    private noti: NotificacionService, 
   ) {
     this.formularioReactive();
     this.listaCategorias();
@@ -85,31 +87,45 @@ export class ProductoFormComponent implements OnInit {
         console.log(this.selectedImagesPath)
       }
     });
+
+    let user={
+      id:462578415,
+      rol: 2
+    }
+    this.currentUser=user;
+    if(this.currentUser.rol===2){
+      this.productoForm.patchValue({
+        proveedor: this.currentUser.id
+      });
+    }
   }
   
   
   //Crear Formulario
   formularioReactive() {
-    //[null, Validators.required]
-    this.productoForm=this.fb.group({
-      //Input type hidden
-      id:[null,null],
-      descripcion: [null,
-        Validators.compose([
-          Validators.required, Validators.minLength(2)
-        ])      
-      ],
-      precio:  [null, Validators.required],
-      cantidad:  [null, Validators.required],
-      estado:  [true, Validators.required],
+    this.productoForm = this.fb.group({
+      id: [null],
+      descripcion: [null, Validators.compose([
+        Validators.required, Validators.minLength(5)
+      ])],
+      precio: [null, Validators.compose([
+        Validators.required,
+        Validators.pattern(/^[0-9]+(\.[0-9]{1,2})?$/)
+      ])],
+      cantidad: [null, Validators.compose([
+        Validators.required,
+        Validators.pattern(/^[0-9]+(\.[0-9]{1,2})?$/)
+      ])],
+      estado: [true, Validators.required],
       categoria: [null, Validators.required],
-      productoEstado:  [null, Validators.required],
-      proveedor:  [null, Validators.required],
+      productoEstado: [null, Validators.required],
+      proveedor: [null, Validators.required],
       imagenes: this.fb.array([])
-    })
-   
+    });
   }
+  
 
+    
   listaEstadoProductos() {
     this.estadosProductoList = null;
     this.gService
@@ -169,9 +185,9 @@ export class ProductoFormComponent implements OnInit {
         console.log(imagenesData);
         imagenesData.forEach((imagenData) => {
           const imagenGroup = this.fb.group({
-            imagen: [imagenData.imagen, Validators.required],
-            imagenPath: [imagenData.imagenPath, Validators.required],
-            estado: [imagenData.estado, Validators.required]
+            imagen: [imagenData.imagen, null],
+            imagenPath: [imagenData.imagenPath, null],
+            estado: [imagenData.estado, null]
           });
   
           imagenes.push(imagenGroup);
@@ -182,7 +198,10 @@ export class ProductoFormComponent implements OnInit {
   //Crear 
   crearProducto(): void {
     this.submitted = true;
-  
+    //Verificar validación
+    if(this.productoForm.invalid){
+      return;
+    }
     const imagenesData = this.addImagenesToForm()
       const productoFormValue = {
         ...this.productoForm.value,
@@ -195,6 +214,9 @@ export class ProductoFormComponent implements OnInit {
         .pipe(takeUntil(this.destroy$))
         .subscribe((data: any) => {
           this.respProducto = data;
+          this.noti.mensaje('',
+          'Nuevo producto agregado exitosamente',
+          TipoMessage.success)
           this.router.navigate(['/producto/all'], {
             queryParams: { create: 'true' }
           });
@@ -215,9 +237,9 @@ export class ProductoFormComponent implements OnInit {
   
 
     //Verificar validación
-    /*if(this.productoForm.invalid){
+    if(this.productoForm.invalid){
       return;
-    }*/
+    }
     
     
     console.log(this.productoForm.value);
@@ -226,6 +248,9 @@ export class ProductoFormComponent implements OnInit {
     .pipe(takeUntil(this.destroy$)) .subscribe((data: any) => {
       //Obtener respuesta
       this.respProducto=data;
+      this.noti.mensaje('',
+      'Producto actualizado exitosamente',
+      TipoMessage.success)
       this.router.navigate(['/producto/all'],{
         queryParams: {update:'true'}
       });
@@ -276,6 +301,13 @@ export class ProductoFormComponent implements OnInit {
       this.selectedImagesPath[this.currentCarouselIndex]=this.selectedFileName;
       this.selectedFileName = '';
       this.clearFileInput();
+      this.noti.mensaje('',
+      'Imagen ha sido actualizada',
+      TipoMessage.success)
+    }else{
+      this.noti.mensaje('',
+      'Seleccione una imagen',
+      TipoMessage.info)
     }
  
   }
@@ -286,6 +318,13 @@ export class ProductoFormComponent implements OnInit {
       this.selectedImagesPath.push(this.selectedFileName);
       this.selectedFileName = '';
       this.clearFileInput();
+      this.noti.mensaje('',
+      'Imagen ha sido agregada',
+      TipoMessage.success)
+    }else{
+      this.noti.mensaje('',
+      'Seleccione una imagen',
+      TipoMessage.info)
     }
     console.log(this.selectedImagesPath)
   }
@@ -298,6 +337,14 @@ export class ProductoFormComponent implements OnInit {
         this.currentCarouselIndex = this.selectedImagesPath.length - 1;
       }
       this.clearFileInput();
+        this.noti.mensaje('',
+        'Imagen ha sido eliminada',
+        TipoMessage.success)
+    }else{
+      this.clearFileInput();
+      this.noti.mensaje('',
+      'No puede eliminarse la única imagen',
+      TipoMessage.warning)
     }
   }
   

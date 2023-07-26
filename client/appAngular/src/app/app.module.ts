@@ -12,10 +12,14 @@ import { ProductoModule } from './producto/producto.module';
 import { PedidoModule } from './pedido/pedido.module';
 import { DireccionModule } from './direccion/direccion.module';
 import { ToastrModule } from 'ngx-toastr';
+import { MatTableModule } from '@angular/material/table';
+import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatSortModule } from '@angular/material/sort';
+import { MetodoPagoModule } from './metodo-pago/metodo-pago.module';
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
   ],
   imports: [
     BrowserModule,
@@ -28,7 +32,11 @@ import { ToastrModule } from 'ngx-toastr';
     ProductoModule,
     PedidoModule,
     DireccionModule, 
-    AppRoutingModule,
+    MatTableModule, 
+    MatPaginatorModule, 
+    MatSortModule, 
+    MetodoPagoModule,
+    AppRoutingModule, 
   ],
   providers: [],
   bootstrap: [AppComponent]

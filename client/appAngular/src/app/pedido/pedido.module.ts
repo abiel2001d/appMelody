@@ -11,6 +11,11 @@ import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { PedidoDetailComponent } from './pedido-detail/pedido-detail.component';
 import {MatTabsModule} from '@angular/material/tabs';
+import {MatButtonModule} from '@angular/material/button'; 
+import { MatInputModule } from '@angular/material/input';
+import { MatSelectModule } from '@angular/material/select';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import {MatGridListModule} from '@angular/material/grid-list';
 
 @NgModule({
   declarations: [
@@ -26,7 +31,13 @@ import {MatTabsModule} from '@angular/material/tabs';
     MatSortModule,
     MatCardModule,
     MatIconModule,
-    MatTabsModule
+    MatTabsModule,
+    MatButtonModule,
+    MatInputModule,
+    MatSelectModule,
+    FormsModule,
+    ReactiveFormsModule,
+    MatGridListModule
   ]
 })
 export class PedidoModule { }

@@ -12,6 +12,8 @@ import { MatSidenavModule } from '@angular/material/sidenav';
 import {MatMenuModule} from '@angular/material/menu';
 import {MatListModule} from '@angular/material/list';
 import { LoadingPageComponent } from './loading-page/loading-page.component';
+import { MatBadgeModule } from '@angular/material/badge';
+
 @NgModule({
   declarations: [
     HeaderComponent,
@@ -28,7 +30,8 @@ import { LoadingPageComponent } from './loading-page/loading-page.component';
     MatToolbarModule,
     MatSidenavModule,
     MatMenuModule,
-    MatListModule
+    MatListModule,
+    MatBadgeModule
   ],
   exports: [
     HeaderComponent,

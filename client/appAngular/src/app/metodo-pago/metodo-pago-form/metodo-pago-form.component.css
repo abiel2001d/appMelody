@@ -1,0 +1,10 @@
+/* Hide the days table */
+.custom-datepicker .mat-calendar-table {
+    display: none !important;
+  }
+  
+  /* Adjust the height to fit only the months and years */
+  .custom-datepicker .mat-calendar-content {
+    height: auto !important;
+  }
+  

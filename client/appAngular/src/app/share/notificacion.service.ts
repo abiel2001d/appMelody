@@ -19,10 +19,10 @@ export class NotificacionService {
     this.options.enableHtml = true;
 
     /* Top Right, Bottom Right, Bottom Left, Top Left, Top Full Width, Bottom Full Width, Top Center, Bottom Center */
-    this.options.positionClass = 'toast-top-center';
+    this.options.positionClass = 'toast-bottom-right';
     //Tiempo que se presenta el mensaje
-    // this.options.timeOut = 5000;
-    this.options.disableTimeOut = true;
+    this.options.timeOut = 3000;
+    //this.options.disableTimeOut = true;
     this.options.closeButton = true;
   }
   /*
@@ -31,7 +31,6 @@ Toast Type: success, info, warning, error
  */
   public mensaje(titulo: string, mensaje: string, tipo:TipoMessage) {
     this.toastr.show(mensaje, titulo, this.options, 'toast-'+TipoMessage[tipo]);
- 
   }
   
 }

@@ -5,6 +5,7 @@ import { ActivatedRoute, NavigationExtras, Router } from '@angular/router';
 import { Subject, takeUntil } from 'rxjs';
 import { GenericService } from 'src/app/share/generic.service';
 import { ProductoDialogComponent } from '../producto-dialog/producto-dialog.component';
+import { NotificacionService, TipoMessage } from 'src/app/share/notificacion.service';
 
 @Component({
   selector: 'app-producto-detail',
@@ -28,6 +29,7 @@ export class ProductoDetailComponent {
     private router: Router,
     private fb: FormBuilder,
     public dialog: MatDialog,
+    private noti: NotificacionService, 
     ){
       //Obtener el parámetro
       let id=this.route.snapshot.paramMap.get('id');
@@ -39,7 +41,7 @@ export class ProductoDetailComponent {
   ngOnInit(): void {
     //Valores de prueba
     let user={
-      id:462578415,
+      id:465218563,
       rol: 3
     }
     this.currentUser=user;
@@ -131,13 +133,15 @@ export class ProductoDetailComponent {
     this.gService.create('comentario', this.comentarioForm.value)
       .pipe(takeUntil(this.destroy$))
       .subscribe((data: any) => {
-        let id = this.route.snapshot.paramMap.get('id'); // Obtain the ID from the current URL
-  
-        this.router.navigate(['/producto', id], { relativeTo: this.route })
-          .then(() => {
-            window.location.reload(); // Reload the page
-          });
+        this.noti.mensaje('',
+          'Comentario enviado con éxito',
+          TipoMessage.success)
+
+        let id = this.route.snapshot.paramMap.get('id'); 
+        this.obtenerProducto(id)
+        this.comentarioForm.reset()
       });
+    
   }
 
   previousDialog() {
@@ -157,12 +161,13 @@ export class ProductoDetailComponent {
       console.log('The dialog was closed', result);
 
       if (result === 'created') {
+
+        this.noti.mensaje('',
+        'Nuevo conversación ha sido creada',
+        TipoMessage.success)
+
         let id = this.route.snapshot.paramMap.get('id'); // Obtain the ID from the current URL
-  
-        this.router.navigate(['/producto', id], { relativeTo: this.route })
-          .then(() => {
-            window.location.reload(); // Reload the page
-          });
+        this.obtenerProducto(id)
       }
     });
   }
