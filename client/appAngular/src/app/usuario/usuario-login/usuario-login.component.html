@@ -1,0 +1,41 @@
+<form [formGroup]="formulario"  novalidate>
+    <div  style="justify-content: center; align-items: center;padding: 30px 50px 30px 50px;">
+      
+        <div class="row mt-3">
+        
+            <mat-form-field class="full-width">
+              <mat-label>Correo Electrónico</mat-label>
+              <input matInput type="text"  formControlName="email" />
+             <mat-error *ngIf="errorHandling('email', 'required')">
+              Correo es <strong>requerido</strong>
+              </mat-error>
+              <mat-error *ngIf="errorHandling('email','email')">
+                Verifique el <strong>formato</strong> del email
+              </mat-error>
+            </mat-form-field>
+         
+        </div>
+        <div class="row mt-3">
+         
+            <mat-form-field class="full-width">
+            <mat-label>Contraseña</mat-label>
+            <input matInput [type]="hide ? 'password' : 'text'" formControlName="password" />
+            <button mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide">
+              <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+            </button>
+              <mat-error *ngIf="errorHandling('password', 'required')">
+                Contraseña es <strong>requerido</strong>
+              </mat-error>
+            </mat-form-field>
+          
+        </div>
+     
+        <div style="display: flex; flex-direction: row; justify-content: center; align-items: center;margin-top: 38px;">
+          <button mat-raised-button color="primary" (click)="submitForm()" style="width: 150px;">Ingresar</button>
+      
+        </div>
+       
+    </div>
+    </form>
+  
+  

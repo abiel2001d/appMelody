@@ -5,6 +5,7 @@ import { MatSort } from '@angular/material/sort';
 import { Subject, filter, takeUntil } from 'rxjs';
 import { GenericService } from 'src/app/share/generic.service';
 import { ActivatedRoute, Router } from '@angular/router';
+import { AuthenticationService } from 'src/app/share/authentication.service';
 
 @Component({
   selector: 'app-pedido-all',
@@ -14,6 +15,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 export class PedidoAllComponent implements AfterViewInit {
   grandTotal:any
   currentUser:any;
+  roleSelected:any
   datos:any;//Guarda la respuesta del API
   destroy$: Subject<boolean>=new Subject<boolean>();
 
@@ -28,21 +30,14 @@ export class PedidoAllComponent implements AfterViewInit {
 
   constructor(private gService:GenericService,
     private router: Router,
-    private route: ActivatedRoute) {
+    private route: ActivatedRoute,
+    private authService: AuthenticationService) {
 
   }
   ngOnInit(): void {
-    //Valores de prueba
-    let user={
-      id:402350442,
-      rol: 2
-      /*
-      402350442 > Proveedor
-      462578415 > Proveedor/Cliente
-      465218563 > Cliente
-      */
-    }
-    this.currentUser=user;
+    this.authService.currentUser.subscribe((x)=>(this.currentUser=x));
+    this.authService.currentSelectedRole.subscribe((valor)=>(this.roleSelected=valor));
+
   }
 
   ngAfterViewInit(): void {
@@ -57,19 +52,19 @@ export class PedidoAllComponent implements AfterViewInit {
         console.log(data);
 
 
-        switch (this.currentUser.rol) {
+        switch (this.roleSelected) {
           case 1: // admin
-            this.displayedColumns = ['id', 'usuario', 'total', 'fechaPedido', 'estado', 'accionescurrentUser'];
+            this.displayedColumns = ['id', 'usuario', 'total', 'fechaPedido', 'estado', 'acciones'];
             this.datos = data;
             break;
-          case 2: // venedor
+          case 2: // proveedor
             this.displayedColumns = ['id', 'usuario', 'total', 'fechaPedido', 'estado', 'acciones'];
             this.datos = data.filter((pedido: any) => {
-              return pedido.productos.some((producto: any) => producto.producto.proveedorId === this.currentUser.id); });
+              return pedido.productos.some((producto: any) => producto.producto.proveedorId === this.currentUser.user.id); });
             break;
           case 3: // cliente
             this.displayedColumns = ['id', 'total', 'fechaPedido', 'estado', 'acciones'];
-            this.datos = data.filter((item: any) => item.usuarioId === this.currentUser.id);
+            this.datos = data.filter((item: any) => item.usuarioId === this.currentUser.user.id);
             break;
           default:
             break;
@@ -88,8 +83,8 @@ export class PedidoAllComponent implements AfterViewInit {
   getTotalSubtotal(productos: any[]): number {
     let grandTotal = 0;
 
-    if(this.currentUser.rol===2){
-      productos = productos.filter((producto: any) => producto.producto.proveedorId === this.currentUser.id);
+    if(this.roleSelected===2){
+      productos = productos.filter((producto: any) => producto.producto.proveedorId === this.currentUser.user.id);
     }
     productos.forEach((producto) => {
       grandTotal += parseFloat(producto.subTotal);
@@ -100,8 +95,8 @@ export class PedidoAllComponent implements AfterViewInit {
   getEstadoPedido(pedido:any): string{
     let estadoPedido
     let productos
-    if(this.currentUser.rol===2){
-      productos = pedido.productos.filter((producto: any) => producto.producto.proveedorId === this.currentUser.id);
+    if(this.roleSelected===2){
+      productos = pedido.productos.filter((producto: any) => producto.producto.proveedorId === this.currentUser.user.id);
 
       let pendienteCount = 0;
       let entregadoCount = 0;

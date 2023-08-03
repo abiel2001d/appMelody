@@ -6,6 +6,7 @@ import { Subject, takeUntil } from 'rxjs';
 import { GenericService } from 'src/app/share/generic.service';
 import { ProductoDialogComponent } from '../producto-dialog/producto-dialog.component';
 import { NotificacionService, TipoMessage } from 'src/app/share/notificacion.service';
+import { AuthenticationService } from 'src/app/share/authentication.service';
 
 @Component({
   selector: 'app-producto-detail',
@@ -14,22 +15,22 @@ import { NotificacionService, TipoMessage } from 'src/app/share/notificacion.ser
 })
 export class ProductoDetailComponent {
   currentDialogIndex = 0;
-
   currentDialog: number = 0;
-
   currentUser:any
   submitted = false;
   comentarioForm: FormGroup;
   datos:any;//Guarda la respuesta del API
   destroy$: Subject<boolean>=new Subject<boolean>();
   estadoInventario:string
+  roleSelected:any
   constructor(
     private gService: GenericService,
     private route: ActivatedRoute,
     private router: Router,
     private fb: FormBuilder,
     public dialog: MatDialog,
-    private noti: NotificacionService, 
+    private noti: NotificacionService,
+    private authService: AuthenticationService 
     ){
       //Obtener el parámetro
       let id=this.route.snapshot.paramMap.get('id');
@@ -39,12 +40,9 @@ export class ProductoDetailComponent {
       this.formularioReactive() 
   }
   ngOnInit(): void {
-    //Valores de prueba
-    let user={
-      id:465218563,
-      rol: 3
-    }
-    this.currentUser=user;
+    this.authService.currentUser.subscribe((x)=>(this.currentUser=x));
+    this.authService.currentSelectedRole.subscribe((valor)=>(this.roleSelected=valor));
+
   }
   public errorHandling = (control: string, error: string) => {
     return this.comentarioForm.controls[control].hasError(error);
@@ -55,11 +53,7 @@ export class ProductoDetailComponent {
     //[null, Validators.required]
     this.comentarioForm=this.fb.group({
       //Input type hidden
-      contenido: [null,
-        Validators.compose([
-          Validators.required, Validators.minLength(2)
-        ])      
-      ],
+      contenido: [null, null],
       tipo:[null,null],
       dialogo:[null,null],
       usuario:[null,null]
@@ -119,14 +113,22 @@ export class ProductoDetailComponent {
   enviarMensaje(idDialogo: any) {
     this.submitted = true;
     
-    if(this.comentarioForm.invalid){
+    if(this.comentarioForm.get("contenido").value===null){
+      this.noti.mensaje('',
+      'Comentario no enviado, no puede estar vacío',
+      TipoMessage.error)
+      return;
+    }else if (this.comentarioForm.get("contenido").value.length<2) {
+      this.noti.mensaje('',
+      'Comentario no enviado, se requieren 2 caracteres mínimo',
+      TipoMessage.error)
       return;
     }
 
     this.comentarioForm.patchValue({ 
       dialogo: idDialogo,
-      usuario: this.currentUser.id,
-      tipo: this.currentUser.rol 
+      usuario: this.currentUser.user.id,
+      tipo: this.roleSelected
     });
   
     console.log(this.comentarioForm.value);

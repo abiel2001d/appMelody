@@ -6,6 +6,7 @@ import { MetodoPagoAllDataSource, MetodoPagoAllItem } from './metodo-pago-all-da
 import { Subject, takeUntil } from 'rxjs';
 import { GenericService } from 'src/app/share/generic.service';
 import { ActivatedRoute, Router } from '@angular/router';
+import { AuthenticationService } from 'src/app/share/authentication.service';
 
 @Component({
   selector: 'app-metodo-pago-all',
@@ -27,19 +28,15 @@ export class MetodoPagoAllComponent implements AfterViewInit {
 
   constructor(private gService:GenericService,
     private router: Router,
-    private route: ActivatedRoute) {
+    private route: ActivatedRoute,
+    private authService: AuthenticationService) {
   }
 
   ngOnInit(): void {
-    //Valores de prueba
-    let user={
-      id:465218563,
-      rol: 3
-    }
-    this.currentUser=user;
+    this.authService.currentUser.subscribe((x)=>(this.currentUser=x));
   }
   ngAfterViewInit(): void {
-    this.listaMetodosPago(this.currentUser.id);
+    this.listaMetodosPago(this.currentUser.data.id);
   }
 
   listaMetodosPago(id: any){

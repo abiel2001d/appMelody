@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { Subject, takeUntil } from 'rxjs';
+import { AuthenticationService } from 'src/app/share/authentication.service';
 import { GenericService } from 'src/app/share/generic.service';
 import { NotificacionService, TipoMessage } from 'src/app/share/notificacion.service';
 
@@ -31,6 +32,7 @@ export class ProductoFormComponent implements OnInit {
   productoForm: FormGroup;
   currentUser:any
   idProducto: number = 0;
+  roleSelected:any
   //Sí es crear
   isCreate: boolean = true;
 
@@ -39,7 +41,8 @@ export class ProductoFormComponent implements OnInit {
     private gService: GenericService,
     private router: Router,
     private activeRouter: ActivatedRoute,
-    private noti: NotificacionService, 
+    private noti: NotificacionService,
+    private authService: AuthenticationService 
   ) {
     this.formularioReactive();
     this.listaCategorias();
@@ -48,6 +51,8 @@ export class ProductoFormComponent implements OnInit {
     
   }
   ngOnInit(): void {
+
+
     this.activeRouter.params.subscribe((params: Params) => {
       this.idProducto = params['id'];
       if (this.idProducto !== undefined) {
@@ -88,14 +93,12 @@ export class ProductoFormComponent implements OnInit {
       }
     });
 
-    let user={
-      id:462578415,
-      rol: 2
-    }
-    this.currentUser=user;
-    if(this.currentUser.rol===2){
+    this.authService.currentUser.subscribe((x)=>(this.currentUser=x));
+    this.authService.currentSelectedRole.subscribe((valor)=>(this.roleSelected=valor));
+
+    if(this.roleSelected===2){
       this.productoForm.patchValue({
-        proveedor: this.currentUser.id
+        proveedor: this.currentUser.user.id
       });
     }
   }
@@ -202,6 +205,7 @@ export class ProductoFormComponent implements OnInit {
     if(this.productoForm.invalid){
       return;
     }
+    // Crear el objeto de datos para enviar al API, incluyendo las imágenes seleccionadas
     const imagenesData = this.addImagenesToForm()
       const productoFormValue = {
         ...this.productoForm.value,
@@ -210,6 +214,7 @@ export class ProductoFormComponent implements OnInit {
       };
   
       console.log(productoFormValue);
+      // Llamar al servicio del API para crear el producto
       this.gService.create('producto', productoFormValue)
         .pipe(takeUntil(this.destroy$))
         .subscribe((data: any) => {
@@ -218,32 +223,29 @@ export class ProductoFormComponent implements OnInit {
           'Nuevo producto agregado exitosamente',
           TipoMessage.success)
           this.router.navigate(['/producto/all'], {
-            queryParams: { create: 'true' }
-          });
+          queryParams: { create: 'true' }
         });
-    
-  }
+      });
+    }
+
   //Actualizar 
   actualizarProducto() {
     //Establecer submit verdadero
     this.submitted=true;
 
+    // Crear el objeto de datos para enviar al API, incluyendo las imágenes seleccionadas
     const imagenesData = this.addImagenesToForm()
       const productoFormValue = {
         ...this.productoForm.value,
         cantidad: parseInt(this.productoForm.value.cantidad),
         imagenes: imagenesData
       };
-  
-
     //Verificar validación
     if(this.productoForm.invalid){
       return;
     }
-    
-    
     console.log(this.productoForm.value);
-    //Accion API create enviando toda la informacion del formulario
+    // Llamar al servicio del API para actualizar el producto
     this.gService.update('producto',productoFormValue)
     .pipe(takeUntil(this.destroy$)) .subscribe((data: any) => {
       //Obtener respuesta
@@ -256,7 +258,11 @@ export class ProductoFormComponent implements OnInit {
       });
     });
   }
-  onReset() {}
+
+  onReset() {
+    this.submitted = false;
+    this.productoForm.reset();
+  }
   onBack() {
     this.router.navigate(['/producto/all']);
   }
@@ -309,7 +315,6 @@ export class ProductoFormComponent implements OnInit {
       'Seleccione una imagen',
       TipoMessage.info)
     }
- 
   }
   
   addSelectedImage(event: Event): void {
@@ -346,6 +351,26 @@ export class ProductoFormComponent implements OnInit {
       'No puede eliminarse la única imagen',
       TipoMessage.warning)
     }
+  }
+
+  resetImages(event: Event): void {
+    event.preventDefault();
+   
+      this.selectedImagesPath= [];
+      this.currentCarouselIndex=0
+      this.selectedFileName = '';
+      if (this.idProducto!==undefined){
+        this.productoInfo.imagenes.forEach(async (imagen) => {
+          const imagePath = imagen.imagen === null ? await this.convertImageToBase64(imagen.imagenPath) : this.convertBufferToUrl(imagen.imagen);
+          this.selectedImagesPath.push(imagePath);
+        });
+      }else{
+        this.buildDefaultImage();
+      }
+      this.clearFileInput();
+      this.noti.mensaje('',
+      'Imagenes restablecidas',
+      TipoMessage.success)
   }
   
   
@@ -391,7 +416,7 @@ export class ProductoFormComponent implements OnInit {
   }
   
   updateCurrentCarouselIndex(event: any): void {
-
+    
     this.currentCarouselIndex = event.to;
     console.log(this.currentCarouselIndex)
   }

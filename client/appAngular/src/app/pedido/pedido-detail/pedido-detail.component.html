@@ -113,7 +113,7 @@
                                     <mat-footer-cell *matFooterCellDef></mat-footer-cell>
                                     </ng-container>
 
-                                    <ng-container matColumnDef="accion" *ngIf="currentUser.rol==2">
+                                    <ng-container matColumnDef="accion" *ngIf="roleSelected==2">
                                         <mat-header-cell *matHeaderCellDef></mat-header-cell>
                                         <mat-cell *matCellDef="let producto" >
                                             <a mat-fab class="custom" *ngIf="producto.estado=='Pendiente'">

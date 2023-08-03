@@ -5,6 +5,7 @@ import { MatSort } from '@angular/material/sort';
 import { Subject, takeUntil } from 'rxjs';
 import { GenericService } from 'src/app/share/generic.service';
 import { ActivatedRoute, Router } from '@angular/router';
+import { AuthenticationService } from 'src/app/share/authentication.service';
 
 @Component({
   selector: 'app-producto-all',
@@ -14,8 +15,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 export class ProductoAllComponent implements AfterViewInit {
   datos:any;//Guarda la respuesta del API
   destroy$: Subject<boolean>=new Subject<boolean>();
-
-
+  currentUser: any;
+  roleSelected:any
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
   dataSource=new MatTableDataSource<any>();
@@ -25,7 +26,10 @@ export class ProductoAllComponent implements AfterViewInit {
 
   constructor(private gService:GenericService,
     private router: Router,
-    private route: ActivatedRoute) {
+    private route: ActivatedRoute,
+    private authService: AuthenticationService) {
+    this.authService.currentUser.subscribe((x)=>(this.currentUser=x));
+    this.authService.currentSelectedRole.subscribe((valor)=>(this.roleSelected=valor));
 
   }
 
@@ -39,7 +43,11 @@ export class ProductoAllComponent implements AfterViewInit {
       .pipe(takeUntil(this.destroy$))
       .subscribe((data:any)=>{
         this.datos=data;
-        this.dataSource = new MatTableDataSource(this.datos.filter(item => item.proveedorId == "402350442"));
+        if(this.roleSelected===2){
+          this.dataSource = new MatTableDataSource(this.datos.filter(item => item.proveedorId == this.currentUser.user.id));
+        }else{
+          this.dataSource = new MatTableDataSource(this.datos)
+        }
         this.dataSource.sort = this.sort;
         this.dataSource.paginator = this.paginator;
         console.log(this.dataSource);

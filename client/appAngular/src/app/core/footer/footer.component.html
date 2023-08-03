@@ -8,21 +8,41 @@
   <div class="example-spacer"></div>
   <div class="example-spacer"></div>
   <div class="example-spacer"></div>
+  <button mat-button [routerLink]="['/usuario/login']" style="color: #ffffff;border: #ffffff solid 1px;font-weight: 100;padding: 0px 30px 0px 30px;" *ngIf="!(isAutenticated)" (click)="login()">
+    Iniciar Sesión
+  </button>
 
-  <div style="padding: 8px 18px 8px 0px;border-left: #ffffff91 solid 1px;height: 61px;"></div>
-    <button mat-button class="border-button" [routerLink]="['/producto']" style="margin-top: 10px;">
+    <button mat-button class="border-button" [routerLink]="['/producto']" style="margin-top: 10px;"*ngIf="isAutenticated && roleSelected==3">
       <mat-icon>local_mall</mat-icon>
       Tienda
     </button>
 
-
-
-  <div style="padding: 5px 18px 8px 0px;border-left: #ffffff91 solid 1px;border-right: #ffffff91 solid 1px;">
+  <div style="padding: 5px 18px 8px 0px;border-left: #ffffff91 solid 1px;border-right: #ffffff91 solid 1px;"*ngIf="isAutenticated && roleSelected==3">
     <button mat-icon-button [routerLink]="'/pedido'" [routerLinkActive]="'mat-raised-button'">
       <mat-icon>shopping_cart</mat-icon>
       <div class="custom-badge">{{ qtyItems }}</div>
     </button>
   </div>
-  <div class="example-spacer"></div>
+ 
+   
+
+<div style="margin: 0px 15px 0px 15px"*ngIf="isAutenticated">
+  <span style="font-weight: 100; padding: 10px;" *ngIf="roleSelected==2">
+    {{ currentUser.user.nombre }} | {{ currentUser.user.proveedor }}
+  </span>
+  <span style="font-weight: 100; padding: 10px;" *ngIf="roleSelected!=2">
+    {{ currentUser.user.nombre }}
+  </span>
+</div>
+
+<div style="background-color: white;border-radius: 17px;"*ngIf="isAutenticated && isMultiRol">
+  <button mat-button [ngStyle]="clienteButtonStyles" (click)="setActiveButton(3)">
+    Cliente
+  </button>
+  <button mat-button [ngStyle]="proveedorButtonStyles" (click)="setActiveButton(2)">
+    Proveedor
+  </button>
+</div>
+ 
 </mat-toolbar>
 

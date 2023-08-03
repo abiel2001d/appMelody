@@ -4,6 +4,7 @@ import { ActivatedRoute } from '@angular/router';
 import { GenericService } from 'src/app/share/generic.service';
 import { Subject, takeUntil } from 'rxjs';
 import { LocationService } from 'src/app/share/location.service';
+import { AuthenticationService } from 'src/app/share/authentication.service';
 
 @Component({
   selector: 'app-pedido-detail',
@@ -15,6 +16,7 @@ export class PedidoDetailComponent {
   estadoPedido:string
   grandTotal:any
   currentUser:any
+  roleSelected:any
   provincias:any
   provincia:any
   cantones:any
@@ -30,6 +32,7 @@ export class PedidoDetailComponent {
     private route: ActivatedRoute,
     private fb: FormBuilder,
     private locationService: LocationService,
+    private authService: AuthenticationService
     ){
       //Obtener el parámetro
       let id=this.route.snapshot.paramMap.get('id');
@@ -39,17 +42,9 @@ export class PedidoDetailComponent {
       this.formularioReactive() 
   }
   ngOnInit(): void {
-    //Valores de prueba
-    let user={
-      id:402350442,
-      rol: 2
-      /*
-      402350442 > Proveedor
-      462578415 > Proveedor
-      465218563 > Cliente
-      */
-    }
-    this.currentUser=user;
+    this.authService.currentUser.subscribe((x)=>(this.currentUser=x));
+    this.authService.currentSelectedRole.subscribe((valor)=>(this.roleSelected=valor));
+
   }
 
   //Crear Formulario
@@ -66,8 +61,8 @@ export class PedidoDetailComponent {
     .pipe(takeUntil(this.destroy$))
     .subscribe((data:any)=>{
       this.datos=data;
-      if(this.currentUser.rol===2){
-        this.datos.productos = this.datos.productos.filter((producto: any) => producto.producto.proveedorId === this.currentUser.id);
+      if(this.roleSelected===2){
+        this.datos.productos = this.datos.productos.filter((producto: any) => producto.producto.proveedorId === this.currentUser.user.id);
 
         let pendienteCount = 0;
         let entregadoCount = 0;

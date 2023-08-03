@@ -16,6 +16,7 @@ import { MatTableModule } from '@angular/material/table';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatSortModule } from '@angular/material/sort';
 import { MetodoPagoModule } from './metodo-pago/metodo-pago.module';
+import { UsuarioModule } from './usuario/usuario.module';
 
 @NgModule({
   declarations: [
@@ -36,7 +37,8 @@ import { MetodoPagoModule } from './metodo-pago/metodo-pago.module';
     MatPaginatorModule, 
     MatSortModule, 
     MetodoPagoModule,
-    AppRoutingModule, 
+    UsuarioModule, 
+    AppRoutingModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

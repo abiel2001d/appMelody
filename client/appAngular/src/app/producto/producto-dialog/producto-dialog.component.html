@@ -1,12 +1,17 @@
-<h3 mat-dialog-title style="text-align: center;">Nueva Conversación</h3>
-<hr>
+
+<mat-card-header style="font-weight: 200; font-size: 18px; padding: 15px 0px 0px 20px;background-color: #3A3A3A;color: white;">
+  <p>
+    Nueva Conversación
+  </p>
+</mat-card-header>
 <mat-dialog-content>
   <!-- Form fields for creating a new dialogo -->
   <!-- Replace the input fields and form structure as per your requirements -->
   <form [formGroup]="dialogoForm">
     <div class="row g-0">
       <mat-form-field>
-        <input matInput placeholder="Título" formControlName="titulo">
+        <mat-label>Titulo</mat-label>
+        <input matInput  formControlName="titulo">
         <mat-error *ngIf="errorHandling('titulo','required')">
           Título no puede ser <strong>vacío</strong>
         </mat-error>

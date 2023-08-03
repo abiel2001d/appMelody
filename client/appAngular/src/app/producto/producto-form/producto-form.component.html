@@ -17,7 +17,6 @@
                     <img [src]="imagen" class="d-block w-100 rounded" alt="...">
                   </div>
                 </ng-container>
-                
               </div>
               <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="prev">
                 <span class="carousel-control-prev-icon" aria-hidden="true" style="background-color: black;border-radius: 8px;"></span>
@@ -28,14 +27,11 @@
                 <span class="visually-hidden">Next</span>
               </button>
             </div>
-            
             <div class="row mt-1">
-           
-                <div class="col-sm-7">
+                <div class="col-sm-6">
                   <input type="file" class="form-control" id="customFile" (change)="handleFileInput($event)" #fileInput />
                 </div>
-                
-                <div class="col-sm-1">
+                <div class="col-sm-2">
                   <div class="btn-group" role="group">
                     <button mat-raised-button color="primary" (click)="addSelectedImage($event)" style="margin-right: 5px;">
                       <mat-icon>add</mat-icon>
@@ -43,22 +39,24 @@
                     <button mat-raised-button color="primary" (click)="changeImage($event)" style="margin-right: 5px;">
                       <mat-icon>check</mat-icon>
                     </button>
-                    <button mat-raised-button color="primary" (click)="deleteImage($event)">
+                    <button mat-raised-button color="primary" (click)="deleteImage($event)" style="margin-right: 5px;">
                       <mat-icon>delete</mat-icon>
+                    </button>
+                    <button mat-raised-button color="primary" (click)="resetImages($event)"  matTooltip="Restablecer" aria-label="Restablecer">
+                      <mat-icon>refresh</mat-icon>
                     </button>
                   </div>
                 </div>
-                
               </div>
-            
             </div>
 
           <div class="col-6 p-2">
             <div class="row">
                 <mat-form-field class="full-width">
-                  <input matInput  placeholder="Descripción" formControlName="descripcion" >
+                  <mat-label>Descripción</mat-label>
+                  <input matInput formControlName="descripcion" >
                   <mat-error *ngIf="errorHandling('descripcion','required')">
-                    Descripción no puede ser <strong>vacío</strong>
+                    La descripción no puede estar <strong>vacío</strong>
                   </mat-error>
                   <mat-error *ngIf="errorHandling('descripcion','minlength')">
                     Descripción debe tener como mínimo <strong>5 caracteres</strong>
@@ -68,12 +66,13 @@
             <div class="row mt-3">
               <div class="col-6">
                 <mat-form-field style="width: 250px;">
-                  <mat-select placeholder="Categoria" formControlName="categoria">
+                  <mat-label>Categoría</mat-label>
+                  <mat-select formControlName="categoria">
                     <mat-option *ngFor="let item of categoriasList" [value]="item.id">
                       {{item.descripcion}}
                     </mat-option>
                   </mat-select>
-                  <mat-error *ngIf="errorHandling('proveedor','required')">
+                  <mat-error *ngIf="errorHandling('categoria','required')">
                     Seleccione una <strong>categoría</strong>
                   </mat-error>
                 </mat-form-field>
@@ -95,7 +94,8 @@
             <div class="row mt-3">
               <div class="col-6">
                 <mat-form-field style="width: 250px;" >
-                  <mat-select placeholder="Estado" formControlName="productoEstado">
+                  <mat-label>Estado</mat-label>
+                  <mat-select formControlName="productoEstado">
                     <mat-option *ngFor="let item of estadosProductoList" [value]="item.id">
                       {{ item.descripcion }}
                     </mat-option>
@@ -108,7 +108,8 @@
               </div>
               <div class="col-6">
                 <mat-form-field class="full-width" style="width: 250px;">
-                  <input matInput type="number" placeholder="Cantidad" formControlName="cantidad" min="0">
+                  <mat-label>Cantidad</mat-label>
+                  <input matInput type="number" formControlName="cantidad" min="0">
                   <mat-error *ngIf="errorHandling('cantidad','required')">
                     Ingrese un valor <strong>numérico</strong>
                   </mat-error>
@@ -129,7 +130,7 @@
                 </mat-radio-group>
                 
               </div>
-              <div class="col-6" *ngIf="currentUser.rol===3">
+              <div class="col-6" *ngIf="roleSelected===1">
                 <mat-form-field  style="width: 250px;" >
                   <mat-select placeholder="Proveedores" formControlName="proveedor">
                     <mat-option *ngFor="let item of proveedoresList" [value]="item.id">
@@ -151,6 +152,7 @@
       </mat-card-content>
 
       <mat-card-footer class="footer">
+  
         <button mat-raised-button color="primary" type="submit"> <mat-icon >save</mat-icon></button>
       </mat-card-footer>
       

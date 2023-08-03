@@ -1,75 +1,74 @@
+<link href="https://fonts.googleapis.com/css?family=Montserrat:200,400,700" rel="stylesheet">
+
 <mat-sidenav-container class="sidebar-container" color="primary">
   <mat-sidenav mode="side" opened class="sidebar">
     <mat-nav-list class="sidebar-nav" id="sidebar-nav">
-      <mat-list-item class="nav-item">
-        <a class="nav-link collapsed" routerLink="index.html">
-          <mat-icon>pie_chart</mat-icon>
-          <span>Dashboard</span>
-        </a>
-      </mat-list-item><!-- End Dashboard Nav -->
-
-      <h3 matSubheader class="nav-heading">Mantenimientos</h3>
-
-      <mat-list-item class="nav-item" routerLinkActive="active">
-        <a class="nav-link collapsed" [routerLink]="['/producto/all']" routerLinkActive="mat-raised-button">
-          <mat-icon>piano</mat-icon>
-          <span>Productos</span>
-        </a>
-       
-      </mat-list-item><!-- End Components Nav -->
-
-      <mat-list-item class="nav-item" routerLinkActive="active">
-        <a class="nav-link collapsed" [routerLink]="['/pedido/all']" routerLinkActive="mat-raised-button">
-          <mat-icon>shop_two</mat-icon>
-          <span>Pedidos</span>
-        </a>
-       
-      </mat-list-item><!-- End Components Nav -->
-
-      <mat-list-item class="nav-item" routerLinkActive="active">
-        <a class="nav-link collapsed">
-          <mat-icon>groups</mat-icon>
-          <span>Usuarios</span>
-        </a>
-      </mat-list-item><!-- End Components Nav -->
-
-      <h3 matSubheader class="nav-heading">Perfil</h3>
-
-      <mat-list-item class="nav-item">
-        <a class="nav-link collapsed" [routerLink]="['/direccion']">
-          <mat-icon>directions</mat-icon>
-          <span>Direcciones</span>
-        </a>
-      </mat-list-item><!-- End Profile Page Nav -->
-
-      <mat-list-item class="nav-item">
-        <a class="nav-link collapsed"  [routerLink]="['/metodoPago']">
-          <mat-icon>credit_card</mat-icon>
-          <span>Métodos Pago</span>
-        </a>
-      </mat-list-item><!-- End Profile Page Nav -->
-
-      <mat-list-item class="nav-item">
-        <a class="nav-link collapsed" routerLink="users-profile.html">
-          <mat-icon>manage_accounts</mat-icon>
-          <span>Mi Cuenta</span>
-        </a>
-      </mat-list-item><!-- End Profile Page Nav -->
-
-      <mat-nav-list class="sidebar-nav" id="sidebar-nav-bottom" >
-        <mat-list-item class="nav-item" class="button-session">
-          <a class="nav-link-session" routerLink="users-profile.html" mat-menu-item *ngIf="!(isAutenticated)">
-            <mat-icon>login</mat-icon>
-            <span>Iniciar Sesión</span>
+      <div *ngIf="isAutenticated">
+        <mat-list-item class="nav-item" *ngIf="roleSelected!=3">
+          <a class="nav-link collapsed" routerLink="index.html">
+            <mat-icon>pie_chart</mat-icon>
+            <span>Dashboard</span>
+          </a>
+        </mat-list-item><!-- End Dashboard Nav -->
+  
+        <h3 matSubheader class="nav-heading"*ngIf="roleSelected!=3">Mantenimientos</h3>
+  
+        <mat-list-item class="nav-item" routerLinkActive="active"*ngIf="roleSelected!=3">
+          <a class="nav-link collapsed" [routerLink]="['/producto/all']" routerLinkActive="mat-raised-button">
+            <mat-icon>piano</mat-icon>
+            <span>Productos</span>
+          </a>
+         
+        </mat-list-item><!-- End Components Nav -->
+  
+        <mat-list-item class="nav-item" routerLinkActive="active">
+          <a class="nav-link collapsed" [routerLink]="['/pedido/all']" routerLinkActive="mat-raised-button">
+            <mat-icon>shop_two</mat-icon>
+            <span>Pedidos</span>
+          </a>
+         
+        </mat-list-item><!-- End Components Nav -->
+  
+        <mat-list-item class="nav-item" routerLinkActive="active"*ngIf="roleSelected==1">
+          <a class="nav-link collapsed">
+            <mat-icon>groups</mat-icon>
+            <span>Usuarios</span>
+          </a>
+        </mat-list-item><!-- End Components Nav -->
+  
+        <h3 matSubheader class="nav-heading">Perfil</h3>
+  
+        <mat-list-item class="nav-item"*ngIf="roleSelected!=1">
+          <a class="nav-link collapsed" [routerLink]="['/direccion']">
+            <mat-icon>directions</mat-icon>
+            <span>Direcciones</span>
           </a>
         </mat-list-item><!-- End Profile Page Nav -->
-        <mat-list-item class="nav-item" class="button-session">
-          <a class="nav-link-session" routerLink="users-profile.html" mat-menu-item *ngIf="isAutenticated" (click)="cerrarSesion()">
-            <mat-icon>logout</mat-icon>
-            <span>Cerrar Sesión</span>
+  
+        <mat-list-item class="nav-item"*ngIf="roleSelected==3">
+          <a class="nav-link collapsed"  [routerLink]="['/metodoPago']">
+            <mat-icon>credit_card</mat-icon>
+            <span>Métodos Pago</span>
           </a>
         </mat-list-item><!-- End Profile Page Nav -->
-      </mat-nav-list>
+  
+        <mat-list-item class="nav-item">
+          <a class="nav-link collapsed" routerLink="users-profile.html">
+            <mat-icon>manage_accounts</mat-icon>
+            <span>Mi Cuenta</span>
+          </a>
+        </mat-list-item><!-- End Profile Page Nav -->
+  
+
+      </div>
+      
+      <div class="button-session" >
+
+        <button mat-button class="border-button" [routerLink]="['/usuario/login']" style="color: #d7caa4;"  *ngIf="isAutenticated" (click)="logout()">
+          Cerrar Sesión
+        </button>
+
+    </div>
 
     </mat-nav-list>
   </mat-sidenav>

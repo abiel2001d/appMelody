@@ -179,27 +179,15 @@
 .button-session {
   position: absolute;
   bottom: 0;
-  margin-bottom: 15px;
+  margin-bottom: 50px;
 }
 
-.nav-link-session {
-  display: flex;
-  align-items: center;
-  font-size: 15px;
+
+.border-button {
+  border: 1px solid #d7caa4a6 ;
+  border-radius: 0px;
+  padding: 8px 40px;
+  width: 100%;
   font-weight: 100;
-  color: #1a1a1a;
-  transition: 0.3;
-  background: rgba(245, 245, 245, 0.788);
-  padding: 15px;
-}
-
-.nav-link-session span{
-  margin: 8px;
-}
-
-.nav-link-session:hover {
-  
-  color: #1a1a1a;
-  transition: 0.3;
-  background: rgb(245, 245, 245);
+  margin-left: 8px;
 }

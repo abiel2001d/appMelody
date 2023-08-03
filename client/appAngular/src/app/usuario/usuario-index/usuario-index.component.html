@@ -1,0 +1,23 @@
+<link href="https://fonts.googleapis.com/css?family=Montserrat:200,400,700" rel="stylesheet">
+
+<div style="background: url('./assets/img/bg-login.jpg') fixed; height: 100vh; display: flex; justify-content: center; align-items: center;">
+    
+        <mat-card class="full-width p-3" style="background-color: rgba(255, 255, 255, 0.514);">
+            <mat-card style="font-family: 'Montserrat', sans-serif; width: 600px; height: 500px;">
+                <mat-card-header style="font-size: 22px; font-weight: 200; text-align: center; justify-content: center; align-items: center;background-color: #1A1A1A;color: white;padding-bottom: 15px;">
+                <img src="./assets/img/logoletras.png" height="25px" style="padding-left: 15px;">
+                </mat-card-header>
+                <nav mat-tab-nav-bar backgroundColor="primary" [tabPanel]="tabPanel" style="font-weight: 300;">
+                    <a mat-tab-link [routerLink]="['/usuario/login']" routerLinkActive="active-link">Iniciar Sesión</a>
+                    <a mat-tab-link [routerLink]="['/usuario/registrar']" routerLinkActive="active-link">Registrarse</a>
+                  </nav>
+                  <mat-tab-nav-panel #tabPanel></mat-tab-nav-panel>
+                  <div>	
+                    <router-outlet></router-outlet>	
+                  </div> 
+                  
+              
+            </mat-card>
+        </mat-card>
+    
+</div>

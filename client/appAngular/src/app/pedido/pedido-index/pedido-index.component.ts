@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
 import { Subject, takeUntil } from 'rxjs';
+import { AuthenticationService } from 'src/app/share/authentication.service';
 import { CartService } from 'src/app/share/cart.service';
 import { GenericService } from 'src/app/share/generic.service';
 import { LocationService } from 'src/app/share/location.service';
@@ -32,23 +33,19 @@ export class PedidoIndexComponent {
   dataSource = new MatTableDataSource<any>();
   destroy$: Subject<boolean> = new Subject<boolean>();
   currentUser:any
+
   constructor(
     private cartService: CartService,
     private noti: NotificacionService,
     private gService: GenericService,
     private router: Router,
     private locationService: LocationService,
+    private authService: AuthenticationService
   ) {
-    let user={
-      id:462578415,
-      rol: 3,
-      nombre:"Vilma Salguera",
-      email:"vsalguera@hotmail.com",
-      telefono:"8458-7433"
-    }
-    this.currentUser=user;
-    this.listaMetodosPago(this.currentUser.id)
-    this.listaDirecciones(this.currentUser.id)
+    this.authService.currentUser.subscribe((x)=>(this.currentUser=x));
+    
+    this.listaMetodosPago(this.currentUser.user.id)
+    this.listaDirecciones(this.currentUser.user.id)
   }
 
   ngOnInit(): void {
@@ -158,14 +155,14 @@ export class PedidoIndexComponent {
        let infoOrden={
         'total':this.totalWithIVA,
         'estado':"Pendiente",
-        'usuario':this.currentUser.id,
+        'usuario':this.currentUser.user.id,
         'direccion':this.selectedDireccion.id,
         'metodoPago':this.selectedMetodoPago.id,
         'productos':detalles,
        }
        this.gService.create('pedido',infoOrden)
        .subscribe((respuesta:any)=>{
-         this.noti.mensaje('Orden',
+         this.noti.mensaje('',
          'Pedido realizado exitosamente',
          TipoMessage.success)
          this.cartService.deleteCart();

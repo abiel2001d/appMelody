@@ -27,7 +27,6 @@ import { ProductoDialogComponent } from './producto-dialog/producto-dialog.compo
 import {MatDialogModule} from "@angular/material/dialog";
 import { CoreModule } from '../core/core.module';
 
-
 @NgModule({
   declarations: [
     ProductoIndexComponent,
@@ -58,7 +57,7 @@ import { CoreModule } from '../core/core.module';
     NgFor,
     MatSelectModule,
     MatDialogModule,
-    CoreModule 
+    CoreModule
   ]
 })
 export class ProductoModule { }

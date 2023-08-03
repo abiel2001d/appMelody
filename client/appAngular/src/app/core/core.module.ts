@@ -13,6 +13,13 @@ import {MatMenuModule} from '@angular/material/menu';
 import {MatListModule} from '@angular/material/list';
 import { LoadingPageComponent } from './loading-page/loading-page.component';
 import { MatBadgeModule } from '@angular/material/badge';
+import { MatCardModule } from '@angular/material/card';
+import {MatTabsModule} from '@angular/material/tabs';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import {FormsModule} from '@angular/forms';
+import { ReactiveFormsModule } from '@angular/forms';
+import { MatInputModule } from '@angular/material/input';
+import {MatButtonToggleModule} from '@angular/material/button-toggle';
 
 @NgModule({
   declarations: [
@@ -31,7 +38,14 @@ import { MatBadgeModule } from '@angular/material/badge';
     MatSidenavModule,
     MatMenuModule,
     MatListModule,
-    MatBadgeModule
+    MatBadgeModule,
+    MatCardModule,
+    MatTabsModule,
+    MatFormFieldModule,
+    FormsModule,
+    ReactiveFormsModule,
+    MatInputModule,
+    MatButtonToggleModule
   ],
   exports: [
     HeaderComponent,

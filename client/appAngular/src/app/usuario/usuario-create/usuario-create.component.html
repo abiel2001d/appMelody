@@ -1,0 +1,100 @@
+<form [formGroup]="formCreate"  novalidate style="padding: 15px 30px 10px 30px;">
+  
+   
+        <div class="row" >
+          <div class="col-6" >
+            <mat-form-field class="full-width" style="width: 250px;">
+                <mat-label>Nombre Completo</mat-label>
+                <input matInput type="text" formControlName="nombre" />
+               <mat-error *ngIf="errorHandling('nombre', 'required')">
+                  Nombre es <strong>requerido</strong>
+                </mat-error>
+              </mat-form-field>
+          </div>
+          <div class="col-6">
+            <mat-form-field class="full-width" style="width: 250px;"> 
+                <mat-label>Cédula</mat-label>
+                <input matInput type="text" formControlName="id" />
+               <mat-error *ngIf="errorHandling('id', 'required')">
+                  Cédula es <strong>requerido</strong>
+                </mat-error>
+              </mat-form-field>
+          </div>
+            
+            
+          
+        </div>
+        <div class="row">
+            <div class="col-6" >
+                <mat-form-field class="full-width"  style="width: 250px;">
+                    <mat-label>Correo Electrónico</mat-label>
+                    <input matInput type="text"formControlName="email" />
+                   <mat-error *ngIf="errorHandling('email', 'required')">
+                      Correo es <strong>requerido</strong>
+                    </mat-error>
+                  </mat-form-field>
+              </div>
+              <div class="col-6">
+                <mat-form-field class="full-width"  style="width: 250px;">
+                    <mat-label>Teléfono</mat-label>
+                    <input matInput type="text"formControlName="telefono" />
+                   <mat-error *ngIf="errorHandling('telefono', 'required')">
+                    Teléfono es <strong>requerido</strong>
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+          
+        </div>
+        
+        <div class="row">
+          <div class="col-6">
+            <mat-form-field class="full-width" style="width: 250px;">
+                <mat-label>Contraseña</mat-label>
+                <input matInput [type]="hide ? 'password' : 'text'" formControlName="password" />
+                <button mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide">
+                  <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+                </button>
+               <mat-error *ngIf="errorHandling('password', 'required')">
+                  Contraseña es <strong>requerido</strong>
+                </mat-error>
+              </mat-form-field>
+          </div>
+
+          <div class="col-6">
+            
+            <mat-form-field  class="full-width" style="width: 250px;">
+                <mat-label>Rol</mat-label>
+                    <mat-select  formControlName="roles" multiple >
+                        <mat-option *ngFor="let r of roles" [value]="r.id">
+                            {{ r.descripcion }}
+                        </mat-option>
+                    </mat-select>
+                    <mat-error *ngIf="errorHandling('roles', 'required')">
+                        Rol es <strong>requerido</strong>
+                    </mat-error>
+            </mat-form-field>
+           
+          </div>
+
+         <!-- Show or hide the Proveedor field based on the selected role ID -->
+        <div *ngIf="proveedorSelected">
+            <mat-form-field class="full-width" style="width: 280px;">
+            <mat-label>Proveedor</mat-label>
+            <input matInput type="text" formControlName="proveedor" required />
+            <mat-error *ngIf="errorHandling('proveedor', 'required')">
+                Proveedor es <strong>requerido</strong>
+            </mat-error>
+            </mat-form-field>
+        </div>
+          
+        </div>
+       
+     
+        <div style="display: flex; flex-direction: row; justify-content: center; align-items: center;padding-top: 5px;">
+            <button mat-raised-button color="primary" (click)="submitForm()" style="width: 150px;">Registrar</button>
+
+        </div>   
+
+    </form>
+    
+    
