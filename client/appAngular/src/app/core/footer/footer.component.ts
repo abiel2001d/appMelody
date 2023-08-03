@@ -53,14 +53,14 @@ export class FooterComponent implements OnInit {
 
   updateButtonStyles(): void {
     if (this.roleSelected === 3) {
-      this.clienteButtonStyles['background-color'] = '#1a1a1adc';
+      this.clienteButtonStyles['background-color'] = '#1a1a1ace';
       this.clienteButtonStyles['color'] = 'white';
       this.proveedorButtonStyles['background-color'] = 'white';
-      this.proveedorButtonStyles['color'] = '#1a1a1adc';
+      this.proveedorButtonStyles['color'] = '#1a1a1ace';
     } else if (this.roleSelected === 2) {
       this.clienteButtonStyles['background-color'] = 'white';
-      this.clienteButtonStyles['color'] = '#1a1a1adc';
-      this.proveedorButtonStyles['background-color'] = '#1a1a1adc';
+      this.clienteButtonStyles['color'] = '#1a1a1ace';
+      this.proveedorButtonStyles['background-color'] = '#1a1a1ace';
       this.proveedorButtonStyles['color'] = 'white';
     }
   }

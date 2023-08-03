@@ -1,7 +1,8 @@
-import { Component } from '@angular/core';
+import { Component,OnInit } from '@angular/core';
 import { MatTabChangeEvent } from '@angular/material/tabs';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subject, takeUntil } from 'rxjs';
+import { AuthenticationService } from 'src/app/share/authentication.service';
 import { CartService } from 'src/app/share/cart.service';
 import { GenericService } from 'src/app/share/generic.service';
 import { NotificacionService, TipoMessage } from 'src/app/share/notificacion.service';
@@ -11,19 +12,25 @@ import { NotificacionService, TipoMessage } from 'src/app/share/notificacion.ser
   templateUrl: './producto-index.component.html',
   styleUrls: ['./producto-index.component.css']
 })
-export class ProductoIndexComponent {
+export class ProductoIndexComponent implements OnInit{
   estadoInventario:any
   datos:any;//Guarda la respuesta del API
   destroy$: Subject<boolean>=new Subject<boolean>();
   loading: boolean ;
-
-
+  roleSelected:any
+  isAutenticated:boolean
   constructor(private gService:GenericService,
     private router: Router,
     private cartService:CartService,
     private notificacion:NotificacionService,
+    private authService: AuthenticationService,
     private route: ActivatedRoute){
     this.listaProductos(1)
+  }
+
+  ngOnInit(): void {
+    this.authService.currentSelectedRole.subscribe((valor)=>(this.roleSelected=valor));
+    this.authService.isAuthenticated.subscribe((valor) => (this.isAutenticated = valor));
   }
 
   getBackgroundColor(cantidad: any): string {

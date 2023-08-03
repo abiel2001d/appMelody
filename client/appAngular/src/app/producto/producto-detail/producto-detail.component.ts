@@ -23,6 +23,7 @@ export class ProductoDetailComponent {
   destroy$: Subject<boolean>=new Subject<boolean>();
   estadoInventario:string
   roleSelected:any
+  isAutenticated: boolean;
   constructor(
     private gService: GenericService,
     private route: ActivatedRoute,
@@ -42,7 +43,7 @@ export class ProductoDetailComponent {
   ngOnInit(): void {
     this.authService.currentUser.subscribe((x)=>(this.currentUser=x));
     this.authService.currentSelectedRole.subscribe((valor)=>(this.roleSelected=valor));
-
+    this.authService.isAuthenticated.subscribe((valor) => (this.isAutenticated = valor));
   }
   public errorHandling = (control: string, error: string) => {
     return this.comentarioForm.controls[control].hasError(error);
@@ -165,7 +166,7 @@ export class ProductoDetailComponent {
       if (result === 'created') {
 
         this.noti.mensaje('',
-        'Nuevo conversación ha sido creada',
+        'Nueva conversación ha sido creada',
         TipoMessage.success)
 
         let id = this.route.snapshot.paramMap.get('id'); // Obtain the ID from the current URL

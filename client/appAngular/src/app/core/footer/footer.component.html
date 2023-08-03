@@ -1,6 +1,6 @@
 <mat-toolbar color="primary" class="d-flex align-items-center fixed-top" style="background-color: #1a1a1a;">
   <div class="d-flex align-items-center justify-content-between">
-    <a routerLink="/">
+    <a [routerLink]="'/'">
       <img src="./assets/img/logo.png" class="logo">
       <img src="./assets/img/logoletras.png" class="logo-letters">
     </a>
@@ -8,14 +8,15 @@
   <div class="example-spacer"></div>
   <div class="example-spacer"></div>
   <div class="example-spacer"></div>
+
+  <button mat-button class="border-button" [routerLink]="['/producto']" style="margin-top: 10px;font-weight: 200;"*ngIf="roleSelected!=2">
+    <mat-icon>local_mall</mat-icon>
+    Tienda
+  </button>
+
   <button mat-button [routerLink]="['/usuario/login']" style="color: #ffffff;border: #ffffff solid 1px;font-weight: 100;padding: 0px 30px 0px 30px;" *ngIf="!(isAutenticated)" (click)="login()">
     Iniciar Sesión
   </button>
-
-    <button mat-button class="border-button" [routerLink]="['/producto']" style="margin-top: 10px;"*ngIf="isAutenticated && roleSelected==3">
-      <mat-icon>local_mall</mat-icon>
-      Tienda
-    </button>
 
   <div style="padding: 5px 18px 8px 0px;border-left: #ffffff91 solid 1px;border-right: #ffffff91 solid 1px;"*ngIf="isAutenticated && roleSelected==3">
     <button mat-icon-button [routerLink]="'/pedido'" [routerLinkActive]="'mat-raised-button'">

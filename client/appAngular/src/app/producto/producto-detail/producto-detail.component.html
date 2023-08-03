@@ -1,7 +1,4 @@
-<mat-card class="full-width" style="margin: 0 50px 0 50px;">
-
-    
-
+<mat-card class="full-width" [ngStyle]="isAutenticated ? {'margin': '0 50px 0 50px'} : {'margin': '100px 30px 30px 30px'}" >
     <div class="row g-0">
 
         <div class="col-6 p-2">
@@ -84,7 +81,7 @@
                 </div>
               </mat-card>
               
-              <form style="margin-top: 10px;" [formGroup]="comentarioForm"
+              <form style="margin-top: 10px;" [formGroup]="comentarioForm" *ngIf="roleSelected==2 || roleSelected==3"
                 (ngSubmit)="enviarMensaje(datos.dialogos[currentDialog].id)">
                 <mat-form-field appearance="fill" class="p-2" style="width: 500px;">
                   <input matInput placeholder="Comentario" formControlName="contenido">
@@ -111,7 +108,7 @@
             </div>
           </div>
           <div *ngIf="roleSelected===3" style="display: flex; justify-content: flex-end;">
-            <a mat-fab color="primary" (click)="openCreateDialog(datos.id,currentUser.id)">
+            <a mat-fab color="primary" (click)="openCreateDialog(datos.id,currentUser.user.id)">
               <mat-icon>add</mat-icon>
             </a>
           </div>
