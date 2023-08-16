@@ -5,17 +5,11 @@
         <mat-card-content>
 
             <div class="row g-0 " style="padding: 20px 0 0 20px;">
-                <div class="col-4" style="padding-right: 15px;" >
+                <div class="col-5" style="padding-right: 15px;" >
                     <mat-form-field style="width: 100%;">
                         <mat-label>Número Tarjeta</mat-label>
                         <input matInput placeholder="____-____-____-____" formControlName="numTajeta" appCreditCardNumber>
-
-                    <mat-error *ngIf="errorHandling('numTajeta','required')">
-                        Descripción no puede ser <strong>vacío</strong>
-                    </mat-error>
-                    <mat-error *ngIf="errorHandling('numTajeta','minlength')">
-                        Descripción debe tener como mínimo <strong>16 números</strong>
-                    </mat-error>
+            
                     </mat-form-field>
                 </div>  
                 
@@ -27,9 +21,7 @@
                     <mat-option value="Dédito">Dédito</mat-option>
                     </mat-select>
 
-                    <mat-error *ngIf="errorHandling('tipo','required')">
-                    Seleccione un <strong>tipo</strong>
-                    </mat-error>
+                   
 
                 </mat-form-field>
                 </div>
@@ -38,9 +30,7 @@
                     <mat-form-field class="full-width" style="width: 100%;">
                         <mat-label>Fecha Vencimiento</mat-label>
                         <input matInput placeholder="__/____" formControlName="fechaVenc" appNumberFormat>
-                        <mat-error *ngIf="errorHandling('fechaVenc','required')">
-                          Precio no puede ser <strong>vacío</strong>
-                        </mat-error>
+                       
                       </mat-form-field>
                       
                 </div>
@@ -49,14 +39,13 @@
                 <mat-form-field style="width: 100%;" >
                     <mat-label>Código Seguridad</mat-label>
                     <input matInput formControlName="codSeguridad">
-                    <mat-error *ngIf="errorHandling('codSeguridad','required')">
-                    Ingrese el <strong>código</strong>
-                    </mat-error>
+                  
                 </mat-form-field>
                 
                 </div>
-                <div class="col-1" style="padding-top: 10px;">
-                    <button mat-raised-button color="primary" type="submit"> <mat-icon >save</mat-icon></button>
+                <div class="col-1" class="d-flex align-items-center justify-content-center">
+                    <button mat-raised-button color="primary" type="submit" style="margin-right: 15px;"> <mat-icon >save</mat-icon></button>
+                    <button mat-raised-button color="primary" (click)="reset($event)"> Cancelar</button>
                 </div>
 
             </div>

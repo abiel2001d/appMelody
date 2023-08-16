@@ -7,6 +7,7 @@ import { GenericService } from 'src/app/share/generic.service';
 import { ProductoDialogComponent } from '../producto-dialog/producto-dialog.component';
 import { NotificacionService, TipoMessage } from 'src/app/share/notificacion.service';
 import { AuthenticationService } from 'src/app/share/authentication.service';
+import { CartService } from 'src/app/share/cart.service';
 
 @Component({
   selector: 'app-producto-detail',
@@ -28,9 +29,11 @@ export class ProductoDetailComponent {
     private gService: GenericService,
     private route: ActivatedRoute,
     private router: Router,
+    private cartService:CartService,
     private fb: FormBuilder,
     public dialog: MatDialog,
     private noti: NotificacionService,
+
     private authService: AuthenticationService 
     ){
       //Obtener el parámetro
@@ -72,6 +75,33 @@ export class ProductoDetailComponent {
     if (this.currentDialog < this.datos.dialogos.length - 1) {
       this.currentDialog++;
     }
+  }
+
+  comprar(producto:any){
+
+    if(producto.cantidad<1){
+      this.noti.mensaje(
+        '',
+        producto.descripcion+ ' está agotado',
+        TipoMessage.error
+      )
+    } else{
+      
+    this.gService
+    .get('producto',parseInt(producto.id))
+    .pipe(takeUntil(this.destroy$))
+    .subscribe((data:any)=>{
+      //Agregar videojuego obtenido del API al carrito
+      this.cartService.addToCart(data,true);
+      //Notificar al usuario
+      this.noti.mensaje(
+        '',
+        data.descripcion+ ' agregado al pedido',
+        TipoMessage.success
+      )
+    });
+    }   
+
   }
 
   getBackgroundColor(cantidad: any): string {

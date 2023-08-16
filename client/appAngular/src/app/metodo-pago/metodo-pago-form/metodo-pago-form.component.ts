@@ -2,7 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { Subject, takeUntil } from 'rxjs';
+import { AuthenticationService } from 'src/app/share/authentication.service';
+import { MetodoPagoService } from 'src/app/share/metodoPago.service';
 import { GenericService } from 'src/app/share/generic.service';
+import { NotificacionService, TipoMessage } from 'src/app/share/notificacion.service';
 
 @Component({
   selector: 'app-metodo-pago-form',
@@ -21,66 +24,51 @@ export class MetodoPagoFormComponent{
   idMetodoPago: number = 0;
   //Sí es crear
   isCreate: boolean = true;
+  selectedObj:any
 
   constructor(
     private fb: FormBuilder,
     private gService: GenericService,
     private router: Router,
-    private activeRouter: ActivatedRoute
+    private activeRouter: ActivatedRoute,
+    private noti: NotificacionService,
+    private authService: AuthenticationService,
+    private metodoPagoService: MetodoPagoService
   ){
     this.formularioReactive()
   }
 
 
   ngOnInit(): void {
-    this.activeRouter.params.subscribe((params: Params) => {
-      this.idMetodoPago = params['id'];
-      if (this.idMetodoPago !== undefined) {
+    this.metodoPagoService.selectedObj$.subscribe((value) => {
+      if (value !== undefined || value !==null) {
         this.isCreate = false;
-        this.gService.get('metodoPago', this.idMetodoPago)
-          .pipe(takeUntil(this.destroy$))
-          .subscribe((data: any) => {
-            this.metodoPagoInfo = data;
-            
-  
-            // Initialize the imagenes control as an empty array
-            this.metodoPagoForm.setValue({
-              id: this.metodoPagoInfo.id,
-              numTajeta: this.metodoPagoInfo.numTajeta,
-              fechaVenc: this.metodoPagoInfo.fechaVenc,
-              codSeguridad: this.metodoPagoInfo.codSeguridad,
-              tipo: this.metodoPagoInfo.tipo,
-              usuario: this.metodoPagoInfo.usuarioId,
-            });
-            
-          });
+        this.metodoPagoInfo=value
+        console.log(value);
+        this.metodoPagoForm.patchValue({
+          id: this.metodoPagoInfo.id,
+          numTajeta: this.metodoPagoInfo.numTajeta,
+          fechaVenc: this.metodoPagoInfo.fechaVenc,
+          codSeguridad: this.metodoPagoInfo.codSeguridad,
+          tipo: this.metodoPagoInfo.tipo,
+          usuario: this.metodoPagoInfo.usuarioId,
+        });
+       
+          console.log(this.metodoPagoForm.value)
       }
     });
-
-    let user={
-      id:462578415,
-      rol: 2
-    }
-    this.currentUser=user;
+    this.authService.currentUser.subscribe((x)=>(this.currentUser=x));
   }
 
   
   formularioReactive() {
     this.metodoPagoForm = this.fb.group({
-      id: [null],
-      numTajeta: [null, Validators.compose([
-        Validators.required, Validators.minLength(16)
-      ])],
-      fechaVenc: [null, Validators.compose([
-        Validators.required
-      ])],
-      codSeguridad: [null, Validators.compose([
-        Validators.required
-      ])],
-      tipo: [true, Validators.required],
-      categoria: [null, Validators.required],
-      productoEstado: [null, Validators.required],
-      usuario: [null, null],
+      id: [null,null],
+      numTajeta: [null,null],
+      fechaVenc: [null,null],
+      codSeguridad: [null,null],
+      tipo: [null,null],
+      usuario: [null,null],
       
     });
   }
@@ -90,55 +78,91 @@ export class MetodoPagoFormComponent{
   };
 
 
-  //Crear 
   crearMetodoPago(): void {
     this.submitted = true;
-    
+  
     this.metodoPagoForm.patchValue({
-      usuario: this.currentUser.id
+      usuario: this.currentUser.user.id
     });
-      //metodoPagoForm validación
-    if(this.metodoPagoForm.invalid){
-      return;
+  
+    let hasNullValue = false;
+  
+    Object.keys(this.metodoPagoForm.controls).forEach(controlName => {
+      if (controlName !== 'id') { // Exclude 'id' from validation
+        const control = this.metodoPagoForm.get(controlName) as FormControl;
+        if (control.value === null  || control.value === "" ) {
+          hasNullValue = true;
+        }
+      }
+    });
+  
+    if (hasNullValue) {
+      this.noti.mensaje(
+        '',
+        'Información Incompleta',
+        TipoMessage.error
+      );
+      this.submitted = false;
+      return; // Exit the function without proceeding to create
     }
   
-      console.log(this.metodoPagoForm.value);
-      this.gService.create('metodoPago', this.metodoPagoForm.value)
-        .pipe(takeUntil(this.destroy$))
-        .subscribe((data: any) => {
-          this.respMetodoPago = data;
-          this.router.navigate(['/metodoPago'], {
-            queryParams: { create: 'true' }
-          });
-        });
-    
+    console.log(this.metodoPagoForm.value);
+    this.gService.create('metodoPago', this.metodoPagoForm.value)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((data: any) => {
+        this.respMetodoPago = data;
+        this.metodoPagoForm.reset();
+        this.submitted = false;
+        this.noti.mensaje('',
+          'Método de pago creado',
+          TipoMessage.success)
+          this.metodoPagoService.refeshData()
+      });
   }
+  
   //Actualizar 
   actualizarMetodoPago() {
     //Establecer submit verdadero
     this.submitted=true;
 
     this.metodoPagoForm.patchValue({
-      usuario: this.currentUser.id
+      usuario: this.currentUser.user.id
     });
   
 
-    //Verificar validación
-    if(this.metodoPagoForm.invalid){
-      return;
-    }
-    
-    
-    console.log(this.metodoPagoForm.value);
-    //Accion API create enviando toda la informacion del formulario
-    this.gService.update('metodoPago',this.metodoPagoForm.value)
-    .pipe(takeUntil(this.destroy$)) .subscribe((data: any) => {
-      //Obtener respuesta
-      this.respMetodoPago=data;
-      this.router.navigate(['/metodoPago'],{
-        queryParams: {update:'true'}
-      });
+    let hasNullValue = false;
+  
+    Object.keys(this.metodoPagoForm.controls).forEach(controlName => {
+      
+      const control = this.metodoPagoForm.get(controlName) as FormControl;
+      if (control.value === null  || control.value === "" ) {
+        hasNullValue = true;
+      }
+      
     });
+  
+    if (hasNullValue) {
+      this.noti.mensaje(
+        '',
+        'Información Incompleta',
+        TipoMessage.error
+      );
+      this.submitted = false;
+      return; // Exit the function without proceeding to create
+    }
+  
+    this.gService.update('metodoPago', this.metodoPagoForm.value)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((data: any) => {
+        this.respMetodoPago = data;
+        this.metodoPagoForm.reset();
+        this.submitted = false;
+        this.isCreate=true;
+        this.noti.mensaje('',
+          'Método de pago actualizado',
+          TipoMessage.success)
+          this.metodoPagoService.refeshData()
+      });
   }
 
 
@@ -149,4 +173,12 @@ export class MetodoPagoFormComponent{
     this.destroy$.unsubscribe();
   }
 
+
+  reset(event: Event): void {
+    event.preventDefault();
+    this.metodoPagoForm.reset();
+    this.submitted = false;
+    this.isCreate=true;
+  }
+  
 }

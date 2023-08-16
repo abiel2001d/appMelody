@@ -1,95 +1,18 @@
 
-  <mat-card class="box">
-    <mat-card-content *ngIf="dataSource">
-      <mat-table [dataSource]="dataSource" class="mat-elevation-z8">
-         
-        <ng-container matColumnDef="imagen">
-          <mat-header-cell *matHeaderCellDef style="font-weight: 500;"> Producto </mat-header-cell>
-          <td mat-cell *matCellDef="let element">
-            <img *ngIf="element.product.imagenes[0].imagen; else imagePath" [src]="getBase64FromBytes(element.product.imagenes[0].imagen.data)" height="100" width="150" alt="...">
-          <ng-template #imagePath>
-            <img src="./assets/img/default.jpg" height="100" width="150" alt="...">
-          </ng-template> 
-        </td> 
-          
-          
-          <mat-footer-cell *matFooterCellDef></mat-footer-cell>
-        </ng-container>
-      
-
-          <ng-container matColumnDef="producto">
-            <mat-header-cell *matHeaderCellDef style="font-weight: 500;"> Descripción </mat-header-cell>
-            <mat-cell *matCellDef="let element" style="font-weight: 200;"> {{element.product.descripcion}} 
-            </mat-cell>
-            
-            <mat-footer-cell *matFooterCellDef></mat-footer-cell>
-          </ng-container>
-
-          <ng-container matColumnDef="proveedor">
-            <mat-header-cell *matHeaderCellDef style="font-weight: 500;"> Proveedor </mat-header-cell>
-            <mat-cell *matCellDef="let element" style="font-weight: 200;"> {{element.product.proveedor.proveedor}} 
-            </mat-cell>
-            
-            <mat-footer-cell *matFooterCellDef></mat-footer-cell>
-          </ng-container>
-        
-          <ng-container matColumnDef="precio">
-            <mat-header-cell *matHeaderCellDef style="font-weight: 500;"> Precio </mat-header-cell>
-            <mat-cell *matCellDef="let element" style="font-weight: 200;"> {{ element.precio | currency}} </mat-cell>
-            <mat-footer-cell *matFooterCellDef></mat-footer-cell>
-          </ng-container>
-        
-          <ng-container matColumnDef="cantidad">
-            <mat-header-cell *matHeaderCellDef style="font-weight: 500;"> Cantidad </mat-header-cell>
-            <mat-cell *matCellDef="let element" style="font-weight: 200;"> 
-              <mat-form-field appearance="fill">
-                  <input matInput id="cantidad " type="number" class="form-control mb-2" 
-                  [(ngModel)]="element.cantidad"
-                  (change)="actualizarCantidad(element)"
-                  > 
-              </mat-form-field> 
-              
-          </mat-cell>
-          <mat-footer-cell *matFooterCellDef class="footer-total" style="font-weight: 500;">Total </mat-footer-cell>
-          </ng-container>
   
-          <ng-container matColumnDef="subtotal">
-            <mat-header-cell *matHeaderCellDef style="font-weight: 500;"> Subtotal </mat-header-cell>
-            <mat-cell *matCellDef="let element" style="font-weight: 200;"> {{ element.subtotal | currency }} </mat-cell>
-            <mat-footer-cell *matFooterCellDef class="footer-total" style="font-weight: 500;">{{total | currency}}</mat-footer-cell>
-          </ng-container>
-  
-          <ng-container matColumnDef="acciones">
-              <mat-header-cell *matHeaderCellDef> </mat-header-cell>
-              <mat-cell *matCellDef="let element"> 
-                  <button mat-icon-button (click)="eliminarItem(element)">
-                  <mat-icon>delete</mat-icon>
-                  </button>
-              </mat-cell>
-              <mat-footer-cell *matFooterCellDef></mat-footer-cell>
-            </ng-container>
-        
-          <mat-header-row *matHeaderRowDef="displayedColumns" class="header"></mat-header-row>
-          <mat-row *matRowDef="let row; columns: displayedColumns"></mat-row>
-          <mat-footer-row *matFooterRowDef="displayedColumns" class="footer-row"></mat-footer-row>
-        </mat-table>   
-    </mat-card-content>
-   
-  </mat-card>
-  
-  <mat-card class="box">
+  <mat-card class="box" >
     <mat-card-content style="font-weight: 200;">
       <div class="container">
-        <span style="padding-right: 15px;">Para continuar con la compra seleccione: </span>
+        <span style="padding-right: 15px;padding-bottom:25px">Para continuar con la compra seleccione: </span>
         <mat-form-field style="width: 250px; padding-right: 15px;">
           <mat-label>Número Tarjeta</mat-label>
           <mat-select (selectionChange)="onMetodoPagoSelectionChange($event)">
-            
             <mat-option *ngFor="let item of metodosPagoList" [value]="item">
               ●●●● {{ item.numTajeta.slice(-4) }}
             </mat-option>
           </mat-select>
         </mat-form-field>
+        
       
         <mat-form-field style="width: 250px; ">
           <mat-label>Dirección Entrega</mat-label>
@@ -99,22 +22,20 @@
             </mat-option>
           </mat-select>
         </mat-form-field>
-      </div>
+
+        <button mat-flat-button color="accent" (click)="resetPedido($event)" style="margin-left: 30px;" *ngIf="enableReadOnly">
+          <mat-icon>restart_alt</mat-icon>
+          </button>
+       </div>
         
-      
-    
-    
-        <div class="container">
+        
           
-          <mat-card class="box" *ngIf="selectedMetodoPago!=null  && selectedDireccion!=null" style="width: 80%;">
+          <mat-card class="box" *ngIf="selectedMetodoPago!=null  && selectedDireccion!=null">
             <mat-card-content style="font-weight: 200;">
               
-              <mat-tab-group  style="background-color: rgba(238, 238, 238, 0.438);">
-                <mat-tab label="Pedido">
-                  
-                </mat-tab>
-              </mat-tab-group>
-
+              <nav mat-tab-nav-bar backgroundColor="primary" style="font-weight: 300;">
+                <a mat-tab-link routerLinkActive="active-link">Pedido</a>
+              </nav>
 
               <div class="row g-0 p-3">
          
@@ -167,23 +88,103 @@
         
         
             </mat-card-content>
-            <mat-card-actions style="display: flex;
-            justify-content: center;">
-              <button mat-flat-button color="accent" (click)="registrarPedido()">
-                  Realizar Compra
-                  <mat-icon>check_circle</mat-icon> 
-                  </button>
-            </mat-card-actions>
+          
           </mat-card>
-          </div>
-    
-    
-    
-    
-    
-    
+          <mat-card class="box">
+            <mat-card-content style="font-weight: 200;">
+              <nav mat-tab-nav-bar backgroundColor="primary" style="font-weight: 300;"  *ngIf="selectedMetodoPago!=null  && selectedDireccion!=null">
+                <a mat-tab-link routerLinkActive="active-link">Detalle Pedido</a>
+              </nav>
+      
+              <mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+                   
+                  <ng-container matColumnDef="imagen">
+                    <mat-header-cell *matHeaderCellDef style="font-weight: 500;"> Producto </mat-header-cell>
+                    <td mat-cell *matCellDef="let element">
+                      <img *ngIf="element.product.imagenes[0].imagen; else imagePath" [src]="getBase64FromBytes(element.product.imagenes[0].imagen.data)" height="100" width="150" alt="...">
+                    <ng-template #imagePath>
+                      <img src="./assets/img/default.jpg" height="100" width="150" alt="...">
+                    </ng-template> 
+                  </td> 
+                    
+                    
+                    <mat-footer-cell *matFooterCellDef></mat-footer-cell>
+                  </ng-container>
+                
+          
+                    <ng-container matColumnDef="producto">
+                      <mat-header-cell *matHeaderCellDef style="font-weight: 500;"> Descripción </mat-header-cell>
+                      <mat-cell *matCellDef="let element" style="font-weight: 200;"> {{element.product.descripcion}} 
+                      </mat-cell>
+                      
+                      <mat-footer-cell *matFooterCellDef></mat-footer-cell>
+                    </ng-container>
+          
+                    <ng-container matColumnDef="proveedor">
+                      <mat-header-cell *matHeaderCellDef style="font-weight: 500;"> Proveedor </mat-header-cell>
+                      <mat-cell *matCellDef="let element" style="font-weight: 200;"> {{element.product.proveedor.proveedor}} 
+                      </mat-cell>
+                      
+                      <mat-footer-cell *matFooterCellDef></mat-footer-cell>
+                    </ng-container>
+                  
+                    <ng-container matColumnDef="precio">
+                      <mat-header-cell *matHeaderCellDef style="font-weight: 500;"> Precio </mat-header-cell>
+                      <mat-cell *matCellDef="let element" style="font-weight: 200;"> {{ element.precio | currency}} </mat-cell>
+                      <mat-footer-cell *matFooterCellDef></mat-footer-cell>
+                    </ng-container>
+                  
+                    <ng-container matColumnDef="cantidad">
+                      <mat-header-cell *matHeaderCellDef style="font-weight: 500;"> Cantidad </mat-header-cell>
+                      <mat-cell *matCellDef="let element" style="font-weight: 200;"> 
+                        <mat-form-field appearance="fill">
+                            <input matInput id="cantidad " type="number" class="form-control mb-2" 
+                            [(ngModel)]="element.cantidad"
+                            (change)="actualizarCantidad(element)"
+                            [readonly]="enableReadOnly"
+                            > 
+                        </mat-form-field> 
+                        
+                    </mat-cell>
+                    <mat-footer-cell *matFooterCellDef class="footer-total" style="font-weight: 500;">Total </mat-footer-cell>
+                    </ng-container>
+            
+                    <ng-container matColumnDef="subtotal">
+                      <mat-header-cell *matHeaderCellDef style="font-weight: 500;"> Subtotal </mat-header-cell>
+                      <mat-cell *matCellDef="let element" style="font-weight: 200;"> {{ element.subtotal | currency }} </mat-cell>
+                      <mat-footer-cell *matFooterCellDef class="footer-total" style="font-weight: 500;">{{total | currency}}</mat-footer-cell>
+                    </ng-container>
+            
+                    <ng-container matColumnDef="acciones">
+                        <mat-header-cell *matHeaderCellDef> </mat-header-cell>
+                        <mat-cell *matCellDef="let element"> 
+                            <button mat-icon-button (click)="eliminarItem(element)" *ngIf="!enableReadOnly">
+                            <mat-icon>delete</mat-icon>
+                            </button>
+                        </mat-cell>
+                        <mat-footer-cell *matFooterCellDef></mat-footer-cell>
+                      </ng-container>
+                  
+                    <mat-header-row *matHeaderRowDef="displayedColumns" class="header"></mat-header-row>
+                    <mat-row *matRowDef="let row; columns: displayedColumns"></mat-row>
+                    <mat-footer-row *matFooterRowDef="displayedColumns" class="footer-row"></mat-footer-row>
+              </mat-table>   
+            </mat-card-content>
+          </mat-card>
+          <mat-card-actions  *ngIf="selectedMetodoPago!=null  && selectedDireccion!=null" style="display: flex;
+          justify-content: center;">
+            <button mat-flat-button color="accent" (click)="registrarPedido()" class="mt-3">
+                Realizar Compra
+                <mat-icon>check_circle</mat-icon> 
+                </button>
+          </mat-card-actions>
+        
       </mat-card-content>
   </mat-card>
+  
+  
+  
+  
 
   
   

@@ -7,6 +7,8 @@ import { Subject, takeUntil } from 'rxjs';
 import { GenericService } from 'src/app/share/generic.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AuthenticationService } from 'src/app/share/authentication.service';
+import { MetodoPagoService } from 'src/app/share/metodoPago.service';
+import { NotificacionService, TipoMessage } from 'src/app/share/notificacion.service';
 
 @Component({
   selector: 'app-metodo-pago-all',
@@ -24,19 +26,31 @@ export class MetodoPagoAllComponent implements AfterViewInit {
   dataSource=new MatTableDataSource<any>();
 
   /** Columns displayed in the table. Columns IDs can be added, removed, or reordered. */
-  displayedColumns = ['numTajeta', 'fechaVenc','codSeguridad','tipo','acciones'];
+  displayedColumns = ['numTajeta', 'tipo','fechaVenc','codSeguridad','acciones'];
 
   constructor(private gService:GenericService,
     private router: Router,
     private route: ActivatedRoute,
-    private authService: AuthenticationService) {
+    private authService: AuthenticationService,
+    private noti: NotificacionService,
+    private metodoPagoService: MetodoPagoService
+    ) {
   }
 
   ngOnInit(): void {
     this.authService.currentUser.subscribe((x)=>(this.currentUser=x));
+    
+    this.metodoPagoService.refesh$.subscribe((success) => {
+      if (success) {
+        this.listaMetodosPago(this.currentUser.user.id);
+      }
+      
+    });
+    
+    
   }
   ngAfterViewInit(): void {
-    this.listaMetodosPago(this.currentUser.data.id);
+    this.listaMetodosPago(this.currentUser.user.id);
   }
 
   listaMetodosPago(id: any){
@@ -51,6 +65,11 @@ export class MetodoPagoAllComponent implements AfterViewInit {
         console.log(this.datos);
       })
   }
+
+  actualizarMetodoPago(id: number) {
+    this.metodoPagoService.setSelectedObj(this.datos.find(item => item.id === id));
+  }
+  
 
   ngOnDestroy(){
     this.destroy$.next(true);

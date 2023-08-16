@@ -29,7 +29,7 @@
          
         </mat-list-item><!-- End Components Nav -->
   
-        <mat-list-item class="nav-item" routerLinkActive="active"*ngIf="roleSelected==1">
+        <mat-list-item class="nav-item" [routerLink]="['/usuario/all']" *ngIf="roleSelected==1">
           <a class="nav-link collapsed">
             <mat-icon>groups</mat-icon>
             <span>Usuarios</span>
@@ -53,7 +53,7 @@
         </mat-list-item><!-- End Profile Page Nav -->
   
         <mat-list-item class="nav-item">
-          <a class="nav-link collapsed" routerLink="users-profile.html">
+          <a class="nav-link collapsed" (click)="actualizarUsuario()">
             <mat-icon>manage_accounts</mat-icon>
             <span>Mi Cuenta</span>
           </a>

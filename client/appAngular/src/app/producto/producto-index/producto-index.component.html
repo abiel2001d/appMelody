@@ -44,7 +44,7 @@
 
 <div class="container">
   <div class="row">
-    <div class="col-4 p-3" *ngFor="let item of datos; let i = index">
+    <div class="col-4 p-3" *ngFor="let item of filterDatos; let i = index">
       <div class="card custom-card">
         <div [id]="'carouselExampleControls-' + i" class="carousel slide" data-bs-ride="carousel">
           <div class="carousel-inner">
@@ -81,7 +81,7 @@
               <button (click)="detalleProducto(item.id)" mat-mini-fab aria-label="Detalle" color="primary">
                 <mat-icon>info</mat-icon>
               </button>
-              <button mat-mini-fab  aria-label="Comprar" color="primary" (click)="comprar(item.id)" *ngIf="isAutenticated && roleSelected==3">
+              <button mat-mini-fab  aria-label="Comprar" color="primary" (click)="comprar(item)" *ngIf="isAutenticated && roleSelected==3">
                 <mat-icon>add</mat-icon>
               </button>
             </div>

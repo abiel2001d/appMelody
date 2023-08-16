@@ -80,7 +80,7 @@ export class UsuarioLoginComponent {
           if (error.status === 401) {
             this.notificacion.mensaje(
               '',
-              'Acceso denegado, verifica los credenciales',
+              'Acceso denegado',
               TipoMessage.error
             )
           } 

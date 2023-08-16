@@ -57,6 +57,12 @@
                <mat-error *ngIf="errorHandling('password', 'required')">
                   Contraseña es <strong>requerido</strong>
                 </mat-error>
+                <mat-error *ngIf="errorHandling('password', 'minlength')">
+                Se requiren: <strong>8 caracteres mínimo</strong>
+                </mat-error>
+                <mat-error *ngIf="errorHandling('password', 'pattern')">
+                Falta: <strong>1 mayúscula | 1 número</strong>
+                </mat-error>
               </mat-form-field>
           </div>
 

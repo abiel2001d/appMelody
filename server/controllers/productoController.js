@@ -124,6 +124,6 @@ module.exports.update = async (request, response, next) => {
       }
     },
   });
-  response.json(producto);
+  response.json(newProducto);
 };
 

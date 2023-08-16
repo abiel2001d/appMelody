@@ -4,138 +4,129 @@
     </mat-card-header>
     <mat-card-content >
 
-        <mat-tab-group  style="background-color: rgba(238, 238, 238, 0.438);">
-            <mat-tab label="Pedido">
+        <nav mat-tab-nav-bar backgroundColor="primary" style="font-weight: 300;">
+            <a mat-tab-link routerLinkActive="active-link">Pedido</a>
+        </nav>
+        <mat-card class="full-width" >
+            <div class="row g-0 p-3">
 
+                <div class="col-4 p-4">
+                    <p style="padding-bottom: 10px;"><strong>Número Pedido:</strong> {{ datos.id }}</p>
+                    <p style="padding-bottom: 10px;"><strong>Realizado en:</strong> {{ datos.fechaPedido | date :"dd/MM/YYYY"}}</p>
+                    <p style="font-weight: 500;padding-bottom: 10px"><strong>Total (IVA):</strong> {{ grandTotal | currency:"USD"}}</p>
+                    <p><strong>Estado:</strong> <span style="padding:5px 10px 5px 10px; border-radius: 8px;margin-left: 8px;" [ngStyle]="{'background-color': getBackgroundColor(estadoPedido)}">{{ estadoPedido }}</span> </p>
+                
+                </div>
+                <div class="col-8">
 
-                <mat-card class="full-width" >
-                    <div class="row g-0 p-3">
-
-                        <div class="col-4 p-4">
-                            <p style="padding-bottom: 10px;"><strong>Número Pedido:</strong> {{ datos.id }}</p>
-                            <p style="padding-bottom: 10px;"><strong>Realizado en:</strong> {{ datos.fechaPedido | date :"dd/MM/YYYY"}}</p>
-                            <p style="font-weight: 500;padding-bottom: 10px"><strong>Total (IVA):</strong> {{ grandTotal | currency:"USD"}}</p>
-                            <p><strong>Estado:</strong> <span style="padding:5px 10px 5px 10px; border-radius: 8px;margin-left: 8px;" [ngStyle]="{'background-color': getBackgroundColor(estadoPedido)}">{{ estadoPedido }}</span> </p>
-                        
-                        </div>
-                        <div class="col-8">
-        
-                            <mat-card class="full-width p-3">
-                                <mat-tab-group style="font-weight: 100;">
-                                    <mat-tab label="Cliente">
-                                        <div class="row g-0">
-                                            <div class="col-1"></div>
-                                            <div class="col-6" style="padding-top: 25px;">
-                                                <p><strong>Nombre:</strong>  {{ datos.usuario.nombre }}</p>
-                                                <p><strong>Correo:</strong>  {{ datos.usuario.email }}</p>
-                                                <p><strong>Contacto:</strong> {{ datos.usuario.telefono }}</p>
-                                            </div>
-                                            <div class="col-3"  style="padding-top: 10px;">
-                                                <p style="font-weight: 400;">Método Pago</p>
-                                                <hr>
-                                                <p><strong>Tipo:</strong> {{ datos.metodoPago.tipo }}</p>
-                                                <p><strong>Tarjeta:</strong> ●●●● {{ datos.metodoPago.numTajeta.slice(-4) }}</p>
-                                            </div>
-                                        </div>
-                                    </mat-tab>
-                                    <mat-tab label="Entrega">
-                                        <div class="row g-0" style="padding-top: 27px;">
-                                            <div class="col-1"></div>
-                                            <div class="col-6">
-                                                <p><strong>Provincia:</strong> {{ provincia }}</p>
-                                                <p><strong>Cantón:</strong> {{ canton }}</p>
-                                                <p><strong>Distrito:</strong> {{ distrito }}</p>
-                                            </div>
-                                            <div class="col-5">
-                                                <p><strong>Dirección Exacta</strong> {{ datos.direccion.exacta }}</p>
-                                                <p><strong>Código Postal:</strong> {{ datos.direccion.codigoPostal }}</p>
-                                                <p><strong>Contacto:</strong> {{ datos.direccion.telefono }}</p>
-                                            </div>
-                                        </div>
-                                    </mat-tab>
-                                </mat-tab-group>    
-                            </mat-card>
-                        </div>
-                      
-                    </div>
-                    
-                    <div>
-                        <mat-tab-group  style="background-color: rgba(238, 238, 238, 0.438);">
-                            <mat-tab label="Detalle Pedido"> 
-
-                            
-                                <mat-table [dataSource]="datos.productos" class="mat-elevation-z8 text-center">
-                                    
-                                    <ng-container matColumnDef="imagen">
-                                        <mat-header-cell *matHeaderCellDef>Producto</mat-header-cell>
-                                        <mat-cell *matCellDef="let producto">
-                                            <img *ngIf="producto.producto.imagenes[0].imagen; else imagePath" [src]="getBase64FromBytes(producto.producto.imagenes[0].imagen.data)" height="100" width="150" alt="...">
-                                        <ng-template #imagePath>
-                                            <img src="./assets/img/default.jpg" height="100" width="150" alt="...">
-                                        </ng-template> 
-                                        </mat-cell>
-                                        <mat-footer-cell *matFooterCellDef></mat-footer-cell>
-                                    </ng-container>
-                                    
-                                    <ng-container matColumnDef="producto">
-                                    <mat-header-cell *matHeaderCellDef>Descripción</mat-header-cell>
-                                    <mat-cell *matCellDef="let producto" style="font-weight: 300;">{{ producto.producto.descripcion }}</mat-cell>
-                                    <mat-footer-cell *matFooterCellDef></mat-footer-cell>
-                                    </ng-container>
-
-                                    <ng-container matColumnDef="proveedor">
-                                        <mat-header-cell *matHeaderCellDef>Proveedor</mat-header-cell>
-                                        <mat-cell *matCellDef="let producto"  style="font-weight: 300;">{{ producto.producto.proveedor.proveedor }}</mat-cell>
-                                        <mat-footer-cell *matFooterCellDef></mat-footer-cell>
-                                        </ng-container>
-
-                                    <ng-container matColumnDef="cantidad">
-                                    <mat-header-cell *matHeaderCellDef>Cantidad</mat-header-cell>
-                                    <mat-cell *matCellDef="let producto"  style="font-weight: 300;">{{ producto.cantidad }}</mat-cell>
-                                    <mat-footer-cell *matFooterCellDef></mat-footer-cell>
-                                    </ng-container>
-
-                                    <ng-container matColumnDef="precioUnitario">
-                                    <mat-header-cell *matHeaderCellDef>Precio Unitario</mat-header-cell>
-                                    <mat-cell *matCellDef="let producto"  style="font-weight: 300;">{{ producto.precioUnitario | currency:"USD" }}</mat-cell>
-                                    <mat-footer-cell *matFooterCellDef class="footer-total"  style="font-weight: 500;">Total </mat-footer-cell>
-                                    </ng-container>
-
-                                    <ng-container matColumnDef="subTotal">
-                                    <mat-header-cell *matHeaderCellDef>Subtotal</mat-header-cell>
-                                    <mat-cell *matCellDef="let producto"  style="font-weight: 300;">{{ producto.subTotal | currency:"USD" }}</mat-cell>
-                                    <mat-footer-cell *matFooterCellDef class="footer-total" style="font-weight: 500;">{{total | currency}}</mat-footer-cell>
-                                    </ng-container>
-                    
-                                    <ng-container matColumnDef="estado">
-                                    <mat-header-cell *matHeaderCellDef>Estado</mat-header-cell>
-                                    <mat-cell *matCellDef="let producto"><span style="padding:5px 10px 5px 10px; border-radius: 8px;margin-left: 8px;font-weight: 300;" [ngStyle]="{'background-color': getBackgroundColor(producto.estado)}">{{ producto.estado }}</span></mat-cell>
-                                    <mat-footer-cell *matFooterCellDef></mat-footer-cell>
-                                    </ng-container>
-
-                                    <ng-container matColumnDef="accion" *ngIf="roleSelected==2">
-                                        <mat-header-cell *matHeaderCellDef></mat-header-cell>
-                                        <mat-cell *matCellDef="let producto" >
-                                            <a mat-fab class="custom" *ngIf="producto.estado=='Pendiente'">
-                                                <mat-icon>task_alt</mat-icon>
-                                            </a>
-                                        </mat-cell>
-                                    <mat-footer-cell *matFooterCellDef></mat-footer-cell>
-                                    </ng-container>
-
-                                    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-                                    <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
-                                    <mat-footer-row *matFooterRowDef="displayedColumns" class="footer-row"></mat-footer-row>
-                                </mat-table>
-
-
+                    <mat-card class="full-width p-3">
+                        <mat-tab-group style="font-weight: 100;">
+                            <mat-tab label="Cliente">
+                                <div class="row g-0">
+                                    <div class="col-1"></div>
+                                    <div class="col-6" style="padding-top: 25px;">
+                                        <p><strong>Nombre:</strong>  {{ datos.usuario.nombre }}</p>
+                                        <p><strong>Correo:</strong>  {{ datos.usuario.email }}</p>
+                                        <p><strong>Contacto:</strong> {{ datos.usuario.telefono }}</p>
+                                    </div>
+                                    <div class="col-3"  style="padding-top: 10px;">
+                                        <p style="font-weight: 400;">Método Pago</p>
+                                        <hr>
+                                        <p><strong>Tipo:</strong> {{ datos.metodoPago.tipo }}</p>
+                                        <p><strong>Tarjeta:</strong> ●●●● {{ datos.metodoPago.numTajeta.slice(-4) }}</p>
+                                    </div>
+                                </div>
                             </mat-tab>
-                        </mat-tab-group>
-                    </div>
-                 </mat-card>
+                            <mat-tab label="Entrega">
+                                <div class="row g-0" style="padding-top: 27px;">
+                                    <div class="col-1"></div>
+                                    <div class="col-6">
+                                        <p><strong>Provincia:</strong> {{ provincia }}</p>
+                                        <p><strong>Cantón:</strong> {{ canton }}</p>
+                                        <p><strong>Distrito:</strong> {{ distrito }}</p>
+                                    </div>
+                                    <div class="col-5">
+                                        <p><strong>Dirección Exacta</strong> {{ datos.direccion.exacta }}</p>
+                                        <p><strong>Código Postal:</strong> {{ datos.direccion.codigoPostal }}</p>
+                                        <p><strong>Contacto:</strong> {{ datos.direccion.telefono }}</p>
+                                    </div>
+                                </div>
+                            </mat-tab>
+                        </mat-tab-group>    
+                    </mat-card>
+                </div>
+              
+            </div>
+            
+            <div>
+                <nav mat-tab-nav-bar backgroundColor="primary" style="font-weight: 300;">
+                    <a mat-tab-link routerLinkActive="active-link">Detalle Pedido</a>
+                </nav>
+                <mat-table [dataSource]="datos.productos" class="mat-elevation-z8 text-center">
+                            
+                    <ng-container matColumnDef="imagen">
+                        <mat-header-cell *matHeaderCellDef>Producto</mat-header-cell>
+                        <mat-cell *matCellDef="let producto">
+                            <img *ngIf="producto.producto.imagenes[0].imagen; else imagePath" [src]="getBase64FromBytes(producto.producto.imagenes[0].imagen.data)" height="100" width="150" alt="...">
+                        <ng-template #imagePath>
+                            <img src="./assets/img/default.jpg" height="100" width="150" alt="...">
+                        </ng-template> 
+                        </mat-cell>
+                        <mat-footer-cell *matFooterCellDef></mat-footer-cell>
+                    </ng-container>
+                    
+                    <ng-container matColumnDef="producto">
+                    <mat-header-cell *matHeaderCellDef>Descripción</mat-header-cell>
+                    <mat-cell *matCellDef="let producto" style="font-weight: 300;">{{ producto.producto.descripcion }}</mat-cell>
+                    <mat-footer-cell *matFooterCellDef></mat-footer-cell>
+                    </ng-container>
 
-            </mat-tab>
-        </mat-tab-group>
+                    <ng-container matColumnDef="proveedor">
+                        <mat-header-cell *matHeaderCellDef>Proveedor</mat-header-cell>
+                        <mat-cell *matCellDef="let producto"  style="font-weight: 300;">{{ producto.producto.proveedor.proveedor }}</mat-cell>
+                        <mat-footer-cell *matFooterCellDef></mat-footer-cell>
+                        </ng-container>
+
+                    <ng-container matColumnDef="cantidad">
+                    <mat-header-cell *matHeaderCellDef>Cantidad</mat-header-cell>
+                    <mat-cell *matCellDef="let producto"  style="font-weight: 300;">{{ producto.cantidad }}</mat-cell>
+                    <mat-footer-cell *matFooterCellDef></mat-footer-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="precioUnitario">
+                    <mat-header-cell *matHeaderCellDef>Precio Unitario</mat-header-cell>
+                    <mat-cell *matCellDef="let producto"  style="font-weight: 300;">{{ producto.precioUnitario | currency:"USD" }}</mat-cell>
+                    <mat-footer-cell *matFooterCellDef class="footer-total"  style="font-weight: 500;">Total </mat-footer-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="subTotal">
+                    <mat-header-cell *matHeaderCellDef>Subtotal</mat-header-cell>
+                    <mat-cell *matCellDef="let producto"  style="font-weight: 300;">{{ producto.subTotal | currency:"USD" }}</mat-cell>
+                    <mat-footer-cell *matFooterCellDef class="footer-total" style="font-weight: 500;">{{total | currency}}</mat-footer-cell>
+                    </ng-container>
+    
+                    <ng-container matColumnDef="estado">
+                    <mat-header-cell *matHeaderCellDef>Estado</mat-header-cell>
+                    <mat-cell *matCellDef="let producto"><span style="padding:5px 10px 5px 10px; border-radius: 8px;margin-left: 8px;font-weight: 300;" [ngStyle]="{'background-color': getBackgroundColor(producto.estado)}">{{ producto.estado }}</span></mat-cell>
+                    <mat-footer-cell *matFooterCellDef></mat-footer-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="accion" *ngIf="roleSelected==2">
+                        <mat-header-cell *matHeaderCellDef></mat-header-cell>
+                        <mat-cell *matCellDef="let producto" >
+                            <a mat-fab class="custom" *ngIf="producto.estado=='Pendiente'" (click)="actualizarEstado(producto)">
+                                <mat-icon>task_alt</mat-icon>
+                            </a>
+                        </mat-cell>
+                    <mat-footer-cell *matFooterCellDef></mat-footer-cell>
+                    </ng-container>
+
+                    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+                    <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+                    <mat-footer-row *matFooterRowDef="displayedColumns" class="footer-row"></mat-footer-row>
+                </mat-table>
+            </div>
+         </mat-card>
 
         
        

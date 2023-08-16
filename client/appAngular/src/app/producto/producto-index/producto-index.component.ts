@@ -6,6 +6,7 @@ import { AuthenticationService } from 'src/app/share/authentication.service';
 import { CartService } from 'src/app/share/cart.service';
 import { GenericService } from 'src/app/share/generic.service';
 import { NotificacionService, TipoMessage } from 'src/app/share/notificacion.service';
+import { SerachProductoService } from 'src/app/share/search.service';
 
 @Component({
   selector: 'app-producto-index',
@@ -19,11 +20,15 @@ export class ProductoIndexComponent implements OnInit{
   loading: boolean ;
   roleSelected:any
   isAutenticated:boolean
+  filterDatos:any
+  filterParm:any
+  sortData:any
   constructor(private gService:GenericService,
     private router: Router,
     private cartService:CartService,
     private notificacion:NotificacionService,
     private authService: AuthenticationService,
+    private serachService:SerachProductoService,
     private route: ActivatedRoute){
     this.listaProductos(1)
   }
@@ -31,6 +36,9 @@ export class ProductoIndexComponent implements OnInit{
   ngOnInit(): void {
     this.authService.currentSelectedRole.subscribe((valor)=>(this.roleSelected=valor));
     this.authService.isAuthenticated.subscribe((valor) => (this.isAutenticated = valor));
+    this.serachService.refesh$.subscribe((valor) => {this.filterProductos(valor);this.filterParm=valor})
+    this.serachService.sort$.subscribe((valor) => {this.sortDatos(valor);this.sortData=valor})
+    this.serachService.showSearchbar(true)
   }
 
   getBackgroundColor(cantidad: any): string {
@@ -45,6 +53,31 @@ export class ProductoIndexComponent implements OnInit{
     }
   }
 
+  filterProductos(text:string){
+    if(!text){
+      this.filterDatos=this.datos
+    }else{
+      
+      this.filterDatos=this.datos.filter(
+        producto=> producto?.descripcion.toLowerCase().
+                          includes(text.toLowerCase())
+      )
+    }
+  }
+
+  sortDatos(sortingOrder:string) {
+    this.filterDatos.sort((a, b) => {
+        const priceA = parseFloat(a?.precio || "0"); // Convert precio to number
+        const priceB = parseFloat(b?.precio || "0");
+
+        if (sortingOrder === 'asc') {
+          return priceA - priceB;
+        } else {
+          return priceB - priceA;
+        }
+      });
+  }
+
   listaProductos(id: any) {
    
     this.gService
@@ -53,13 +86,24 @@ export class ProductoIndexComponent implements OnInit{
       .subscribe((data: any) => {
         console.log(data);
         this.datos = data;
-      
+        this.filterDatos=this.datos;
+        this.filterProductos(this.filterParm)
+        this.sortDatos(this.sortData)
       });
   }
   
-  comprar(id:number){
+  comprar(producto:any){
+
+    if(producto.cantidad<1){
+      this.notificacion.mensaje(
+        '',
+        producto.descripcion+ ' está agotado',
+        TipoMessage.error
+      )
+    } else{
+      
     this.gService
-    .get('producto',id)
+    .get('producto',parseInt(producto.id))
     .pipe(takeUntil(this.destroy$))
     .subscribe((data:any)=>{
       //Agregar videojuego obtenido del API al carrito
@@ -71,6 +115,8 @@ export class ProductoIndexComponent implements OnInit{
         TipoMessage.success
       )
     });
+    }   
+
   }
 
   onTabChange(event: MatTabChangeEvent) {
@@ -90,6 +136,7 @@ export class ProductoIndexComponent implements OnInit{
   ngOnDestroy(){
     this.destroy$.next(true);
     this.destroy$.unsubscribe();
+    this.serachService.showSearchbar(false)
   }
 
   getBase64FromBytes(byteArray) {

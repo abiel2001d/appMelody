@@ -5,6 +5,7 @@ import { GenericService } from 'src/app/share/generic.service';
 import { Subject, takeUntil } from 'rxjs';
 import { LocationService } from 'src/app/share/location.service';
 import { AuthenticationService } from 'src/app/share/authentication.service';
+import { NotificacionService, TipoMessage } from 'src/app/share/notificacion.service';
 
 @Component({
   selector: 'app-pedido-detail',
@@ -23,12 +24,12 @@ export class PedidoDetailComponent {
   canton:any
   distritos:any
   distrito:any
-  pedidoForm: FormGroup;
   datos:any;//Guarda la respuesta del API
   destroy$: Subject<boolean>=new Subject<boolean>();
   displayedColumns: string[] = ['imagen','producto', 'proveedor','cantidad', 'precioUnitario', 'subTotal', 'estado','accion'];
   constructor(
     private gService: GenericService,
+    private noti: NotificacionService,
     private route: ActivatedRoute,
     private fb: FormBuilder,
     private locationService: LocationService,
@@ -39,7 +40,6 @@ export class PedidoDetailComponent {
       if(!isNaN(Number(id))){
         this.obtenerPedido(id);
       }
-      this.formularioReactive() 
   }
   ngOnInit(): void {
     this.authService.currentUser.subscribe((x)=>(this.currentUser=x));
@@ -47,14 +47,7 @@ export class PedidoDetailComponent {
 
   }
 
-  //Crear Formulario
-  formularioReactive() {
-    //[null, Validators.required]
-    this.pedidoForm=this.fb.group({
-      
-    })
-   
-  }
+  
   obtenerPedido(id:any){
     this.gService
     .get('pedido',id)
@@ -160,4 +153,19 @@ export class PedidoDetailComponent {
     return totalSubtotal;
   }
 
-}
+  actualizarEstado(producto: any) {
+   
+    this.gService
+      .update(`pedido/${this.datos.id}`, producto.producto)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((data: any) => {
+        this.datos = data;
+        this.noti.mensaje(
+          '',
+          'Producto entregado con éxito',
+          TipoMessage.success
+        );
+        this.obtenerPedido(this.datos.id);
+      });
+  }
+}  

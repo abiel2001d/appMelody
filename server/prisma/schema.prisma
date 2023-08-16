@@ -36,8 +36,11 @@ model Rol {
 model Direccion{
   id       Int     @id @default(autoincrement())
   provincia   Int
-  canton    Int  
-  distrito    Int  
+  provinciaDesc String?
+  canton    Int
+  cantonDesc String? 
+  distrito    Int
+  distritoDesc String? 
   exacta String
   codigoPostal Int
   telefono String

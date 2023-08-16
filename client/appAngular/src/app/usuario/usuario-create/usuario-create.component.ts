@@ -5,7 +5,7 @@ import { Subject, takeUntil } from 'rxjs';
 import { AuthenticationService } from 'src/app/share/authentication.service';
 import { GenericService } from 'src/app/share/generic.service';
 import { NotificacionService, TipoMessage } from 'src/app/share/notificacion.service';
-
+import { forkJoin } from 'rxjs';
 @Component({
   selector: 'app-usuario-create',
   templateUrl: './usuario-create.component.html',
@@ -33,10 +33,10 @@ export class UsuarioCreateComponent implements OnInit {
     this.formCreate = this.fb.group({
       id: ['', [Validators.required]],
       nombre: ['', [Validators.required]],
-      email: ['', [Validators.required]],
+      email: ['', [Validators.required,Validators.email]],
       telefono: ['', [Validators.required]],
       proveedor: ['', null],
-      password: ['', [Validators.required]],
+      password: ['', [Validators.required,Validators.minLength(8),Validators.pattern(/^(?=.*[A-Z])(?=.*\d).+$/)]],
       estado: [true, null],
       roles: ['', [Validators.required]],
     });
@@ -59,26 +59,46 @@ export class UsuarioCreateComponent implements OnInit {
   }
 
   submitForm() {
-    this.makeSubmit=true;
-    //Validación
-    if(this.formCreate.invalid){
-     return;
-    }
-    
-    let gFormat:any=this.formCreate.get('roles').value.map(x=>({['id']: x}))
-    this.formCreate.patchValue({roles: gFormat});
+    this.makeSubmit = true;
 
+    // Validación
+    if (this.formCreate.invalid) {
+        return;
+    }
+
+    let gFormat: any = this.formCreate.get('roles').value.map(x => ({ ['id']: x }))
+    this.formCreate.patchValue({ roles: gFormat });
     this.formCreate.get('id').setValue(parseInt(this.formCreate.get('id').value, 10));
-    this.authService.createUser(this.formCreate.value)
-    .subscribe((respuesta:any)=>{
-      this.usuario=respuesta;
-      
-      this.router.navigate(['/usuario/login'],{
-        //Mostrar un mensaje
-        queryParams:{register:'true'},
-      })
-    })
-  }
+
+    const idCheck$ = this.gService.get('usuario', this.formCreate.get('id').value);
+    const emailCheck$ = this.gService.get('usuario/email', this.formCreate.get('email').value);
+
+    forkJoin([idCheck$, emailCheck$])
+        .pipe(takeUntil(this.destroy$))
+        .subscribe(([idResponse, emailResponse]) => {
+            if (idResponse != null) {
+                this.noti.mensaje('', 'Cédula ya está registrada', TipoMessage.error);
+                return;
+            }
+
+            if (emailResponse != null) {
+                this.noti.mensaje('', 'Correo ya está registrado', TipoMessage.error);
+                return;
+            }
+
+            this.authService.createUser(this.formCreate.value)
+                .subscribe((respuesta: any) => {
+                    this.usuario = respuesta;
+
+                    this.router.navigate(['/usuario/login'], {
+                        queryParams: { register: 'true' },
+                    });
+                });
+        });
+}
+
+
+
   onReset() {
     this.formCreate.reset();
   }
@@ -87,8 +107,8 @@ export class UsuarioCreateComponent implements OnInit {
       .list('rol')
       .pipe(takeUntil(this.destroy$))
       .subscribe((data: any) => {
-        this.roles = data;
-        console.log( this.roles);
+        this.roles = data.filter((role: any) => role.id !== 1);
+        console.log(this.roles);
       });
   }
   public errorHandling = (control: string, error: string) => {

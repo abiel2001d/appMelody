@@ -33,6 +33,7 @@ export class PedidoIndexComponent {
   dataSource = new MatTableDataSource<any>();
   destroy$: Subject<boolean> = new Subject<boolean>();
   currentUser:any
+  enableReadOnly:boolean=false
 
   constructor(
     private cartService: CartService,
@@ -52,6 +53,7 @@ export class PedidoIndexComponent {
    
     this.cartService.currentDataCart$.subscribe(data=>{
      this.dataSource=new MatTableDataSource(data)
+     console.log(data)
     })
     this.total=this.cartService.getTotal()
     this.totalWithIVA=this.total*1.13
@@ -62,6 +64,7 @@ export class PedidoIndexComponent {
     this.total=this.cartService.getTotal();
     this.totalWithIVA=this.total*1.13
   }
+
   eliminarItem(item: any) {
     this.cartService.removeFromCart(item);
     this.total=this.cartService.getTotal();
@@ -70,6 +73,7 @@ export class PedidoIndexComponent {
     'Producto eliminado',
     TipoMessage.success)
   }
+
   getBase64FromBytes(byteArray) {
     var binary = '';
     var bytes = new Uint8Array(byteArray);
@@ -90,6 +94,7 @@ export class PedidoIndexComponent {
         this.metodosPagoList = data;
       });
   }
+
   listaDirecciones(id:any) {
     this.direccionList = null;
     this.gService
@@ -104,11 +109,17 @@ export class PedidoIndexComponent {
   onMetodoPagoSelectionChange(event: any) {
     // Assign the selected item from the event value to the variable
     this.selectedMetodoPago = event.value;
+    if(this.selectedMetodoPago!=null && this.selectedDireccion ){
+      this.enableReadOnly=true
+    }
   }
 
   onDireccionSelectionChange(event: any) {
     // Assign the selected item from the event value to the variable
     this.selectedDireccion = event.value;
+    if(this.selectedMetodoPago!=null && this.selectedDireccion ){
+      this.enableReadOnly=true
+    }
 
     this.locationService.getProvinces()
         .pipe(takeUntil(this.destroy$))
@@ -137,11 +148,18 @@ export class PedidoIndexComponent {
   }
 
   registrarPedido() {
-    if(this.cartService.getItems!=null){
+    if(this.cartService.getItems!=null && this.cartService.getItems.length>0){
+     
+      const itemExcessiveCantidad = this.cartService.getItems.find(item => item.cantidad > item.product.cantidad);
+      if (itemExcessiveCantidad) {
+        this.noti.mensaje(`Excede cantidad límite [${itemExcessiveCantidad.product.descripcion}]`,
+        `Solo hay ${itemExcessiveCantidad.product.cantidad} disponible(s)`,
+         TipoMessage.error)
+      } else {
+
        //Obtener los items del carrito de compras
        let itemsCarrito=this.cartService.getItems;
        //Armar la estructura de la tabla intermedia
-       //[{'videojuegoId':valor, 'cantidad':valor}]
        let detalles=itemsCarrito.map(
          x=>({
            ['producto']:x.idItem,
@@ -160,6 +178,8 @@ export class PedidoIndexComponent {
         'metodoPago':this.selectedMetodoPago.id,
         'productos':detalles,
        }
+
+       console.log(infoOrden)
        this.gService.create('pedido',infoOrden)
        .subscribe((respuesta:any)=>{
          this.noti.mensaje('',
@@ -171,7 +191,9 @@ export class PedidoIndexComponent {
          this.router.navigate(['/pedido/all'], {
           queryParams: { create: 'true' }
           });
-       })
+       })  
+      }
+
     }else{
      this.noti.mensaje('',
      'Agregue producto(s) al pedido',
@@ -179,4 +201,13 @@ export class PedidoIndexComponent {
      
     }
    }
+
+   resetPedido(event: any){
+    this.selectedMetodoPago = null; 
+    this.selectedDireccion = null; 
+    this.enableReadOnly=false  
+    this.listaMetodosPago(this.currentUser.user.id)
+    this.listaDirecciones(this.currentUser.user.id)
+   }
+
 }

@@ -1,0 +1,69 @@
+<form [formGroup]="direccionForm" (ngSubmit)="isCreate ? crearMetodoPago() : actualizarMetodoPago()"  novalidate >
+  <input type="hidden" formControlName="id"  />
+  <mat-card class="shipping-card" >
+    <mat-card-content>
+
+      <div class="row">
+        <div class="col-3">
+          <mat-form-field style="width:100%">
+            <mat-label>Provincia</mat-label>
+            <mat-select [(ngModel)]="selectedProvince" (selectionChange)="onProvinceChange()" formControlName="provincia" >
+              <mat-option *ngFor="let province of provinces" [value]="province.key">{{ province.value }}</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <div class="col-3">
+          <mat-form-field style="width:100%">
+            <mat-label>Cantón</mat-label>
+            <mat-select [(ngModel)]="selectedCanton" (selectionChange)="onCantonChange()" formControlName="canton" >
+              <mat-option *ngFor="let canton of cantons" [value]="canton.key">{{ canton.value }}</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <div class="col-3">
+          <mat-form-field style="width:100%">
+            <mat-label>Distrito</mat-label>
+            <mat-select [(ngModel)]="selectedDistrito" (selectionChange)="onDistritoChange()" formControlName="distrito" >
+              <mat-option *ngFor="let distrito of distritos" [value]="distrito.key">{{ distrito.value }}</mat-option>
+            </mat-select>
+          </mat-form-field >
+        </div>
+        <div class="col-3">
+          <mat-form-field style="width:100%">
+            <mat-label>Código Postal</mat-label>
+            <input matInput type="text" id="postalCode" [(ngModel)]="postalCode" readonly formControlName="codigoPostal" >
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-5">
+          <mat-form-field class="full-width" style="width: 500px;" >
+            <mat-label>Detalle</mat-label>
+            <input matInput  formControlName="exacta" >
+          </mat-form-field>
+        </div>
+        <div class="col-4">
+          <mat-form-field style="width:100%;margin-left: 30px;">
+            <mat-label>Teléfono</mat-label>
+            <input matInput formControlName="telefono" >
+          </mat-form-field>
+        </div>
+      
+        <div class="col-3 d-flex align-items-center justify-content-center">
+          <button mat-raised-button color="primary" type="submit" style="margin-right: 15px;"> <mat-icon >save</mat-icon></button>
+          <button mat-raised-button color="primary" (click)="reset($event)"> Cancelar</button>
+       </div>
+      </div>
+
+      
+    
+     
+    
+      
+
+    </mat-card-content>
+  </mat-card>
+      
+    
+ </form>

@@ -1,9 +1,14 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { DireccionIndexComponent } from './direccion-index/direccion-index.component';
+import { DireccionAllComponent } from './direccion-all/direccion-all.component';
+import { AuthGuard } from '../share/guards/auth.guard';
 
 const routes: Routes = [
-  {path:'direccion',component:DireccionIndexComponent}
+  {path:'direccion',component:DireccionAllComponent,
+  canActivate:[AuthGuard],
+  data:{
+    roles: [2,3]
+  }},
 ];
 
 @NgModule({

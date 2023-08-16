@@ -1,0 +1,137 @@
+<form [formGroup]="usuarioForm"  novalidate >
+  
+   <mat-card>
+    <mat-card-title style="background-color: #1a1a1aea;color: white;" class="d-flex justify-content-center">
+        <p style="font-weight: 200;font-size: 18px;padding-top: 15px;">Perfil Usuario</p>
+    </mat-card-title>
+
+    <mat-tab-group  >
+        <mat-tab label="Actualizar Información">
+            <mat-card-content class="p-3">
+                <div class="d-flex justify-content-center mb-4" *ngIf="!datosDialog.isNotAdmin">
+                    <mat-radio-group formControlName="estado" primary>
+                        <mat-radio-button [value]="true">Activo</mat-radio-button>
+                        <mat-radio-button [value]="false">Inactivo</mat-radio-button>
+                    </mat-radio-group>
+                </div>
+                <div class="row" >
+                    <div class="col-6" >
+                      <mat-form-field class="full-width" style="width: 100%;">
+                          <mat-label>Nombre Completo</mat-label>
+                          <input matInput type="text" formControlName="nombre" />
+                         <mat-error *ngIf="errorHandling('nombre', 'required')">
+                            Nombre es <strong>requerido</strong>
+                          </mat-error>
+                        </mat-form-field>
+                    </div>
+                    <div class="col-6 d-flex justify-content-center">
+                        <mat-form-field class="full-width" style="width: 100%;" > 
+                            <mat-label>Cédula</mat-label>
+                            <input matInput type="text" formControlName="id" readonly/>
+                           <mat-error *ngIf="errorHandling('id', 'required')">
+                              Cédula es <strong>requerido</strong>
+                            </mat-error>
+                        </mat-form-field>
+                       
+                    </div>
+                      
+                      
+                    
+                </div>
+                  <div class="row">
+                      <div class="col-6" >
+                          <mat-form-field class="full-width"  style="width: 100%;">
+                              <mat-label>Correo Electrónico</mat-label>
+                              <input matInput type="text"formControlName="email" readonly/>
+                             <mat-error *ngIf="errorHandling('email', 'required')">
+                                Correo es <strong>requerido</strong>
+                              </mat-error>
+                            </mat-form-field>
+                        </div>
+                        <div class="col-6" >
+                            <mat-form-field  class="full-width" style="width: 100%;">
+                                <mat-label>Rol</mat-label>  
+                                    <mat-select  formControlName="roles" multiple >
+                                        <mat-option *ngFor="let r of roles" [value]="r.id" [disabled]="datosDialog.isNotAdmin">
+                                            {{ r.descripcion }}
+                                        </mat-option>
+                                    </mat-select>
+                                    <mat-error *ngIf="errorHandling('roles', 'required')">
+                                        Rol es <strong>requerido</strong>
+                                    </mat-error>
+                            </mat-form-field>
+                          </div>
+                    
+                  </div>
+                  
+                  <div class="row">
+                    <div class="col-6">
+                        <mat-form-field class="full-width"  style="width: 100%;">
+                            <mat-label>Teléfono</mat-label>
+                            <input matInput type="text"formControlName="telefono" />
+                           <mat-error *ngIf="errorHandling('telefono', 'required')">
+                            Teléfono es <strong>requerido</strong>
+                            </mat-error>
+                          </mat-form-field>
+                    </div>
+              
+                    <div class="col-6">
+                        <div *ngIf="proveedorSelected">
+                            <mat-form-field class="full-width" style="width: 100%;">
+                            <mat-label>Proveedor</mat-label>
+                            <input matInput type="text" formControlName="proveedor" required />
+                            <mat-error *ngIf="errorHandling('proveedor', 'required')">
+                                Proveedor es <strong>requerido</strong>
+                            </mat-error>
+                            </mat-form-field>
+                        </div>
+                     
+                    </div>
+                    
+                  </div>
+            </mat-card-content>
+            <div style="display: flex; flex-direction: row; justify-content: center; align-items: center;margin-bottom: 15px;">
+                <button mat-raised-button color="primary" style="width: 150px;" (click)="actualizarUsuario()">Guardar</button>
+            </div> 
+        </mat-tab>
+        <mat-tab label="Cambiar contraseña">
+
+            <mat-card-content class="p-3">
+                <form style="margin-top: 10px;" [formGroup]="passwordForm" class="d-flex justify-content-center">
+                <span style="font-weight: 200;padding-top: 20px;margin-right: 15px;">Ingrese la nueva contraseña: </span>
+                <mat-form-field style="width: 500px;">
+                    <mat-label>Nueva Contraseña</mat-label>
+                    <input matInput [type]="hide ? 'password' : 'text'" formControlName="password" />
+                    <button mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide">
+                      <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+                    </button>
+                    <mat-error *ngIf="errorHandlingPassword('password', 'required')">
+                        Contraseña es <strong>requerido</strong>
+                      </mat-error>
+                      <mat-error *ngIf="errorHandlingPassword('password', 'minlength')">
+                      Se requiren: <strong>8 caracteres mínimo</strong>
+                      </mat-error>
+                      <mat-error *ngIf="errorHandlingPassword('password', 'pattern')">
+                      Falta: <strong>1 mayúscula | 1 número</strong>
+                      </mat-error>
+                      
+                    </mat-form-field>
+                
+              </form>
+            </mat-card-content>
+            <div style="display: flex; flex-direction: row; justify-content: center; align-items: center;margin-bottom: 15px;margin-top: 10px;">
+                <button mat-raised-button color="primary" style="width: 150px;" (click)="actualizarPassword()">Guardar</button>
+            </div> 
+
+        </mat-tab>
+    </mat-tab-group>
+        
+
+     
+   </mat-card>
+    
+ 
+    
+
+</form>
+

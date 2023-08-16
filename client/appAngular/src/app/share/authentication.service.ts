@@ -54,6 +54,14 @@ export class AuthenticationService {
     return this.http.post<any>(this.ServerUrl + 'usuario/registrar', user);
   }
 
+  updateUserName(newName: string): void {
+  const currentUserData = JSON.parse(localStorage.getItem('currentUser'));
+  if (currentUserData) {
+    currentUserData.user.nombre = newName;
+    localStorage.setItem('currentUser', JSON.stringify(currentUserData));
+    this.currentUserSubject.next(currentUserData);
+  }
+}
   //Login
   loginUser(user: any): Observable<any> {
     return this.http.post<any>(this.ServerUrl + 'usuario/login', user).pipe(

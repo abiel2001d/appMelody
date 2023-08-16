@@ -10,5 +10,6 @@ router.get('/', pedidoController.get);
 router.post('/', pedidoController.create);
 
 router.get('/:id',pedidoController.getById);
+router.put('/:pedidoId/:productoId',pedidoController.update);
 
 module.exports = router;

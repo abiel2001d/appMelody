@@ -6,9 +6,19 @@
     </a>
   </div>
   <div class="example-spacer"></div>
-  <div class="example-spacer"></div>
-  <div class="example-spacer"></div>
+  
+  
+   
+    <input *ngIf="showSearchbar" matInput #texto (keyup)="searchProducto(texto.value)" placeholder="Buscar producto" 
+    style="padding: 5px;background-color: #1a1a1a;border-top: #1a1a1a;border-left: #1a1a1a;
+    border-right: #1a1a1a;color: white;width: 350px;">
+   <button *ngIf="showSearchbar" mat-icon-button (click)="toggleSortingOrder()">
+    <mat-icon>sort</mat-icon>
+  </button>
+  
 
+ 
+  <div class="example-spacer"></div>
   <button mat-button class="border-button" [routerLink]="['/producto']" style="margin-top: 10px;font-weight: 200;"*ngIf="roleSelected!=2">
     <mat-icon>local_mall</mat-icon>
     Tienda

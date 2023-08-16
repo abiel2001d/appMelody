@@ -45,7 +45,7 @@
               </div>
             </div> 
             <hr>
-            <button *ngIf="roleSelected===3" mat-raised-button style="font-weight: 500;background-color: #2A2A2A;color: white;margin: 0px 50px 15px 50px" type="submit">
+            <button (click)="comprar(datos)" *ngIf="roleSelected===3" mat-raised-button style="font-weight: 500;background-color: #2A2A2A;color: white;margin: 0px 50px 15px 50px" type="submit">
               Agegar al carrito
             </button>
           </mat-card>

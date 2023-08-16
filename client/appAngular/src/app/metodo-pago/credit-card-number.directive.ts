@@ -15,7 +15,7 @@ export class CreditCardNumberDirective {
     if (value.length > 0) {
       const formattedValue = value
         .match(new RegExp('.{1,4}', 'g'))
-        .join('-')
+        .join(' ')
         .substr(0, 19);
       this.ngControl.control?.setValue(formattedValue, { emitEvent: false });
     }

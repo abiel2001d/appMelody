@@ -50,9 +50,10 @@ module.exports.register = async (request, response, next) => {
 module.exports.login = async (request, response, next) => {
   let userReq = request.body;
   //Buscar el usuario según el email dado
-  const user = await prisma.Usuario.findUnique({
+  const user = await prisma.Usuario.findFirst({
     where: {
       email: userReq.email,
+      estado: true,
     },
     include:{
       roles:true
@@ -98,11 +99,39 @@ module.exports.login = async (request, response, next) => {
 };
 
 //Obtener por Id
-module.exports.getById = async (request, response, next) => {};
-//Crear
-module.exports.create = async (request, response, next) => {};
+module.exports.getById = async (request, response, next) => {
+  let id = parseInt(request.params.id);
+  
+  const usuario = await prisma.usuario.findUnique({
+    where: {
+      id: id
+    },
+    include:{
+      roles:true
+    }
+  }); 
+  
+  response.json(usuario);
+};
+
+
+module.exports.getByEmail = async (request, response, next) => {
+  let email = request.params.email;
+  
+  const usuario = await prisma.usuario.findUnique({
+    where: {
+      email: email
+    },
+    include:{
+      roles:true
+    }
+  }); 
+  
+  response.json(usuario);
+};
+
 //Actualizar
-module.exports.update = async (request, response, next) => {
+module.exports.updatePassword = async (request, response, next) => {
   let idUser = parseInt(request.params.id);
   const userData = request.body;
 
@@ -116,6 +145,39 @@ module.exports.update = async (request, response, next) => {
   const user = await prisma.usuario.update({
     where: { id: idUser },
     data: { password: hash },
+  });
+
+  response.json(user);
+};
+
+//Actualizar
+module.exports.update = async (request, response, next) => {
+  let idUser = parseInt(request.params.id);
+  let userData = request.body;
+  const usuarioAnterior = await prisma.usuario.findUnique({
+    where: { id: idUser },
+    include: {
+      roles: {
+        select:{
+          id:true
+        }
+      }
+    }
+  });
+  const user = await prisma.usuario.update({
+    where: { id: idUser },
+    data: { 
+      id:userData.id,
+      nombre: userData.nombre,
+      email: userData.email,
+      telefono: userData.telefono,
+      proveedor: userData.proveedor,
+      estado: userData.estado,
+      roles: {
+        disconnect:usuarioAnterior.roles,
+        connect: userData.roles.map((role) => ({ id: role.id }))
+      },
+    },
   });
 
   response.json(user);
