@@ -1,6 +1,8 @@
+
+
 <mat-card class="full-width" [ngStyle]="isAutenticated ? {'margin': '0'} : {'margin': '80px 20px 20px 20px'}" >
 
-
+ 
 
 <mat-tab-group  (selectedTabChange)="onTabChange($event)" style="padding: 0 15px 0 15px;">
   <mat-tab label="BATERÍAS">
@@ -42,7 +44,7 @@
   </mat-tab>
 </mat-tab-group>
 
-<div class="container">
+<div class="container" *ngIf="!loading" >
   <div class="row">
     <div class="col-4 p-3" *ngFor="let item of filterDatos; let i = index">
       <div class="card custom-card">
@@ -101,3 +103,5 @@
 
 </div>
 </mat-card>
+
+<app-loading-page *ngIf="loading"></app-loading-page>

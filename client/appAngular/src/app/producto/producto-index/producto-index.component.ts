@@ -23,6 +23,7 @@ export class ProductoIndexComponent implements OnInit{
   filterDatos:any
   filterParm:any
   sortData:any
+  categoriaSelected:any
   constructor(private gService:GenericService,
     private router: Router,
     private cartService:CartService,
@@ -30,7 +31,7 @@ export class ProductoIndexComponent implements OnInit{
     private authService: AuthenticationService,
     private serachService:SerachProductoService,
     private route: ActivatedRoute){
-    this.listaProductos(1)
+    this.listaProductosAll()
   }
 
   ngOnInit(): void {
@@ -55,14 +56,15 @@ export class ProductoIndexComponent implements OnInit{
 
   filterProductos(text:string){
     if(!text){
-      this.filterDatos=this.datos
+      this.filterDatos=this.datos.filter(x=>x.categoria.id==this.categoriaSelected);
     }else{
-      
-      this.filterDatos=this.datos.filter(
+      this.filterDatos=this.datos.filter(x=>x.categoria.id==this.categoriaSelected);
+      this.filterDatos=this.filterDatos.filter(
         producto=> producto?.descripcion.toLowerCase().
                           includes(text.toLowerCase())
       )
     }
+    this.sortDatos(this.sortData)
   }
 
   sortDatos(sortingOrder:string) {
@@ -78,18 +80,24 @@ export class ProductoIndexComponent implements OnInit{
       });
   }
 
-  listaProductos(id: any) {
-   
+  listaProductosAll() {
+    this.categoriaSelected=1
+    this.loading=true
     this.gService
-      .get('producto/categoria', id)
+      .list('producto')
       .pipe(takeUntil(this.destroy$))
       .subscribe((data: any) => {
         console.log(data);
         this.datos = data;
-        this.filterDatos=this.datos;
-        this.filterProductos(this.filterParm)
-        this.sortDatos(this.sortData)
+        this.loading=false
+        this.categoryFilter(this.categoriaSelected)
       });
+  }
+
+  categoryFilter(id: any) {
+    this.filterDatos=this.datos.filter(x=>x.categoria.id==id);
+    this.filterProductos(this.filterParm)
+   
   }
   
   comprar(producto:any){
@@ -120,9 +128,8 @@ export class ProductoIndexComponent implements OnInit{
   }
 
   onTabChange(event: MatTabChangeEvent) {
-    this.datos.length = 0;
-    const tabId = event.index+1; 
-    this.listaProductos(tabId);
+    this.categoriaSelected = event.index+1; 
+    this.categoryFilter(this.categoriaSelected);
   }
 
   detalleProducto(id:Number){
