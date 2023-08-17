@@ -72,8 +72,6 @@ export class DireccionAllComponent implements AfterViewInit {
   }
 
   getNombreProvincia(item:any){
-   // this.cantones(item.provincia)
-    //this.distritos(item.provincia,item.canton)
     return (this.provinces.find(province => province.key === item.provincia.toString())).value
   }
 

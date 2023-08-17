@@ -24,7 +24,7 @@ export class DireccionFormComponent implements OnInit {
   destroy$: Subject<boolean>=new Subject<boolean>();
 
   //Respuesta del API crear/modificar
-  respMetodoPago: any;
+  respDireccion: any;
   submitted = false;
   //Nombre del formulario
   direccionForm: FormGroup;
@@ -109,11 +109,9 @@ export class DireccionFormComponent implements OnInit {
     });
 
 
-    this.authService.currentUser.subscribe((x)=>(this.currentUser=x));
+   
     }
 
-
-  
     onProvinceChange() {
     this.locationService.getCantons(this.selectedProvince)
     .pipe(takeUntil(this.destroy$))
@@ -152,12 +150,13 @@ export class DireccionFormComponent implements OnInit {
         format(this.selectedCanton, 2) +
         format(this.selectedDistrito, 2);
     }
+
     ngOnDestroy(){
       this.destroy$.next(true);
       this.destroy$.unsubscribe();
     }
 
-    crearMetodoPago(): void {
+    crearDireccion(): void {
       this.submitted = true;
     
       this.direccionForm.patchValue({
@@ -208,7 +207,7 @@ export class DireccionFormComponent implements OnInit {
       this.gService.create('direccion', this.direccionForm.value)
         .pipe(takeUntil(this.destroy$))
         .subscribe((data: any) => {
-          this.respMetodoPago = data;
+          this.respDireccion = data;
           this.direccionForm.reset();
           this.submitted = false;
           this.noti.mensaje('',
@@ -219,7 +218,7 @@ export class DireccionFormComponent implements OnInit {
     }
     
     //Actualizar 
-    actualizarMetodoPago() {
+    actualizarDireccion() {
       //Establecer submit verdadero
       this.submitted=true;
   
@@ -269,7 +268,7 @@ export class DireccionFormComponent implements OnInit {
       this.gService.update('direccion', this.direccionForm.value)
         .pipe(takeUntil(this.destroy$))
         .subscribe((data: any) => {
-          this.respMetodoPago = data;
+          this.respDireccion = data;
           this.direccionForm.reset();
           this.submitted = false;
           this.isCreate=true;
