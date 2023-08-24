@@ -5,7 +5,7 @@
     <mat-nav-list class="sidebar-nav" id="sidebar-nav">
       <div *ngIf="isAutenticated">
         <mat-list-item class="nav-item" *ngIf="roleSelected!=3">
-          <a class="nav-link collapsed" routerLink="index.html">
+          <a class="nav-link collapsed"  [routerLink]="['/pedido/dashboard']">
             <mat-icon>pie_chart</mat-icon>
             <span>Dashboard</span>
           </a>

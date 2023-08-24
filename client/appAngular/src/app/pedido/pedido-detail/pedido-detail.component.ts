@@ -47,7 +47,6 @@ export class PedidoDetailComponent {
 
   }
 
-  
   obtenerPedido(id:any){
     this.gService
     .get('pedido',id)

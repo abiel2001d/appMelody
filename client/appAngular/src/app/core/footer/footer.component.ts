@@ -86,7 +86,7 @@ export class FooterComponent implements OnInit {
     if (activeButton === 3) {
       this.router.navigate(['inicio']);
     } else if (activeButton === 2) {
-      this.router.navigate(['index']);
+      this.router.navigate(['/pedido/dashboard']);
     }
   }
 }

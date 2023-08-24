@@ -19,6 +19,7 @@ const dialogoRoutes = require('./routes/dialogoRoutes');
 const metodoPagoRoutes = require('./routes/metodoPagoRoutes');
 const direccionRoutes = require('./routes/direccionRoutes');
 const rolRoutes = require('./routes/rolRoutes');
+const evaluacionRoutes = require('./routes/evaluacionRoutes');
 
 // Acceder a la configuracion del archivo .env
 dotEnv.config();
@@ -49,6 +50,7 @@ app.use('/dialogo/', dialogoRoutes);
 app.use('/metodoPago/', metodoPagoRoutes);
 app.use('/direccion/', direccionRoutes);
 app.use('/rol/', rolRoutes);
+app.use('/evaluacion/', evaluacionRoutes);
 
 // Servidor
 app.listen(port, () => {

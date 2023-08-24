@@ -14,6 +14,7 @@ export class UsuarioLoginComponent {
   formulario: FormGroup;
   makeSubmit: boolean = false;
   infoUsuario: any;
+  roleSelected: any
   constructor(
     public fb: FormBuilder,
     private authService: AuthenticationService,
@@ -33,6 +34,7 @@ export class UsuarioLoginComponent {
 
   ngOnInit(): void {
     this.mensajes();
+    this.authService.currentSelectedRole.subscribe((valor)=>(this.roleSelected=valor));
   }
 
   mensajes() {
@@ -72,8 +74,12 @@ export class UsuarioLoginComponent {
       .subscribe({
         next: (respuesta: any) => {
 
-
-          this.router.navigate(['/']);
+          if(this.roleSelected==3){
+            this.router.navigate(['/']);
+          }else{
+            this.router.navigate(['/pedido/dashboard']);
+          }
+         
 
         },
         error: (error: any) => {

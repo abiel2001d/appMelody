@@ -16,12 +16,17 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import {MatGridListModule} from '@angular/material/grid-list';
+import { EvaluacionDialogComponent } from './evaluacion-dialog/evaluacion-dialog.component';
+import {MatSliderModule} from '@angular/material/slider';
+import { ReporteComponent } from './reporte/reporte.component';
 
 @NgModule({
   declarations: [
     PedidoIndexComponent,
     PedidoAllComponent,
-    PedidoDetailComponent
+    PedidoDetailComponent,
+    EvaluacionDialogComponent,
+    ReporteComponent
   ],
   imports: [
     CommonModule,
@@ -37,7 +42,8 @@ import {MatGridListModule} from '@angular/material/grid-list';
     MatSelectModule,
     FormsModule,
     ReactiveFormsModule,
-    MatGridListModule
+    MatGridListModule,
+    MatSliderModule
   ]
 })
 export class PedidoModule { }

@@ -88,7 +88,7 @@ export class ProductoIndexComponent implements OnInit{
       .pipe(takeUntil(this.destroy$))
       .subscribe((data: any) => {
         console.log(data);
-        this.datos = data;
+        this.datos = data.filter(x=>x.estado==true);
         this.loading=false
         this.categoryFilter(this.categoriaSelected)
       });

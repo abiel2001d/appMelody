@@ -6,6 +6,8 @@ import { Subject, filter, takeUntil } from 'rxjs';
 import { GenericService } from 'src/app/share/generic.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AuthenticationService } from 'src/app/share/authentication.service';
+import { MatDialog } from '@angular/material/dialog';
+import { EvaluacionDialogComponent } from '../evaluacion-dialog/evaluacion-dialog.component';
 
 @Component({
   selector: 'app-pedido-all',
@@ -30,6 +32,7 @@ export class PedidoAllComponent implements AfterViewInit {
 
   constructor(private gService:GenericService,
     private router: Router,
+    public dialog: MatDialog,
     private route: ActivatedRoute,
     private authService: AuthenticationService) {
 
@@ -54,16 +57,16 @@ export class PedidoAllComponent implements AfterViewInit {
 
         switch (this.roleSelected) {
           case 1: // admin
-            this.displayedColumns = ['id', 'usuario', 'total', 'fechaPedido', 'estado', 'acciones'];
+            this.displayedColumns = ['id', 'usuario', 'total', 'fechaPedido', 'estado', 'acciones','calificaciones'];
             this.datos = data;
             break;
           case 2: // proveedor
-            this.displayedColumns = ['id', 'usuario', 'total', 'fechaPedido', 'estado', 'acciones'];
+            this.displayedColumns = ['id', 'usuario', 'total', 'fechaPedido', 'estado','acciones', 'calificaciones'];
             this.datos = data.filter((pedido: any) => {
               return pedido.productos.some((producto: any) => producto.producto.proveedorId === this.currentUser.user.id); });
             break;
           case 3: // cliente
-            this.displayedColumns = ['id', 'total', 'fechaPedido', 'estado', 'acciones'];
+            this.displayedColumns = ['id', 'total', 'fechaPedido', 'estado','acciones', 'calificaciones'];
             this.datos = data.filter((item: any) => item.usuarioId === this.currentUser.user.id);
             break;
           default:
@@ -91,6 +94,44 @@ export class PedidoAllComponent implements AfterViewInit {
     });
     return grandTotal*1.13;
   }
+
+
+  getTotalEvaluacion(evaluaciones: any) {
+    let totalPts: any = "- pts";
+    
+    if (evaluaciones.length > 0) {
+      if (this.roleSelected == 2) { // Vista Proveedor
+        const evaluacionPorCliente = evaluaciones.filter((evaluacion) => {
+          return evaluacion.proveedorId == this.currentUser.user.id && evaluacion.realizadoPor == 3;
+        });
+        
+        if (evaluacionPorCliente.length > 0) { 
+          const totalPuntaje = evaluacionPorCliente.reduce((sum, evaluacion) => sum + evaluacion.puntaje, 0);
+          const averageScore = totalPuntaje / evaluacionPorCliente.length;
+          totalPts = this.formatScore(averageScore) + "/5 pts";
+        }
+      } else { // Vista Cliente - Administrador
+        const totalPuntaje = evaluaciones.reduce((sum, evaluacion) => sum + evaluacion.puntaje, 0);
+        const averageScore = totalPuntaje / evaluaciones.length;
+        totalPts = this.formatScore(averageScore) + "/5 pts";
+      }
+    }
+    
+    return totalPts;
+  }
+  
+  formatScore(score: number): string {
+    const roundedScore = score.toFixed(1);
+    const parts = roundedScore.split('.');
+    
+    if (parts[1] === '0') {
+      return parts[0];
+    }
+    
+    return roundedScore;
+  }
+  
+  
 
   getEstadoPedido(pedido:any): string{
     let estadoPedido
@@ -147,6 +188,23 @@ export class PedidoAllComponent implements AfterViewInit {
     } else {
       return 'transparent';
     }
+  }
+
+  realizarEvaluacion(pedido:any) {
+    
+    const dialogRef = this.dialog.open(EvaluacionDialogComponent, {
+      width: '900px',
+      data: { pedido: pedido}
+    });
+  
+    dialogRef.afterClosed().subscribe(result => {
+      // Handle the result after the dialog is closed
+      console.log('The dialog was closed', result);
+
+      if (result === 'created') {
+        this.listaPedidos()
+      }
+    });
   }
   
 

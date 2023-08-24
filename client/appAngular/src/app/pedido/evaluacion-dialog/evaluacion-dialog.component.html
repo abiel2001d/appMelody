@@ -1,0 +1,364 @@
+<mat-card>
+  <mat-card-title
+    style="background-color: #1a1a1aea; color: white"
+    class="d-flex justify-content-center"
+  >
+    <p style="font-weight: 200; font-size: 18px; padding-top: 15px">
+      Evaluar Pedido # {{ datosDialog.pedido.id }}
+    </p>
+  </mat-card-title>
+
+  <mat-card-content class="p-3">
+
+    <div *ngIf="roleSelected == 3">
+
+      <div *ngIf="!pedidoEvaluadoPorCliente">
+        <mat-card-title class="d-flex justify-content-center p-2" style="background-color: #2C2C2C;color: white;">
+          Enviar Calificación
+        </mat-card-title>
+
+        <mat-card
+        *ngFor="let item of evaluaciones"
+        class="m-2"
+        style="padding: 20px 10px 0px 10px; font-weight: 200"
+      >
+        <div class="row">
+          <div class="col-4">
+            <mat-form-field class="full-width" style="width: 100%">
+              <mat-label>Proveedor</mat-label>
+              <input
+                matInput
+                type="text"
+                [(ngModel)]="item.proveedorNombre"
+                readonly
+              />
+            </mat-form-field>
+          </div>
+
+          <div class="col-5">
+            <mat-form-field class="full-width" style="width: 100%">
+              <mat-label>Comentario</mat-label>
+              <input matInput type="text" [(ngModel)]="item.comentrario" />
+            </mat-form-field>
+          </div>
+
+          <div class="col-3 d-flex flex-column align-items-center">
+            <div class="row">
+              <!-- Show the Calificación value above the slider -->
+              <span>Calificación: {{ item.puntaje }}</span>
+            </div>
+
+            <div class="row">
+              <mat-slider
+                class="example-margin"
+                [disabled]="disabled"
+                [max]="max"
+                [min]="min"
+                [step]="step"
+                [discrete]="thumbLabel"
+                [showTickMarks]="showTicks"
+              >
+                <input matSliderThumb [(ngModel)]="item.puntaje" />
+              </mat-slider>
+            </div>
+          </div>
+        </div>
+      </mat-card>
+
+      <div *ngIf="!pedidoEvaluadoPorCliente" style="display: flex; flex-direction: row; justify-content: center; align-items: center;margin-bottom: 15px;">
+        <button mat-raised-button color="primary" style="width: 150px;" (click)="enviarEvaluacion()" >Guardar</button>
+      </div> 
+
+      </div>
+      
+      <div *ngIf="pedidoEvaluadoPorCliente">
+        <mat-card-title class="d-flex justify-content-center p-2" style="background-color: #2C2C2C;color: white;">
+          Calificación enviada a Proveedor(es)
+        </mat-card-title>
+        <mat-card
+        *ngFor="let item of evaluacionesCliente"
+        class="m-2"
+        style="padding: 20px 10px 0px 10px; font-weight: 200"
+      >
+        <div class="row">
+          <div class="col-4">
+            <mat-form-field class="full-width" style="width: 100%">
+              <mat-label>Proveedor</mat-label>
+              <input
+                matInput
+                type="text"
+                [(ngModel)]="item.proveedor.proveedor"
+                readonly
+              />
+            </mat-form-field>
+          </div>
+
+          <div class="col-5">
+            <mat-form-field class="full-width" style="width: 100%">
+              <mat-label>Comentario</mat-label>
+              <input matInput type="text" [(ngModel)]="item.comentrario"  readonly/>
+            </mat-form-field>
+          </div>
+
+          <div class="col-3 d-flex flex-column align-items-center">
+            <div class="row">
+              <!-- Show the Calificación value above the slider -->
+              <span>Calificación: {{ item.puntaje }}</span>
+            </div>
+
+            <div class="row">
+              <mat-slider
+              class="example-margin"
+              [disabled]="true" 
+              [max]="max"
+              [min]="min"
+              [step]="step"
+              [discrete]="thumbLabel"
+              [showTickMarks]="showTicks"
+            >
+              <input matSliderThumb [(ngModel)]="item.puntaje" />
+            </mat-slider>
+            
+            </div>
+          </div>
+        </div>
+      </mat-card>
+      </div>
+
+      <div *ngIf="pedidoEvaluadoPorProveedor">
+        <mat-card-title class="d-flex justify-content-center p-2" style="background-color: #2C2C2C;color: white;">
+          Calificación recibida por Proveedor(es)
+        </mat-card-title>
+        <mat-card
+        *ngFor="let item of evaluacionesProveedor"
+        class="m-2"
+        style="padding: 20px 10px 0px 10px; font-weight: 200"
+      >
+        <div class="row">
+          <div class="col-4">
+            <mat-form-field class="full-width" style="width: 100%">
+              <mat-label>Proveedor</mat-label>
+              <input
+                matInput
+                type="text"
+                [(ngModel)]="item.proveedor.proveedor"
+                readonly
+              />
+            </mat-form-field>
+          </div>
+
+          <div class="col-5">
+            <mat-form-field class="full-width" style="width: 100%">
+              <mat-label>Comentario</mat-label>
+              <input matInput type="text" [(ngModel)]="item.comentrario"  readonly/>
+            </mat-form-field>
+          </div>
+
+          <div class="col-3 d-flex flex-column align-items-center">
+            <div class="row">
+              <!-- Show the Calificación value above the slider -->
+              <span>Calificación: {{ item.puntaje }}</span>
+            </div>
+
+            <div class="row">
+              <mat-slider
+              class="example-margin"
+              [disabled]="true" 
+              [max]="max"
+              [min]="min"
+              [step]="step"
+              [discrete]="thumbLabel"
+              [showTickMarks]="showTicks"
+            >
+              <input matSliderThumb [(ngModel)]="item.puntaje" />
+            </mat-slider>
+            
+            </div>
+          </div>
+        </div>
+      </mat-card>
+      </div>
+      
+
+     
+
+    </div>
+
+
+
+    <div *ngIf="roleSelected == 2">
+
+      <div *ngIf="!pedidoEvaluadoPorProveedor">
+
+        <mat-card-title class="d-flex justify-content-center p-2" style="background-color: #2C2C2C;color: white;">
+          Enviar Calificación
+        </mat-card-title>
+
+        <mat-card
+        *ngFor="let item of evaluaciones"
+        class="m-2"
+        style="padding: 20px 10px 0px 10px; font-weight: 200"
+      >
+        <div class="row">
+          <div class="col-4">
+            <mat-form-field class="full-width" style="width: 100%">
+              <mat-label>Cliente</mat-label>
+              <input
+                matInput
+                type="text"
+                [(ngModel)]="item.proveedorNombre"
+                readonly
+              />
+            </mat-form-field>
+          </div>
+
+          <div class="col-5">
+            <mat-form-field class="full-width" style="width: 100%">
+              <mat-label>Comentario</mat-label>
+              <input matInput type="text" [(ngModel)]="item.comentrario" />
+            </mat-form-field>
+          </div>
+
+          <div class="col-3 d-flex flex-column align-items-center">
+            <div class="row">
+              <!-- Show the Calificación value above the slider -->
+              <span>Calificación: {{ item.puntaje }}</span>
+            </div>
+
+            <div class="row">
+              <mat-slider
+                class="example-margin"
+                [disabled]="disabled"
+                [max]="max"
+                [min]="min"
+                [step]="step"
+                [discrete]="thumbLabel"
+                [showTickMarks]="showTicks"
+              >
+                <input matSliderThumb [(ngModel)]="item.puntaje" />
+              </mat-slider>
+            </div>
+          </div>
+        </div>
+        </mat-card>
+
+        <div *ngIf="!pedidoEvaluadoPorProveedor" style="display: flex; flex-direction: row; justify-content: center; align-items: center;margin-bottom: 15px;">
+          <button mat-raised-button color="primary" style="width: 150px;" (click)="enviarEvaluacion()" >Guardar</button>
+        </div> 
+
+      </div>
+
+      <div *ngIf="pedidoEvaluadoPorProveedor">
+        <mat-card-title class="d-flex justify-content-center p-2" style="background-color: #2C2C2C;color: white;">
+          Calificación enviada a Cliente
+        </mat-card-title>
+        <mat-card
+        *ngFor="let item of evaluacionesProveedor"
+        class="m-2"
+        style="padding: 20px 10px 0px 10px; font-weight: 200"
+      >
+        <div class="row">
+          <div class="col-4">
+            <mat-form-field class="full-width" style="width: 100%">
+              <mat-label>Cliente</mat-label>
+              <input
+                matInput
+                type="text"
+                [(ngModel)]="item.pedido.usuario.nombre"
+                readonly
+              />
+            </mat-form-field>
+          </div>
+
+          <div class="col-5">
+            <mat-form-field class="full-width" style="width: 100%">
+              <mat-label>Comentario</mat-label>
+              <input matInput type="text" [(ngModel)]="item.comentrario"  readonly/>
+            </mat-form-field>
+          </div>
+
+          <div class="col-3 d-flex flex-column align-items-center">
+            <div class="row">
+              <!-- Show the Calificación value above the slider -->
+              <span>Calificación: {{ item.puntaje }}</span>
+            </div>
+
+            <div class="row">
+              <mat-slider
+              class="example-margin"
+              [disabled]="true" 
+              [max]="max"
+              [min]="min"
+              [step]="step"
+              [discrete]="thumbLabel"
+              [showTickMarks]="showTicks"
+            >
+              <input matSliderThumb [(ngModel)]="item.puntaje" />
+            </mat-slider>
+            
+            </div>
+          </div>
+        </div>
+      </mat-card>
+      </div>
+     
+
+      <div *ngIf="pedidoEvaluadoPorCliente">
+        <mat-card-title class="d-flex justify-content-center p-2" style="background-color: #2C2C2C;color: white;">
+          Calificación recibida por Cliente
+        </mat-card-title>
+        <mat-card
+        *ngFor="let item of evaluacionesCliente"
+        class="m-2"
+        style="padding: 20px 10px 0px 10px; font-weight: 200"
+      >
+        <div class="row">
+          <div class="col-4">
+            <mat-form-field class="full-width" style="width: 100%">
+              <mat-label>Cliente</mat-label>
+              <input
+                matInput
+                type="text"
+                [(ngModel)]="item.pedido.usuario.nombre"
+                readonly
+              />
+            </mat-form-field>
+          </div>
+
+          <div class="col-5">
+            <mat-form-field class="full-width" style="width: 100%">
+              <mat-label>Comentario</mat-label>
+              <input matInput type="text" [(ngModel)]="item.comentrario"  readonly/>
+            </mat-form-field>
+          </div>
+
+          <div class="col-3 d-flex flex-column align-items-center">
+            <div class="row">
+              <!-- Show the Calificación value above the slider -->
+              <span>Calificación: {{ item.puntaje }}</span>
+            </div>
+
+            <div class="row">
+              <mat-slider
+              class="example-margin"
+              [disabled]="true" 
+              [max]="max"
+              [min]="min"
+              [step]="step"
+              [discrete]="thumbLabel"
+              [showTickMarks]="showTicks"
+            >
+              <input matSliderThumb [(ngModel)]="item.puntaje" />
+            </mat-slider>
+            
+            </div>
+          </div>
+        </div>
+      </mat-card>
+      </div>
+
+
+    </div>
+  </mat-card-content>
+
+</mat-card>
